@@ -350,9 +350,9 @@ void Window() {
 	Console::CursorVisible = false;
 	Console::BackgroundColor = ConsoleColor::Blue;
 	Console::SetWindowSize(1, 1);
-	Console::SetBufferSize(150, 40); //Comando obtenido con Chat-GTP
-	Console::SetWindowSize(150, 40);  //Comando obtenido con Chat-GTP
-	Console::Clear();  //Comando obtenido con Chat-GTP
+	Console::SetBufferSize(150, 40);
+	Console::SetWindowSize(150, 40); 
+	Console::Clear(); 
 }
 
 //Funcion que define los arbustos
