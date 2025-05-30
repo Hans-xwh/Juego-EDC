@@ -338,6 +338,10 @@ int main() {
 	setlocale(LC_ALL, "Spanish");
 	Window();
 	Piso(150);
+
+	//Poner el tamaño de la consola, para que funcione en Win10
+	Console::SetWindowSize(150, 40);
+
 	//Personaje
 	int x = 90; int y = 28;
 	Personaje Marco(x, y);
@@ -675,3 +679,6 @@ void BorrarAnimacion(int x, int y, int columna, int fila) {
 	}
 }
 /*======================================*/
+
+
+//Sexoooooo
