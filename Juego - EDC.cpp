@@ -300,7 +300,7 @@ public:
 			Pintar(x - 3, y + 3, "  =  10    ", ColorGris, ColorNegro);
 		}
 		if (animacion == 2) {
-			Pintar(x-1, y, "Quien", ColorGris, ColorNegro);
+			Pintar(x - 1, y, "Quien", ColorGris, ColorNegro);
 			Pintar(x - 2, y + 1, "  es  ", ColorGris, ColorNegro);
 			Pintar(x - 3, y + 2, "   Dina  ", ColorGris, ColorNegro);
 			Pintar(x - 4, y + 3, " Boluarte?", ColorGris, ColorNegro);
@@ -339,8 +339,11 @@ int main() {
 	Window();
 	Piso(150);
 
+	
 	//Poner el tamaño de la consola, para que funcione en Win10
 	Console::SetWindowSize(150, 40);
+	Console::SetBufferSize(150, 50);
+	
 
 	//Personaje
 	int x = 90; int y = 28;
@@ -423,7 +426,7 @@ int main() {
 			/*    Nubes   */
 			
 			//nube 1
-			Nube_X_1++;
+			Nube_X_1--;
 			nube1.setCursor(Nube_X_1, Nube_Y_1);
 			nube1.BorrarNube(AntiguoXNube1, AntiguoYNube1);
 			nube1.DibujarNube(FormaNube1);
@@ -662,13 +665,20 @@ void Piso(int columnas) {
 
 //Funcion pintar + cursor + cout
 void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres) {
-	
-	Console::BackgroundColor = fondo;
-	Console::ForegroundColor = ColorCaracteres;
+	try {
+		Console::SetBufferSize(250, 50);
 
-	Console::SetCursorPosition(x, y);
+		Console::BackgroundColor = fondo;
+		Console::ForegroundColor = ColorCaracteres;
 
-	cout << caracter;
+
+		Console::SetCursorPosition(x, y);
+
+		cout << caracter;
+	}
+	catch (...) {
+		//Sexoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+	}
 }
 //Funcion borrar animacion
 void BorrarAnimacion(int x, int y, int columna, int fila) {
