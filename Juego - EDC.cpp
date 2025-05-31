@@ -6,6 +6,7 @@
 #include <vector>
 #include <chrono>
 #include <locale>
+#include <vector>
 
 //Documentacion .NET ("https://learn.microsoft.com/en-us/dotnet/api/system.console?view=net-9.0")
 
@@ -15,13 +16,13 @@ using Clock = chrono::steady_clock;
 /*  Protipo de funciones */
 void Window();
 void Piso(int columnas);
-void Vegetacion(int animacion, int x, int y); 
+void Vegetacion(int animacion, int x, int y);
 void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres);
 void BorrarAnimacion(int x, int y, int columna, int fila);
 /*=======================*/
 
 /* Teclas */
-enum Teclas { DERECHA = 77, IZQUIERDA = 75 ,ARRIBA = 72};
+enum Teclas { DERECHA = 77, IZQUIERDA = 75, ARRIBA = 72 };
 /*----------*/
 
 /* VARIABLES GLOBALES*/
@@ -30,7 +31,7 @@ bool balaActiva = false;
 int balaX, balaY;
 int balaDireccion;
 bool puedeDisparar = true;       // control de cooldown
-clock_t ultimoDisparo = 0;      // tiempo del último disparo
+clock_t ultimoDisparo = 0;      // tiempo del Ãºltimo disparo
 const int cooldownDisparo = 500; // 500ms = 0.5s entre disparos
 const int velocidadBala = 1;
 
@@ -59,100 +60,100 @@ public:
 		ConsoleColor ColorAzulOscuro = ConsoleColor::DarkBlue;
 		/* Direccion a la izquierda  */
 		if (posicion == 1) {
-			if (frame == 1){
+			if (frame == 1) {
 				// Sombrero 
-				Pintar(x + 1, y,     " /^^^^\\ ",ColorNegro, ColorRojo);
+				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
 
 				// Cabeza y cara
-				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro,ColorNegro);
-				Pintar(x + 2, y + 2, "|  ^  |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 2, "|  ^  |", ColorGrisOscuro, ColorNegro);
 
 				// Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
-				Pintar(x+1, y + 4,   "--",ColorNegro, ColorAzul);             
-				Pintar(x + 2, y + 4,  "|   |",ColorNegro, ColorAzul);       
-				Pintar(x + 7, y + 4,        "--",ColorNegro, ColorAzul);        
+				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
+				Pintar(x + 1, y + 4, "--", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
+				Pintar(x + 7, y + 4, "--", ColorNegro, ColorAzul);
 
 				// Arma
-		  Pintar(x - 1, y + 4,"==>",ColorNegro, ColorGris);     
+				Pintar(x - 1, y + 4, "==>", ColorNegro, ColorGris);
 
 				// Piernas
-				Pintar(x + 2, y + 5, "/   \\",ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/   \\", ColorNegro, ColorAzul);
 
 				// Pies
-				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
 
 			}
 
-			if (frame == 2){
+			if (frame == 2) {
 				//Sombrero
-				Pintar(x + 1, y,    " /^^^^\\ ",ColorNegro, ColorRojo);
+				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro,ColorNegro);
-				Pintar(x + 2, y + 2, "|  -  |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 2, "|  -  |", ColorGrisOscuro, ColorNegro);
 
 				//Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
 
-			  Pintar(x, y + 4,"-",ColorNegro, ColorAzul);            
-				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
-				Pintar(x + 7, y + 4,        " -",ColorNegro, ColorAzul);             
+				Pintar(x, y + 4, "-", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
+				Pintar(x + 7, y + 4, " -", ColorNegro, ColorAzul);
 				//Arma
-			Pintar(x - 1, y + 4, "==>",ColorNegro, ColorGris);            
+				Pintar(x - 1, y + 4, "==>", ColorNegro, ColorGris);
 				//Piernas
-				Pintar(x + 2, y + 5, "/    ",ColorNegro, ColorAzul);           
-				Pintar(x + 5, y + 5,     " \\",ColorNegro, ColorAzul);            
+				Pintar(x + 2, y + 5, "/    ", ColorNegro, ColorAzul);
+				Pintar(x + 5, y + 5, " \\", ColorNegro, ColorAzul);
 				//pies
-				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
-				
+				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
+
 
 			}
 
-			if (frame == 3){
+			if (frame == 3) {
 				//Sombrero
-				Pintar(x + 1, y,     " /^^^^\\ ",ColorNegro, ColorRojo);
+				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| o_o |", ColorGrisOscuro,ColorNegro);
-				Pintar(x + 2, y + 2, "|  o  |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 1, "| o_o |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 2, "|  o  |", ColorGrisOscuro, ColorNegro);
 
-				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
 				//Brazos y cuerpo
-				Pintar(x-1, y + 4, "-",ColorNegro, ColorAzul);                  
-				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
-				Pintar(x + 6, y + 4,        "--",ColorNegro, ColorAzul);           
+				Pintar(x - 1, y + 4, "-", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
+				Pintar(x + 6, y + 4, "--", ColorNegro, ColorAzul);
 				//Arma
-			Pintar(x 	, y + 4, "==>",ColorNegro, ColorGris);            
+				Pintar(x, y + 4, "==>", ColorNegro, ColorGris);
 				//Piernas
-				Pintar(x + 2, y + 5, "    \\",ColorNegro, ColorAzul);        
-				Pintar(x + 2, y + 5, "/",ColorNegro, ColorAzul);              
+				Pintar(x + 2, y + 5, "    \\", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/", ColorNegro, ColorAzul);
 				//Pies 
-				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
-				
+				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
+
 
 			}
 
-			if (frame == 4){
+			if (frame == 4) {
 				//Sombrero
-				Pintar(x + 1, y,   " /^^^^\\ ",ColorNegro, ColorRojo);
+				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| > < |", ColorGrisOscuro,ColorNegro);
-				Pintar(x + 2, y + 2, "| [!] |", ColorGrisOscuro,ColorNegro); 
+				Pintar(x + 2, y + 1, "| > < |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 2, "| [!] |", ColorGrisOscuro, ColorNegro);
 				//Cuerpo
-				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
 				//Arma y brazos
-			Pintar(x - 1, y + 4,"==>",ColorNegro, ColorGris);        
-				Pintar(x, y + 4,    "-",ColorNegro, ColorAzul);              
-				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
-				Pintar(x + 7, y + 4,         "--",ColorNegro, ColorAzul);        
+				Pintar(x - 1, y + 4, "==>", ColorNegro, ColorGris);
+				Pintar(x, y + 4, "-", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
+				Pintar(x + 7, y + 4, "--", ColorNegro, ColorAzul);
 
 				//Piernas
-				Pintar(x + 2, y + 5, "/ _ \\",ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/ _ \\", ColorNegro, ColorAzul);
 				//pies
-				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
 			}
 
 		}
@@ -160,95 +161,95 @@ public:
 		if (posicion == 2) {
 			if (frame == 1) {
 				// Sombrero 
-				Pintar(x + 1, y,     " /^^^^\\ ",ColorNegro, ColorRojo);
+				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
 
 				// Cabeza
-				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro,ColorNegro);
-				Pintar(x + 2, y + 2, "|  ^  |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 2, "|  ^  |", ColorGrisOscuro, ColorNegro);
 
 				// Cuerpo
-				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
 
 				// Brazos y torzo
-				Pintar(x + 6, y + 4,         "--",ColorNegro, ColorAzul);        
-				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);       
-			 Pintar(x, y + 4, "--",ColorNegro, ColorAzul);          
+				Pintar(x + 6, y + 4, "--", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
+				Pintar(x, y + 4, "--", ColorNegro, ColorAzul);
 
 				// Arma 
-				Pintar(x + 8, y + 4,         "<==",ColorNegro, ColorGris); 
+				Pintar(x + 8, y + 4, "<==", ColorNegro, ColorGris);
 
 				// Piernas
-				Pintar(x + 2, y + 5, "/   \\",ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/   \\", ColorNegro, ColorAzul);
 
 				// Pies
-				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
 			}
 
 			if (frame == 2) {
 				//Sombrero
-				Pintar(x + 1, y,     " /^^^^\\ ",ColorNegro, ColorRojo);
+				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro,ColorNegro);
-				Pintar(x + 2, y + 2, "|  -  |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 2, "|  -  |", ColorGrisOscuro, ColorNegro);
 				//Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
 
-				Pintar(x + 7, y + 4,          "--",ColorNegro, ColorAzul);              
-				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
-			 Pintar(x , y + 4, " -",ColorNegro, ColorAzul);             
+				Pintar(x + 7, y + 4, "--", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
+				Pintar(x, y + 4, " -", ColorNegro, ColorAzul);
 				//Arma
-				Pintar(x + 7, y + 4,          "<==",ColorNegro, ColorGris);        
+				Pintar(x + 7, y + 4, "<==", ColorNegro, ColorGris);
 				//pierna
-				Pintar(x + 2, y + 5, "/",ColorNegro, ColorAzul);
-				Pintar(x + 5, y + 5, " \\",ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/", ColorNegro, ColorAzul);
+				Pintar(x + 5, y + 5, " \\", ColorNegro, ColorAzul);
 
 				//pies
-				Pintar(x + 2, y + 6, "_",ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
 			}
 
 			if (frame == 3) {
 				//Sombrero
-				Pintar(x + 1, y,    " /^^^^\\ ",ColorNegro, ColorRojo);
+				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| o_o |", ColorGrisOscuro,ColorNegro);
-				Pintar(x + 2, y + 2, "|  o  |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 1, "| o_o |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 2, "|  o  |", ColorGrisOscuro, ColorNegro);
 				//Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
 
-				Pintar(x + 8, y + 4,        "-",ColorNegro, ColorAzul);               
-				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
-			   Pintar(x , y + 4,"--",ColorNegro, ColorAzul);               
+				Pintar(x + 8, y + 4, "-", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
+				Pintar(x, y + 4, "--", ColorNegro, ColorAzul);
 				//arma
-				Pintar(x + 7, y + 4,         "<==",ColorNegro, ColorGris);           
+				Pintar(x + 7, y + 4, "<==", ColorNegro, ColorGris);
 				//piernas
-				Pintar(x + 2, y + 5, "/    ",ColorNegro, ColorAzul);           
-				Pintar(x + 5, y + 5,    " \\",ColorNegro, ColorAzul);             
+				Pintar(x + 2, y + 5, "/    ", ColorNegro, ColorAzul);
+				Pintar(x + 5, y + 5, " \\", ColorNegro, ColorAzul);
 				//pies
-				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
 			}
 
 			if (frame == 4) {
 				//Sombrero
-				Pintar(x + 1, y,    " /^^^^\\ ",ColorNegro, ColorRojo);
+				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| < > |", ColorGrisOscuro,ColorNegro);      
-				Pintar(x + 2, y + 2, "| [!] |", ColorGrisOscuro,ColorNegro);  
+				Pintar(x + 2, y + 1, "| < > |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 2, "| [!] |", ColorGrisOscuro, ColorNegro);
 				//Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
 
-				Pintar(x + 6, y + 4,      "--",ColorNegro, ColorAzul);               
-				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
-				Pintar(x, y + 4,"--",ColorNegro, ColorAzul);  
+				Pintar(x + 6, y + 4, "--", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
+				Pintar(x, y + 4, "--", ColorNegro, ColorAzul);
 				//ARma
-				Pintar(x + 8, y + 4,        "<==",ColorNegro, ColorGris);
+				Pintar(x + 8, y + 4, "<==", ColorNegro, ColorGris);
 				//PIErnas
-				Pintar(x + 2, y + 5, "/ _ \\",ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/ _ \\", ColorNegro, ColorAzul);
 				//pies
-				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
 			}
 
 
@@ -256,37 +257,86 @@ public:
 		if (posicion == 3) {
 			if (frame == 1) {
 				//Sombrero
-				Pintar(x + 1, y + 0, "  /^\\  ",ColorNegro, ColorRojo);
+				Pintar(x + 1, y + 0, "  /^\\  ", ColorNegro, ColorRojo);
 
 				// Cabeza y cara
-				Pintar(x + 2, y + 1, " (o o) ", ColorGrisOscuro,ColorNegro);
-				Pintar(x + 2, y + 2, "  \\_/  ", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 1, " (o o) ", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 2, "  \\_/  ", ColorGrisOscuro, ColorNegro);
 
 				// ARma
-				Pintar(x + 4, y - 1,  " ^ ",ColorNegro, ColorGris);     
-				Pintar(x + 4, y + 0,  " ||",ColorNegro, ColorGris);     
+				Pintar(x + 4, y - 1, " ^ ", ColorNegro, ColorGris);
+				Pintar(x + 4, y + 0, " ||", ColorNegro, ColorGris);
 
 				// Cuerpo y brazos
-				Pintar(x + 1, y + 3, "/",ColorNegro, ColorAzul);      
-				Pintar(x + 6, y + 3, "\\",ColorNegro, ColorAzul);      
+				Pintar(x + 1, y + 3, "/", ColorNegro, ColorAzul);
+				Pintar(x + 6, y + 3, "\\", ColorNegro, ColorAzul);
 
-				Pintar(x + 2, y + 3, "|[_]|",ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "|[_]|", ColorNegro, ColorBlanco);
 
 				// Piernas 
-				Pintar(x + 2, y + 5, "/   \\",ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/   \\", ColorNegro, ColorAzul);
 
 				//Pies
-				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
 			}
 		}
 	}
 
 	void Borrar(int AntiguoX, int AntiguoY) {
-		BorrarAnimacion(AntiguoX-1 , AntiguoY, 20, 7);
+		BorrarAnimacion(AntiguoX - 1, AntiguoY, 12, 7);
 	}
 };
 /*=================================================================*/
+/* Clase Enemigos*/
+class Enemigos {
+private:
+	int x;
+	int y;
+public:
+	Enemigos(int _x, int _y) : x(_x), y(_y) {}
+	void setCursor(int nuevo_x, int nuevo_y) {
+		x = nuevo_x;
+		y = nuevo_y;
+	}
+	void DibujarEnemigo() {
+		
+			ConsoleColor ColorNegro = ConsoleColor::Black;
+			ConsoleColor ColorRojo = ConsoleColor::DarkRed;
+			//Cabeza
+			Pintar(x + 2, y, "   ", ColorNegro, ColorNegro);
+			Pintar(x + 1, y + 1, " \\ / ", ColorNegro, ColorRojo);
+			//Ojos
+			Pintar(x, y + 2, "       ", ColorNegro, ColorRojo);
+			Pintar(x + 2, y + 2, " ", ColorRojo, ColorRojo);
+			Pintar(x + 4, y + 2, " ", ColorRojo, ColorRojo);
+			//Cuerpo
+			Pintar(x, y + 3, "       ", ColorNegro, ColorRojo);
+
+			//Brazos:
+			Pintar(x + 1, y + 4, " ", ColorNegro, ColorNegro);
+			Pintar(x + 3, y + 4, " ", ColorNegro, ColorNegro);
+			Pintar(x + 5, y + 4, " ", ColorNegro, ColorNegro);
+			Pintar(x + 1, y + 5, " ", ColorNegro, ColorNegro);
+			Pintar(x + 3, y + 5, " ", ColorNegro, ColorNegro);
+			Pintar(x + 5, y + 5, " ", ColorNegro, ColorNegro);
+		
+		
+	}
+	void BorrarEnemigo(int AntiguoX, int AntiguoY) {
+		BorrarAnimacion(AntiguoX, AntiguoY, 10, 6);
+	}
+	int getX(){
+		return x;
+	}
+	int getY() {
+		return y;
+	}
+};
+
+
+/*=================================================================*/
+
 
 /* Clase  Nubes*/
 class Nubes {
@@ -296,7 +346,7 @@ private:
 public:
 	Nubes(int _x, int _y) : x(_x), y(_y) {}
 
-	void setCursor(int nuevoX, int nuevoY){
+	void setCursor(int nuevoX, int nuevoY) {
 		x = nuevoX;
 		y = nuevoY;
 	}
@@ -319,7 +369,7 @@ public:
 			Pintar(x - 4, y + 3, " Boluarte?", ColorGris, ColorNegro);
 		}
 		if (animacion == 3) {
-			Pintar(x-1, y + 1, "      ", ColorGris, ColorNegro);
+			Pintar(x - 1, y + 1, "      ", ColorGris, ColorNegro);
 			Pintar(x - 2, y + 2, "        ", ColorGris, ColorNegro);
 			Pintar(x - 3, y + 3, "         ", ColorGris, ColorNegro);
 			Pintar(x - 4, y + 4, "           ", ColorGris, ColorNegro);
@@ -335,8 +385,8 @@ public:
 			Pintar(x - 1, y + 5, " |  | | ", ColorAzul, ColorAzulOscuro);
 		}
 	}
-	void BorrarNube(int AntiguoX,int AntiguoY) {
-		BorrarAnimacion(AntiguoX-4, AntiguoY, 20, 6);
+	void BorrarNube(int AntiguoX, int AntiguoY) {
+		BorrarAnimacion(AntiguoX - 4, AntiguoY, 20, 6);
 	}
 };
 
@@ -348,11 +398,11 @@ public:
 void Disparar(int personajeX, int personajeY, int direccion) {
 	clock_t ahora = clock();
 
-	if (puedeDisparar && (ahora - ultimoDisparo) >= cooldownDisparo) {
+	if (puedeDisparar && (ahora - ultimoDisparo) * 1000 / CLOCKS_PER_SEC >= cooldownDisparo) {
 		balaActiva = true;
 		balaDireccion = direccion;
 
-		// Posición inicial basada en la dirección del personaje
+		// PosiciÃ³n inicial basada en la direcciÃ³n del personaje
 		if (direccion == 1) { // Izquierda
 			balaX = personajeX - 3;
 		}
@@ -382,7 +432,7 @@ void ActualizarBala() {
 		if (balaDireccion == 1) balaX -= velocidadBala; // Izquierda
 		else balaX += velocidadBala;                   // Derecha
 
-		// 3. Verificar límites
+		// 3. Verificar lÃ­mites
 		if (balaX < 2 || balaX > 148) {
 			balaActiva = false;
 			return;
@@ -405,22 +455,23 @@ int main() {
 	Window();
 	Piso(150);
 
-	
-	//Poner el tamaño de la consola, para que funcione en Win10
+
+	//Poner el tamaÃ±o de la consola, para que funcione en Win10
 	Console::SetWindowSize(150, 40);
 	Console::SetBufferSize(150, 50);
-	
+
 
 	//Personaje
 	int x = 90; int y = 28;
 	Personaje Marco(x, y);
 	//Nubes
+	int movimiento_nube_1 = 1;
 	int FormaNube1 = 1;
-	int Nube_X_1 = 80; int Nube_Y_1 = 10;
+	int Nube_X_1 = 120; int Nube_Y_1 = 10;
 	Nubes nube1(Nube_X_1, Nube_Y_1);
 
 	int FormaNube2 = 2;
-	int Nube_X_2 = 20; int Nube_Y_2 = 5;
+	int Nube_X_2 = 30; int Nube_Y_2 = 5;
 	Nubes nube2(Nube_X_2, Nube_Y_2);
 
 	int FormaNube3 = 3;
@@ -436,20 +487,35 @@ int main() {
 	nube3.DibujarNube(FormaNube3);
 	nube4.DibujarNube(FormaNube4);
 
+	//Controlar tiempo y animaciones 
 	int frame = 1;
 	int posicion = 1;
 	int animacion = 1;
-	auto UltimoMomento = Clock::now();
+	auto UltimoMomentoNube = Clock::now();
 	auto Intervalo = chrono::milliseconds(500);
-	Marco.Dibujar(1,1);
+	Marco.Dibujar(1, 1);
+
+	//Enemigos
+	auto UltimoMomentoEnemigo = Clock::now();
+	auto UltimoMomentoEnemigoFuerte = Clock::now();
+
+	auto IntervaloEnemigos = chrono::milliseconds(6000);
+	auto IntervaloEnemigosFuertes = chrono::milliseconds(15000);
+	vector<Enemigos> ListaEnemigos;
+	vector<Enemigos> ListaEnemigosFuertes;
 	while (true) {
 		bool moverse = false;
+		
 		//Coordenadas Nubes
 		int AntiguoXNube1 = Nube_X_1; int AntiguoYNube1 = Nube_Y_1;
 		int AntiguoXNube2 = Nube_X_2; int AntiguoYNube2 = Nube_Y_2;
 		int AntiguoXNube3 = Nube_X_3; int AntiguoYNube3 = Nube_Y_3;
 		int AntiguoXNube4 = Nube_X_4; int AntiguoYNube4 = Nube_Y_4;
 
+		//Coordenadas Personaje
+		int AntiguoX = x; int AntiguoY = y;
+
+		
 		// Verificar cooldown del disparo
 		if (!puedeDisparar) {
 			clock_t ahora = clock();
@@ -457,10 +523,6 @@ int main() {
 				puedeDisparar = true;
 			}
 		}
-
-		//Cordenadas Personaje
-		int AntiguoX = x; int AntiguoY = y;
-
 
 		if (_kbhit()) {
 			int Tecla = _getch();
@@ -485,8 +547,8 @@ int main() {
 					moverse = true;
 				}
 				if (Tecla == static_cast<int>(Teclas::ARRIBA)) {
-					posicion = 3;   
-					frame = 1;         
+					posicion = 3;
+					frame = 1;
 					Marco.Dibujar(posicion, frame);
 				}
 				Marco.setCursor(x, y);
@@ -499,41 +561,59 @@ int main() {
 			}
 
 
+
 			if (moverse == true) {
 				Marco.Borrar(AntiguoX, AntiguoY);
 				Marco.Dibujar(posicion, frame);
 			}
 
 		}
-		auto ahora = Clock::now();
-		
 		/*ACTUALIZAR LAS BALAS */
-		ActualizarBala(); 
+		ActualizarBala();
 
-		if (ahora - UltimoMomento >= Intervalo) {
+		auto ahora = Clock::now();
+
+
+		
+		if (ahora - UltimoMomentoEnemigo >= IntervaloEnemigos) {
+			int EnemigoX = 6; int EnemigoY = 29;
+			ListaEnemigos.push_back(Enemigos(EnemigoX, EnemigoY));
+			Enemigos UltimoEnemigo = ListaEnemigos.back();
+			UltimoEnemigo.DibujarEnemigo();
+			UltimoMomentoEnemigo = ahora;
+
+		}
+		if (ahora - UltimoMomentoEnemigoFuerte >= IntervaloEnemigosFuertes) {
+			int EnemigoX = 134; int EnemigoY = 29;
+			ListaEnemigosFuertes.push_back(Enemigos(EnemigoX, EnemigoY));
+			Enemigos UltimoEnemigo = ListaEnemigosFuertes.back();
+			UltimoEnemigo.DibujarEnemigo();
+			UltimoMomentoEnemigoFuerte = ahora;
+		}
+
+		if (ahora - UltimoMomentoNube >= Intervalo) {
 			/*    Nubes   */
-			
 			//nube 1
-			Nube_X_1--;
+			//Nube_X_1++;
 			nube1.setCursor(Nube_X_1, Nube_Y_1);
 			nube1.BorrarNube(AntiguoXNube1, AntiguoYNube1);
 			nube1.DibujarNube(FormaNube1);
 
 			//nube 2
-			Nube_X_2--;
+			//Nube_X_2++;
 			nube2.setCursor(Nube_X_2, Nube_Y_2);
 			nube2.BorrarNube(AntiguoXNube2, AntiguoYNube2);
 			nube2.DibujarNube(FormaNube2);
 
 			//nube 3
-			Nube_X_3--;
+			//Nube_X_3++;
 
 			nube3.setCursor(Nube_X_3, Nube_Y_3);
 			nube3.BorrarNube(AntiguoXNube3, AntiguoYNube3);
 			nube3.DibujarNube(FormaNube3);
 
 			//nube 4
-			Nube_X_4--;
+			//Nube_X_4++;
 			nube4.setCursor(Nube_X_4, Nube_Y_4);
 			nube4.BorrarNube(AntiguoXNube4, AntiguoYNube4);
 			nube4.DibujarNube(FormaNube4);
@@ -541,7 +621,7 @@ int main() {
 			/*===================*/
 
 			//plantas
-			for (int Columna : {20, 60, 100}) {
+			for (int Columna : {4, 130}) {
 				BorrarAnimacion(Columna, 31, 15, 4);
 				Vegetacion(animacion, Columna, 31);
 			}
@@ -550,9 +630,53 @@ int main() {
 			if (animacion >= 8) {
 				animacion = 1;
 			}
+
+
+			/*  Movimiento enemigos */
+
+			//Enemigo Normal
+			for (int i = 0; i < ListaEnemigos.size(); i++) {
+				int AntiguoXEnemigo = ListaEnemigos[i].getX();
+				int AntiguoYEnemigo = ListaEnemigos[i].getY();
+
+				int nuevoXEnemigo = AntiguoXEnemigo;
+				int nuevoYEnemigo = AntiguoYEnemigo;
+				if (nuevoXEnemigo <= x) {
+					nuevoXEnemigo++;
+				}
+				if (nuevoXEnemigo >= x) {
+					nuevoXEnemigo--;
+				}
+				ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
+				ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
+				ListaEnemigos[i].DibujarEnemigo();
+			}
+			//Enemigos fuertes
+			for (int i = 0; i < ListaEnemigosFuertes.size(); i++) {
+				int AntiguoXEnemigo = ListaEnemigosFuertes[i].getX();
+				int AntiguoYEnemigo = ListaEnemigosFuertes[i].getY();
+
+				int NuevoXEnemigo = AntiguoXEnemigo;
+				int NuevoYEnemigo = AntiguoYEnemigo;
+
+				if (NuevoXEnemigo < x) {
+					NuevoXEnemigo++;
+				}
+				if (NuevoXEnemigo > x) {
+					NuevoXEnemigo--;
+				}
+				ListaEnemigosFuertes[i].setCursor(NuevoXEnemigo, NuevoYEnemigo);
+				ListaEnemigosFuertes[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
+				ListaEnemigosFuertes[i].DibujarEnemigo();
+
+			}
+
+			/*=========================*/
 			//Restablecer intervalo
-			UltimoMomento = ahora;
+			UltimoMomentoNube = ahora;
+
 		}
+		Sleep(10);
 	}
 
 	/*LLAMAR A LA FUNCION BALA */
@@ -571,8 +695,8 @@ void Window() {
 	Console::BackgroundColor = ConsoleColor::Blue;
 	Console::SetWindowSize(1, 1);
 	Console::SetBufferSize(150, 40);
-	Console::SetWindowSize(150, 40); 
-	Console::Clear(); 
+	Console::SetWindowSize(150, 40);
+	Console::Clear();
 }
 
 //Funcion que define los arbustos
@@ -758,7 +882,6 @@ void Piso(int columnas) {
 //Funcion pintar + cursor + cout
 void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres) {
 	try {
-		Console::SetBufferSize(250, 50);
 
 		Console::BackgroundColor = fondo;
 		Console::ForegroundColor = ColorCaracteres;
