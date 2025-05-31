@@ -15,7 +15,7 @@ using Clock = chrono::steady_clock;
 /*  Protipo de funciones */
 void Window();
 void Piso(int columnas);
-void Vegetacion(int animacion, int x, int y);
+void Vegetacion(int animacion, int x, int y); 
 void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres);
 void BorrarAnimacion(int x, int y, int columna, int fila);
 /*=======================*/
@@ -24,6 +24,19 @@ void BorrarAnimacion(int x, int y, int columna, int fila);
 enum Teclas { DERECHA = 77, IZQUIERDA = 75 ,ARRIBA = 72};
 /*----------*/
 
+/* VARIABLES GLOBALES*/
+// ===== VARIABLES DE BALA ===== //
+bool balaActiva = false;
+int balaX, balaY;
+int balaDireccion;
+bool puedeDisparar = true;       // control de cooldown
+clock_t ultimoDisparo = 0;      // tiempo del último disparo
+const int cooldownDisparo = 500; // 500ms = 0.5s entre disparos
+const int velocidadBala = 1;
+
+auto ultimoMovimientoBala = Clock::now();
+const auto intervaloMovimientoBala = chrono::milliseconds(10); // Valor para mayor lentitud
+// ============================ //
 /* Personaje Principal */
 class Personaje {
 private:
@@ -330,6 +343,59 @@ public:
 /*=================================================================*/
 
 
+/* FUNCION DISPARAR */
+
+void Disparar(int personajeX, int personajeY, int direccion) {
+	clock_t ahora = clock();
+
+	if (puedeDisparar && (ahora - ultimoDisparo) >= cooldownDisparo) {
+		balaActiva = true;
+		balaDireccion = direccion;
+
+		// Posición inicial basada en la dirección del personaje
+		if (direccion == 1) { // Izquierda
+			balaX = personajeX - 3;
+		}
+		else { // Derecha
+			balaX = personajeX + 9;
+		}
+		balaY = personajeY + 4; // Altura del arma
+
+		ultimoDisparo = ahora;
+		puedeDisparar = false;
+	}
+}
+
+/*ACTUALIAZR BALA*/
+
+void ActualizarBala() {
+	auto ahora = Clock::now();
+
+	if (!balaActiva) return;
+
+	// Solo mover la bala si ha pasado el tiempo suficiente
+	if (ahora - ultimoMovimientoBala >= intervaloMovimientoBala) {
+		// 1. Borrar la bala
+		Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue);
+
+		// 2. Mover la bala
+		if (balaDireccion == 1) balaX -= velocidadBala; // Izquierda
+		else balaX += velocidadBala;                   // Derecha
+
+		// 3. Verificar límites
+		if (balaX < 2 || balaX > 148) {
+			balaActiva = false;
+			return;
+		}
+
+		// 4. Dibujar la bala
+		string simboloBala = (balaDireccion == 1) ? "<=" : "=>";
+		Pintar(balaX, balaY, simboloBala, ConsoleColor::Black, ConsoleColor::Yellow);
+
+		ultimoMovimientoBala = ahora; // Reiniciar el temporizador
+	}
+}
+
 
 
 
@@ -384,8 +450,18 @@ int main() {
 		int AntiguoXNube3 = Nube_X_3; int AntiguoYNube3 = Nube_Y_3;
 		int AntiguoXNube4 = Nube_X_4; int AntiguoYNube4 = Nube_Y_4;
 
+		// Verificar cooldown del disparo
+		if (!puedeDisparar) {
+			clock_t ahora = clock();
+			if (ahora - ultimoDisparo >= cooldownDisparo) {
+				puedeDisparar = true;
+			}
+		}
+
 		//Cordenadas Personaje
 		int AntiguoX = x; int AntiguoY = y;
+
+
 		if (_kbhit()) {
 			int Tecla = _getch();
 			if (Tecla == 0 || Tecla == 224) {
@@ -415,6 +491,14 @@ int main() {
 				}
 				Marco.setCursor(x, y);
 			}
+			else if ((Tecla == 'f' || Tecla == 'F' || Tecla == 32) && puedeDisparar)
+			{
+				Disparar(x, y, posicion);
+				puedeDisparar = false; // Activa el cooldown
+				ultimoDisparo = clock();
+			}
+
+
 			if (moverse == true) {
 				Marco.Borrar(AntiguoX, AntiguoY);
 				Marco.Dibujar(posicion, frame);
@@ -422,6 +506,10 @@ int main() {
 
 		}
 		auto ahora = Clock::now();
+		
+		/*ACTUALIZAR LAS BALAS */
+		ActualizarBala(); 
+
 		if (ahora - UltimoMomento >= Intervalo) {
 			/*    Nubes   */
 			
@@ -466,6 +554,10 @@ int main() {
 			UltimoMomento = ahora;
 		}
 	}
+
+	/*LLAMAR A LA FUNCION BALA */
+
+
 	return 0;
 }
 /*=========================================================*/
