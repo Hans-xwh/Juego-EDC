@@ -6,7 +6,11 @@
 #include <vector>
 #include <chrono>
 #include <locale>
-#include <vector>
+#include <mmsystem.h>
+//PARA COLOCAR UN BACKGROUND AL MENU SIMPLE
+#include <stdlib.h>
+//PARA EJECUTAR EL AUDIO
+#pragma comment(lib, "winmm.lib") 
 
 //Documentacion .NET ("https://learn.microsoft.com/en-us/dotnet/api/system.console?view=net-9.0")
 
@@ -16,14 +20,13 @@ using Clock = chrono::steady_clock;
 /*  Protipo de funciones */
 void Window();
 void Piso(int columnas);
-void Vegetacion(int animacion, int x, int y);
+void Vegetacion(int animacion, int x, int y); 
 void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres);
 void BorrarAnimacion(int x, int y, int columna, int fila);
-void Cursor(int x, int y);
 /*=======================*/
 
 /* Teclas */
-enum Teclas { DERECHA = 77, IZQUIERDA = 75, ARRIBA = 72 };
+enum Teclas { DERECHA = 77, IZQUIERDA = 75 ,ARRIBA = 72};
 /*----------*/
 
 /* VARIABLES GLOBALES*/
@@ -32,16 +35,19 @@ bool balaActiva = false;
 int balaX, balaY;
 int balaDireccion;
 bool puedeDisparar = true;       // control de cooldown
-clock_t ultimoDisparo = 0;      // tiempo del Ãºltimo disparo
+clock_t ultimoDisparo = 0;      // tiempo del último disparo
 const int cooldownDisparo = 500; // 500ms = 0.5s entre disparos
 const int velocidadBala = 1;
 
+/*PARA EL MENU*/
+const int FILAS = 40;
+const int COLUMNAS = 80;
+
 auto ultimoMovimientoBala = Clock::now();
 const auto intervaloMovimientoBala = chrono::milliseconds(10); // Valor para mayor lentitud
-
 // ============================ //
 /* Personaje Principal */
-struct Personaje {
+class Personaje {
 private:
 	int x;
 	int y;
@@ -62,100 +68,100 @@ public:
 		ConsoleColor ColorAzulOscuro = ConsoleColor::DarkBlue;
 		/* Direccion a la izquierda  */
 		if (posicion == 1) {
-			if (frame == 1) {
+			if (frame == 1){
 				// Sombrero 
-				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
+				Pintar(x + 1, y,     " /^^^^\\ ",ColorNegro, ColorRojo);
 
 				// Cabeza y cara
-				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro, ColorNegro);
-				Pintar(x + 2, y + 2, "|  ^  |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 2, "|  ^  |", ColorGrisOscuro,ColorNegro);
 
 				// Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
-				Pintar(x + 1, y + 4, "--", ColorNegro, ColorAzul);
-				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
-				Pintar(x + 7, y + 4, "--", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
+				Pintar(x+1, y + 4,   "--",ColorNegro, ColorAzul);             
+				Pintar(x + 2, y + 4,  "|   |",ColorNegro, ColorAzul);       
+				Pintar(x + 7, y + 4,        "--",ColorNegro, ColorAzul);        
 
 				// Arma
-				Pintar(x - 1, y + 4, "==>", ColorNegro, ColorGris);
+		  Pintar(x - 1, y + 4,"==>",ColorNegro, ColorGris);     
 
 				// Piernas
-				Pintar(x + 2, y + 5, "/   \\", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/   \\",ColorNegro, ColorAzul);
 
 				// Pies
-				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
 
 			}
 
-			if (frame == 2) {
+			if (frame == 2){
 				//Sombrero
-				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
+				Pintar(x + 1, y,    " /^^^^\\ ",ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro, ColorNegro);
-				Pintar(x + 2, y + 2, "|  -  |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 2, "|  -  |", ColorGrisOscuro,ColorNegro);
 
 				//Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
 
-				Pintar(x, y + 4, "-", ColorNegro, ColorAzul);
-				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
-				Pintar(x + 7, y + 4, " -", ColorNegro, ColorAzul);
+			  Pintar(x, y + 4,"-",ColorNegro, ColorAzul);            
+				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
+				Pintar(x + 7, y + 4,        " -",ColorNegro, ColorAzul);             
 				//Arma
-				Pintar(x - 1, y + 4, "==>", ColorNegro, ColorGris);
+			Pintar(x - 1, y + 4, "==>",ColorNegro, ColorGris);            
 				//Piernas
-				Pintar(x + 2, y + 5, "/    ", ColorNegro, ColorAzul);
-				Pintar(x + 5, y + 5, " \\", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/    ",ColorNegro, ColorAzul);           
+				Pintar(x + 5, y + 5,     " \\",ColorNegro, ColorAzul);            
 				//pies
-				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
-
+				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
+				
 
 			}
 
-			if (frame == 3) {
+			if (frame == 3){
 				//Sombrero
-				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
+				Pintar(x + 1, y,     " /^^^^\\ ",ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| o_o |", ColorGrisOscuro, ColorNegro);
-				Pintar(x + 2, y + 2, "|  o  |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 1, "| o_o |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 2, "|  o  |", ColorGrisOscuro,ColorNegro);
 
-				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
 				//Brazos y cuerpo
-				Pintar(x - 1, y + 4, "-", ColorNegro, ColorAzul);
-				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
-				Pintar(x + 6, y + 4, "--", ColorNegro, ColorAzul);
+				Pintar(x-1, y + 4, "-",ColorNegro, ColorAzul);                  
+				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
+				Pintar(x + 6, y + 4,        "--",ColorNegro, ColorAzul);           
 				//Arma
-				Pintar(x, y + 4, "==>", ColorNegro, ColorGris);
+			Pintar(x 	, y + 4, "==>",ColorNegro, ColorGris);            
 				//Piernas
-				Pintar(x + 2, y + 5, "    \\", ColorNegro, ColorAzul);
-				Pintar(x + 2, y + 5, "/", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "    \\",ColorNegro, ColorAzul);        
+				Pintar(x + 2, y + 5, "/",ColorNegro, ColorAzul);              
 				//Pies 
-				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
-
+				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
+				
 
 			}
 
-			if (frame == 4) {
+			if (frame == 4){
 				//Sombrero
-				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
+				Pintar(x + 1, y,   " /^^^^\\ ",ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| > < |", ColorGrisOscuro, ColorNegro);
-				Pintar(x + 2, y + 2, "| [!] |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 1, "| > < |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 2, "| [!] |", ColorGrisOscuro,ColorNegro); 
 				//Cuerpo
-				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
 				//Arma y brazos
-				Pintar(x - 1, y + 4, "==>", ColorNegro, ColorGris);
-				Pintar(x, y + 4, "-", ColorNegro, ColorAzul);
-				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
-				Pintar(x + 7, y + 4, "--", ColorNegro, ColorAzul);
+			Pintar(x - 1, y + 4,"==>",ColorNegro, ColorGris);        
+				Pintar(x, y + 4,    "-",ColorNegro, ColorAzul);              
+				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
+				Pintar(x + 7, y + 4,         "--",ColorNegro, ColorAzul);        
 
 				//Piernas
-				Pintar(x + 2, y + 5, "/ _ \\", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/ _ \\",ColorNegro, ColorAzul);
 				//pies
-				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
 			}
 
 		}
@@ -163,95 +169,95 @@ public:
 		if (posicion == 2) {
 			if (frame == 1) {
 				// Sombrero 
-				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
+				Pintar(x + 1, y,     " /^^^^\\ ",ColorNegro, ColorRojo);
 
 				// Cabeza
-				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro, ColorNegro);
-				Pintar(x + 2, y + 2, "|  ^  |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 2, "|  ^  |", ColorGrisOscuro,ColorNegro);
 
 				// Cuerpo
-				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
 
 				// Brazos y torzo
-				Pintar(x + 6, y + 4, "--", ColorNegro, ColorAzul);
-				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
-				Pintar(x, y + 4, "--", ColorNegro, ColorAzul);
+				Pintar(x + 6, y + 4,         "--",ColorNegro, ColorAzul);        
+				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);       
+			 Pintar(x, y + 4, "--",ColorNegro, ColorAzul);          
 
 				// Arma 
-				Pintar(x + 8, y + 4, "<==", ColorNegro, ColorGris);
+				Pintar(x + 8, y + 4,         "<==",ColorNegro, ColorGris); 
 
 				// Piernas
-				Pintar(x + 2, y + 5, "/   \\", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/   \\",ColorNegro, ColorAzul);
 
 				// Pies
-				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
 			}
 
 			if (frame == 2) {
 				//Sombrero
-				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
+				Pintar(x + 1, y,     " /^^^^\\ ",ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro, ColorNegro);
-				Pintar(x + 2, y + 2, "|  -  |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 1, "| o o |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 2, "|  -  |", ColorGrisOscuro,ColorNegro);
 				//Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
 
-				Pintar(x + 7, y + 4, "--", ColorNegro, ColorAzul);
-				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
-				Pintar(x, y + 4, " -", ColorNegro, ColorAzul);
+				Pintar(x + 7, y + 4,          "--",ColorNegro, ColorAzul);              
+				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
+			 Pintar(x , y + 4, " -",ColorNegro, ColorAzul);             
 				//Arma
-				Pintar(x + 7, y + 4, "<==", ColorNegro, ColorGris);
+				Pintar(x + 7, y + 4,          "<==",ColorNegro, ColorGris);        
 				//pierna
-				Pintar(x + 2, y + 5, "/", ColorNegro, ColorAzul);
-				Pintar(x + 5, y + 5, " \\", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/",ColorNegro, ColorAzul);
+				Pintar(x + 5, y + 5, " \\",ColorNegro, ColorAzul);
 
 				//pies
-				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6, "_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
 			}
 
 			if (frame == 3) {
 				//Sombrero
-				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
+				Pintar(x + 1, y,    " /^^^^\\ ",ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| o_o |", ColorGrisOscuro, ColorNegro);
-				Pintar(x + 2, y + 2, "|  o  |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 1, "| o_o |", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 2, "|  o  |", ColorGrisOscuro,ColorNegro);
 				//Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
 
-				Pintar(x + 8, y + 4, "-", ColorNegro, ColorAzul);
-				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
-				Pintar(x, y + 4, "--", ColorNegro, ColorAzul);
+				Pintar(x + 8, y + 4,        "-",ColorNegro, ColorAzul);               
+				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
+			   Pintar(x , y + 4,"--",ColorNegro, ColorAzul);               
 				//arma
-				Pintar(x + 7, y + 4, "<==", ColorNegro, ColorGris);
+				Pintar(x + 7, y + 4,         "<==",ColorNegro, ColorGris);           
 				//piernas
-				Pintar(x + 2, y + 5, "/    ", ColorNegro, ColorAzul);
-				Pintar(x + 5, y + 5, " \\", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/    ",ColorNegro, ColorAzul);           
+				Pintar(x + 5, y + 5,    " \\",ColorNegro, ColorAzul);             
 				//pies
-				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
 			}
 
 			if (frame == 4) {
 				//Sombrero
-				Pintar(x + 1, y, " /^^^^\\ ", ColorNegro, ColorRojo);
+				Pintar(x + 1, y,    " /^^^^\\ ",ColorNegro, ColorRojo);
 				//Cabeza y cara
-				Pintar(x + 2, y + 1, "| < > |", ColorGrisOscuro, ColorNegro);
-				Pintar(x + 2, y + 2, "| [!] |", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 1, "| < > |", ColorGrisOscuro,ColorNegro);      
+				Pintar(x + 2, y + 2, "| [!] |", ColorGrisOscuro,ColorNegro);  
 				//Cuerpo y brazos
-				Pintar(x + 2, y + 3, "| [_] |", ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "| [_] |",ColorNegro, ColorBlanco);
 
-				Pintar(x + 6, y + 4, "--", ColorNegro, ColorAzul);
-				Pintar(x + 2, y + 4, "|   |", ColorNegro, ColorAzul);
-				Pintar(x, y + 4, "--", ColorNegro, ColorAzul);
+				Pintar(x + 6, y + 4,      "--",ColorNegro, ColorAzul);               
+				Pintar(x + 2, y + 4, "|   |",ColorNegro, ColorAzul);
+				Pintar(x, y + 4,"--",ColorNegro, ColorAzul);  
 				//ARma
-				Pintar(x + 8, y + 4, "<==", ColorNegro, ColorGris);
+				Pintar(x + 8, y + 4,        "<==",ColorNegro, ColorGris);
 				//PIErnas
-				Pintar(x + 2, y + 5, "/ _ \\", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/ _ \\",ColorNegro, ColorAzul);
 				//pies
-				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
 			}
 
 
@@ -259,100 +265,47 @@ public:
 		if (posicion == 3) {
 			if (frame == 1) {
 				//Sombrero
-				Pintar(x + 1, y + 0, "  /^\\  ", ColorNegro, ColorRojo);
+				Pintar(x + 1, y + 0, "  /^\\  ",ColorNegro, ColorRojo);
 
 				// Cabeza y cara
-				Pintar(x + 2, y + 1, " (o o) ", ColorGrisOscuro, ColorNegro);
-				Pintar(x + 2, y + 2, "  \\_/  ", ColorGrisOscuro, ColorNegro);
+				Pintar(x + 2, y + 1, " (o o) ", ColorGrisOscuro,ColorNegro);
+				Pintar(x + 2, y + 2, "  \\_/  ", ColorGrisOscuro,ColorNegro);
 
 				// ARma
-				Pintar(x + 4, y - 1, " ^ ", ColorNegro, ColorGris);
-				Pintar(x + 4, y + 0, " ||", ColorNegro, ColorGris);
+				Pintar(x + 4, y - 1,  " ^ ",ColorNegro, ColorGris);     
+				Pintar(x + 4, y + 0,  " ||",ColorNegro, ColorGris);     
 
 				// Cuerpo y brazos
-				Pintar(x + 1, y + 3, "/", ColorNegro, ColorAzul);
-				Pintar(x + 6, y + 3, "\\", ColorNegro, ColorAzul);
+				Pintar(x + 1, y + 3, "/",ColorNegro, ColorAzul);      
+				Pintar(x + 6, y + 3, "\\",ColorNegro, ColorAzul);      
 
-				Pintar(x + 2, y + 3, "|[_]|", ColorNegro, ColorBlanco);
+				Pintar(x + 2, y + 3, "|[_]|",ColorNegro, ColorBlanco);
 
 				// Piernas 
-				Pintar(x + 2, y + 5, "/   \\", ColorNegro, ColorAzul);
+				Pintar(x + 2, y + 5, "/   \\",ColorNegro, ColorAzul);
 
 				//Pies
-				Pintar(x + 2, y + 6, "_", ColorNegro, ColorAzulOscuro);
-				Pintar(x + 6, y + 6, "_", ColorNegro, ColorAzulOscuro);
+				Pintar(x + 2, y + 6,"_",ColorNegro, ColorAzulOscuro);
+				Pintar(x + 6, y + 6,      "_",ColorNegro, ColorAzulOscuro);
 			}
 		}
 	}
 
 	void Borrar(int AntiguoX, int AntiguoY) {
-		BorrarAnimacion(AntiguoX - 1, AntiguoY, 12, 7);
+		BorrarAnimacion(AntiguoX-1 , AntiguoY, 20, 7);
 	}
 };
 /*=================================================================*/
-/* Clase Enemigos*/
-struct Enemigos {
-private:
-	int x;
-	int y;
-public:
-	Enemigos() : x(6), y(29) {}
-	Enemigos(int _x, int _y) : x(_x), y(_y) {}
-	void setCursor(int nuevo_x, int nuevo_y) {
-		x = nuevo_x;
-		y = nuevo_y;
-	}
-	void DibujarEnemigo() {
-		Console::BackgroundColor = ConsoleColor::Black;
-
-	
-		//Cabeza
-		
-		Cursor(x + 2, y); cout << "   ";
-		Console::ForegroundColor = ConsoleColor::DarkRed;
-		Cursor(x + 1, y + 1); cout << " \\ / ";
-		//Ojos
-		Cursor(x, y + 2); cout << "       ";
-		Pintar(x + 2, y + 2, " ", ConsoleColor::DarkRed, ConsoleColor::DarkRed);
-		Pintar(x + 4, y + 2, " ", ConsoleColor::DarkRed, ConsoleColor::DarkRed);
-		Console::BackgroundColor = ConsoleColor::Black;
-		//Cuerpo
-		Cursor(x, y + 3); cout << "       ";
-
-		//Brazos:
-		Cursor(x + 1, y + 4); cout << " ";
-		Cursor(x + 3, y + 4); cout << " ";
-		Cursor(x + 5, y + 4) ;cout<<" ";
-		Cursor(x + 1, y + 5) ;cout<<" ";
-		Cursor(x + 3, y + 5) ;cout<<" ";
-		Cursor(x + 5, y + 5) ;cout<<" ";
-
-
-	}
-	void BorrarEnemigo(int AntiguoX, int AntiguoY) {
-		BorrarAnimacion(AntiguoX, AntiguoY, 10, 6);
-	}
-	int getX() {
-		return x;
-	}
-	int getY() {
-		return y;
-	}
-};
-
-
-/*=================================================================*/
-
 
 /* Clase  Nubes*/
-struct Nubes {
+class Nubes {
 private:
 	int x;
 	int y;
 public:
 	Nubes(int _x, int _y) : x(_x), y(_y) {}
 
-	void setCursor(int nuevoX, int nuevoY) {
+	void setCursor(int nuevoX, int nuevoY){
 		x = nuevoX;
 		y = nuevoY;
 	}
@@ -375,7 +328,7 @@ public:
 			Pintar(x - 4, y + 3, " Boluarte?", ColorGris, ColorNegro);
 		}
 		if (animacion == 3) {
-			Pintar(x - 1, y + 1, "      ", ColorGris, ColorNegro);
+			Pintar(x-1, y + 1, "      ", ColorGris, ColorNegro);
 			Pintar(x - 2, y + 2, "        ", ColorGris, ColorNegro);
 			Pintar(x - 3, y + 3, "         ", ColorGris, ColorNegro);
 			Pintar(x - 4, y + 4, "           ", ColorGris, ColorNegro);
@@ -391,11 +344,10 @@ public:
 			Pintar(x - 1, y + 5, " |  | | ", ColorAzul, ColorAzulOscuro);
 		}
 	}
-	void BorrarNube(int AntiguoX, int AntiguoY) {
-		BorrarAnimacion(AntiguoX - 4, AntiguoY, 20, 6);
+	void BorrarNube(int AntiguoX,int AntiguoY) {
+		BorrarAnimacion(AntiguoX-4, AntiguoY, 20, 6);
 	}
 };
-
 
 /*=================================================================*/
 
@@ -405,11 +357,11 @@ public:
 void Disparar(int personajeX, int personajeY, int direccion) {
 	clock_t ahora = clock();
 
-	if (puedeDisparar && (ahora - ultimoDisparo) * 1000 / CLOCKS_PER_SEC >= cooldownDisparo) {
+	if (puedeDisparar && (ahora - ultimoDisparo) >= cooldownDisparo) {
 		balaActiva = true;
 		balaDireccion = direccion;
 
-		// PosiciÃ³n inicial basada en la direcciÃ³n del personaje
+		// Posición inicial basada en la dirección del personaje
 		if (direccion == 1) { // Izquierda
 			balaX = personajeX - 3;
 		}
@@ -439,7 +391,7 @@ void ActualizarBala() {
 		if (balaDireccion == 1) balaX -= velocidadBala; // Izquierda
 		else balaX += velocidadBala;                   // Derecha
 
-		// 3. Verificar lÃ­mites
+		// 3. Verificar límites
 		if (balaX < 2 || balaX > 148) {
 			balaActiva = false;
 			return;
@@ -450,8 +402,103 @@ void ActualizarBala() {
 		Pintar(balaX, balaY, simboloBala, ConsoleColor::Black, ConsoleColor::Yellow);
 
 		ultimoMovimientoBala = ahora; // Reiniciar el temporizador
+	}
+}
 
-		return;
+
+
+/*FUNCION MENU*/
+int menu_matriz[FILAS][COLUMNAS] = { {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,1,1,0,0,0,0,0,1,1,1,1,1,1,1,0,1,0,0,0,0,1,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{1,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,1,0,0,1,0,0,1,1,1,1,0,0,1,1,1,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,1,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+
+
+//EL 2. DINAMICA
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,1,1,0,0,0,0,1,0,0,0,1,1,1,0,0,0,1,1,0,0,0,1,1,0,1,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{1,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,1,1,0,0,1,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,1,0,1,0,1,0,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,1,1,0,0,1,0,0,1,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,1,0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,1,1,0,0,0,0,0,1,0,0,0,0,1,0,0,1,1,0,0,1,0,0,0,1,0,1,0,1,1,1,1,1,1,1,0,1,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,1,0,0,1,0,0,0,0,1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,1,1,1,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} };
+
+
+
+
+void seleccionar_opcion() {
+	int tecla;
+	//PARA QUE INGRESE EL NUMERO PARA SELECCIONAR UNA PARTE DEL MUNDO
+	tecla = _getch();
+
+	PlaySound(NULL, 0, 0); // Detener música del menú
+}
+
+
+//ESTABLECER COLORES
+void colores(int codigo) {
+	switch (codigo)
+	{
+	case 0:
+		Console::ForegroundColor = ConsoleColor::Black;
+		break;
+	case 1:
+		Console::ForegroundColor = ConsoleColor::Red;
+		break;
+	default:
+		break;
+	}
+}
+
+
+
+//FUNCION MOVER CURSOR, PARA INDICAR DONDE IMPRIMIR
+void mover_cursor(int columna, int fila) {
+	//SET CURSOR POSITION (X - Y)
+	Console::SetCursorPosition(columna, fila);
+}
+
+//ARREGLOS (Y - X)
+void dibujar_mapa(int menu[FILAS][COLUMNAS]) {
+	for (int fila = 0; fila < FILAS; fila++)
+	{
+		for (int columna = 0; columna < COLUMNAS; columna++)
+		{
+			//Se llama a la funcion mover cursor para indicar donde va a imprimir el siguiente cout
+			mover_cursor(columna, fila);
+			//CON EL CURSOR EN LA POSICION, SE ESTABLECE EL COLOR EN LA FILA X COLUMNA DE LA MATRIZ
+			colores(menu[fila][columna]);
+			//SE COLOCA EL BLOQUE CON EL COLOR SEGUN EL ASCCI
+			cout << (char)219;
+		}
 	}
 }
 
@@ -460,27 +507,53 @@ void ActualizarBala() {
 
 /*      Funcion Principal Main    */
 int main() {
-	setlocale(LC_ALL, "Spanish");
-	Window();
-	Piso(150);
-
-
-	//Poner el tamaÃ±o de la consola, para que funcione en Win10
+	// Al inicio de main(), antes de cualquier cout:
+	
+	//setlocale(LC_ALL, "Spanish");
+	
+	
+	//Poner el tamaño de la consola, para que funcione en Win10
 	Console::SetWindowSize(150, 40);
 	Console::SetBufferSize(150, 50);
+	
+	
+	// Configuración inicial con fondo negro para el menú
+	//Console::BackgroundColor = ConsoleColor::Black;
 
+	//PARA EJECTUAR EL MENU
+	//EL AUDIO DE FONDO
+	
+	PlaySound(TEXT("horizon.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	Sleep(10);
+	
+	
+	
+
+	//SE LLAMA A LA FUNCION DE DIBUJAR VENTANA/MAPA
+	dibujar_mapa(menu_matriz);
+
+	//SE LLAMA A LA FUNCION SELECCIONAR LA OPCION
+	seleccionar_opcion();
+	
+	//SE CONFIGURA QUE EL FONDO ESE AZUL DESPUES DE PRESIONAR CUALQUIER TECLA POR EL MOMENOT
+	Console::BackgroundColor = ConsoleColor::Blue;
+	Console::Clear();  // Limpia la consola
+
+	
+	Piso(150);
+	
+	PlaySound(TEXT("musica.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
 	//Personaje
 	int x = 90; int y = 28;
 	Personaje Marco(x, y);
 	//Nubes
-	int movimiento_nube_1 = 1;
 	int FormaNube1 = 1;
-	int Nube_X_1 = 120; int Nube_Y_1 = 10;
+	int Nube_X_1 = 80; int Nube_Y_1 = 10;
 	Nubes nube1(Nube_X_1, Nube_Y_1);
 
 	int FormaNube2 = 2;
-	int Nube_X_2 = 30; int Nube_Y_2 = 5;
+	int Nube_X_2 = 20; int Nube_Y_2 = 5;
 	Nubes nube2(Nube_X_2, Nube_Y_2);
 
 	int FormaNube3 = 3;
@@ -496,40 +569,19 @@ int main() {
 	nube3.DibujarNube(FormaNube3);
 	nube4.DibujarNube(FormaNube4);
 
-	//Controlar tiempo y animaciones 
 	int frame = 1;
 	int posicion = 1;
 	int animacion = 1;
-	auto UltimoMomentoNube = Clock::now();
+	auto UltimoMomento = Clock::now();
 	auto Intervalo = chrono::milliseconds(500);
-	Marco.Dibujar(1, 1);
-
-	//Enemigos
-	auto UltimoMomentoEnemigo = Clock::now();
-	auto UltimoMomentoEnemigoFuerte = Clock::now();
-
-	auto IntervaloEnemigos = chrono::milliseconds(6000);
-	auto IntervaloEnemigosFuertes = chrono::milliseconds(15000);
-	Enemigos ListaEnemigosFuertes[1];
-	Enemigos ListaEnemigos[2];
-	int TamaÃ±oListaEnemigos = sizeof(ListaEnemigos) / sizeof(ListaEnemigos[0]);
-	int TamaÃ±oListaEnemigosFuertes = sizeof(ListaEnemigosFuertes) / sizeof(ListaEnemigosFuertes[0]);
-	bool enemigosCreados = false;
-	bool enemigosFuertesCreados = false;
-	int IndiceEnemigos = 0; int IndiceEnemigosFuertes = 0;
-
+	Marco.Dibujar(1,1);
 	while (true) {
 		bool moverse = false;
-
 		//Coordenadas Nubes
 		int AntiguoXNube1 = Nube_X_1; int AntiguoYNube1 = Nube_Y_1;
 		int AntiguoXNube2 = Nube_X_2; int AntiguoYNube2 = Nube_Y_2;
 		int AntiguoXNube3 = Nube_X_3; int AntiguoYNube3 = Nube_Y_3;
 		int AntiguoXNube4 = Nube_X_4; int AntiguoYNube4 = Nube_Y_4;
-
-		//Coordenadas Personaje
-		int AntiguoX = x; int AntiguoY = y;
-
 
 		// Verificar cooldown del disparo
 		if (!puedeDisparar) {
@@ -538,6 +590,10 @@ int main() {
 				puedeDisparar = true;
 			}
 		}
+
+		//Cordenadas Personaje
+		int AntiguoX = x; int AntiguoY = y;
+
 
 		if (_kbhit()) {
 			int Tecla = _getch();
@@ -562,8 +618,8 @@ int main() {
 					moverse = true;
 				}
 				if (Tecla == static_cast<int>(Teclas::ARRIBA)) {
-					posicion = 3;
-					frame = 1;
+					posicion = 3;   
+					frame = 1;         
 					Marco.Dibujar(posicion, frame);
 				}
 				Marco.setCursor(x, y);
@@ -576,62 +632,41 @@ int main() {
 			}
 
 
-
 			if (moverse == true) {
 				Marco.Borrar(AntiguoX, AntiguoY);
 				Marco.Dibujar(posicion, frame);
 			}
 
 		}
-		/*ACTUALIZAR LAS BALAS */
-
-		ActualizarBala();
-
 		auto ahora = Clock::now();
+		
+		/*ACTUALIZAR LAS BALAS */
+		ActualizarBala(); 
 
-
-		if (ahora - UltimoMomentoEnemigo >= IntervaloEnemigos && IndiceEnemigos < TamaÃ±oListaEnemigos) {
-			int EnemigoX = 6; int EnemigoY = 29;
-			ListaEnemigos[IndiceEnemigos] = Enemigos(EnemigoX, EnemigoY);
-			ListaEnemigos[IndiceEnemigos].DibujarEnemigo();
-			enemigosCreados = true;
-			IndiceEnemigos++;
-			UltimoMomentoEnemigo = ahora;
-		}
-
-		if (ahora - UltimoMomentoEnemigoFuerte >= IntervaloEnemigosFuertes && IndiceEnemigosFuertes < TamaÃ±oListaEnemigosFuertes) {
-			int EnemigoX = 134; int EnemigoY = 29;
-			ListaEnemigosFuertes[IndiceEnemigosFuertes] = Enemigos(EnemigoX, EnemigoY);
-			ListaEnemigosFuertes[IndiceEnemigosFuertes].DibujarEnemigo();
-			enemigosFuertesCreados = true;
-			IndiceEnemigosFuertes++;
-			UltimoMomentoEnemigoFuerte = ahora;
-		}
-
-
-		if (ahora - UltimoMomentoNube >= Intervalo) {
+		if (ahora - UltimoMomento >= Intervalo) {
 			/*    Nubes   */
+			
 			//nube 1
-			//Nube_X_1++;
+			Nube_X_1--;
 			nube1.setCursor(Nube_X_1, Nube_Y_1);
 			nube1.BorrarNube(AntiguoXNube1, AntiguoYNube1);
 			nube1.DibujarNube(FormaNube1);
 
 			//nube 2
-			//Nube_X_2++;
+			Nube_X_2--;
 			nube2.setCursor(Nube_X_2, Nube_Y_2);
 			nube2.BorrarNube(AntiguoXNube2, AntiguoYNube2);
 			nube2.DibujarNube(FormaNube2);
 
 			//nube 3
-			//Nube_X_3++;
+			Nube_X_3--;
 
 			nube3.setCursor(Nube_X_3, Nube_Y_3);
 			nube3.BorrarNube(AntiguoXNube3, AntiguoYNube3);
 			nube3.DibujarNube(FormaNube3);
 
 			//nube 4
-			//Nube_X_4++;
+			Nube_X_4--;
 			nube4.setCursor(Nube_X_4, Nube_Y_4);
 			nube4.BorrarNube(AntiguoXNube4, AntiguoYNube4);
 			nube4.DibujarNube(FormaNube4);
@@ -639,7 +674,7 @@ int main() {
 			/*===================*/
 
 			//plantas
-			for (int Columna : {4, 130}) {
+			for (int Columna : {20, 60, 100}) {
 				BorrarAnimacion(Columna, 31, 15, 4);
 				Vegetacion(animacion, Columna, 31);
 			}
@@ -648,76 +683,15 @@ int main() {
 			if (animacion >= 8) {
 				animacion = 1;
 			}
-
-
-			/*  Movimiento enemigos */
-
-			//Enemigo Normal
-			if (enemigosCreados == true) {
-				for (int i = 0; i < TamaÃ±oListaEnemigos; i++) {
-					int AntiguoXEnemigo = ListaEnemigos[i].getX();
-					int AntiguoYEnemigo = ListaEnemigos[i].getY();
-
-					int nuevoXEnemigo = AntiguoXEnemigo;
-					int nuevoYEnemigo = AntiguoYEnemigo;
-					if (nuevoXEnemigo <= x) {
-						nuevoXEnemigo++;
-					}
-					if (nuevoXEnemigo >= x) {
-						nuevoXEnemigo--;
-					}
-					ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
-					ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
-					ListaEnemigos[i].DibujarEnemigo();
-				}
-			}
-			//Enemigos fuertes
-			if (enemigosFuertesCreados == true) {
-				for (int i = 0; i < TamaÃ±oListaEnemigosFuertes; i++) {
-					int AntiguoXEnemigo = ListaEnemigosFuertes[i].getX();
-					int AntiguoYEnemigo = ListaEnemigosFuertes[i].getY();
-
-					int NuevoXEnemigo = AntiguoXEnemigo;
-					int NuevoYEnemigo = AntiguoYEnemigo;
-
-					if (NuevoXEnemigo < x) {
-						NuevoXEnemigo++;
-					}
-					if (NuevoXEnemigo > x) {
-						NuevoXEnemigo--;
-					}
-					ListaEnemigosFuertes[i].setCursor(NuevoXEnemigo, NuevoYEnemigo);
-					ListaEnemigosFuertes[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
-					ListaEnemigosFuertes[i].DibujarEnemigo();
-
-				}
-			}
-			/*=========================*/
 			//Restablecer intervalo
-			UltimoMomentoNube = ahora;
+			UltimoMomento = ahora;
 		}
-		//Sleep(10);
-
-		//Colisiones
-		Console::SetCursorPosition(0, 0);
-		cout << balaX;
-		Console::SetCursorPosition(0, 1);
-		for (int i = 0; i < TamaÃ±oListaEnemigos; i++) {
-			int enemigoX, enemigoY;
-			enemigoX = ListaEnemigos[i].getX() + 6;
-			enemigoY = ListaEnemigos[i].getY();
-
-			if (balaX == ListaEnemigos[i].getX() + 6) {
-				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
-			}
-		}
-
 	}
 
-/*LLAMAR A LA FUNCION BALA */
+	/*LLAMAR A LA FUNCION BALA */
 
 
-return 0;
+	return 0;
 }
 /*=========================================================*/
 
@@ -730,161 +704,160 @@ void Window() {
 	Console::BackgroundColor = ConsoleColor::Blue;
 	Console::SetWindowSize(1, 1);
 	Console::SetBufferSize(150, 40);
-	Console::SetWindowSize(150, 40);
-	Console::Clear();
+	Console::SetWindowSize(150, 40); 
+	Console::Clear(); 
 }
 
 //Funcion que define los arbustos
 void Vegetacion(int animacion, int x, int y) {
 	//Definiendo colores de la planta
-	Console::ForegroundColor = ConsoleColor::DarkRed;
-	Console::BackgroundColor = ConsoleColor::DarkGreen;
-
-
+	ConsoleColor ColorVerde = ConsoleColor::DarkGreen;
+	ConsoleColor ColorRojo = ConsoleColor::DarkRed;
 	//Animacion 1 (Neutro)
 	if (animacion == 1) {
-		Cursor(x, y); cout << "  ";
-		Cursor(x + 3, y); cout << "* ";
-		Cursor(x + 6, y ); cout << "* ";
-		Cursor(x + 6, y ); cout << "* ";
-		Cursor(x + 12, y); cout << "  ";
+		Pintar(x, y, "  ", ColorVerde, ColorRojo);
+		Pintar(x + 3, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 6, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 9, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 12, y, "  ", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 1);cout<<"* ";
-		Cursor(x + 3, y + 1 );cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1);cout<< " *";
-		Cursor(x + 12, y + 1);cout<< " *";
+		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 2 );cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
+		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
 	}
 	//Animacion 2 (derecha)
 	if (animacion == 2) {
-		Cursor(x + 1, y);cout<< "  ";
-		Cursor(x + 4, y);cout<< "* ";
-		Cursor(x + 7, y);cout<< "* ";
-		Cursor(x + 10, y);cout<< "* ";
-		Cursor(x + 13, y);cout<< "  ";
+		Pintar(x + 1, y, "  ", ColorVerde, ColorRojo);
+		Pintar(x + 4, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 7, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 10, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 13, y, "  ", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 1);cout<< "* ";
-		Cursor(x + 3, y + 1);cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1 );cout<< " *";
-		Cursor(x + 12, y + 1 );cout<< " *";
+		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
+		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
 
 	}
 	//Animacion 3(derecha)
 	if (animacion == 3) {
-		Cursor(x + 4, y);cout<< "  ";
-		Cursor(x + 7, y);cout<< "* ";
-		Cursor(x + 6, y); cout << "* ";
-		Cursor(x + 13, y);cout<< "* ";
-		Cursor(x + 16, y);cout<< "  ";
+		Pintar(x + 4, y, "  ", ColorVerde, ColorRojo);
+		Pintar(x + 7, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 9, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 13, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 16, y, "  ", ColorVerde, ColorRojo);
 
-		Cursor(x + 2, y + 1);cout<< "* ";
-		Cursor(x + 5, y + 1);cout<< " *";
-		Cursor(x + 8, y + 1 );cout<< " *";
-		Cursor(x + 11, y + 1);cout<< " *";
-		Cursor(x + 14, y + 1);cout<< " *";
+		Pintar(x + 2, y + 1, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 5, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 8, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 11, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 14, y + 1, " *", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3 );cout<< " *  *  *  *  *";
+		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
+		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
 
 
 	}
 	//Animacion 4 (Derecha)
 	if (animacion == 4) {
-		Cursor(x + 1, y);cout<< "  ";
-		Cursor(x + 4, y);cout<< "* ";
-		Cursor(x + 7, y);cout<< "* ";
-		Cursor(x + 10, y);cout<< "* ";
-		Cursor(x + 13, y);cout<< "  ";
+		Pintar(x + 1, y, "  ", ColorVerde, ColorRojo);
+		Pintar(x + 4, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 7, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 10, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 13, y, "  ", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 1);cout<< "* ";
-		Cursor(x + 3, y + 1);cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1 );cout<< " *";
-		Cursor(x + 12, y + 1 ); cout << " *";
+		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
+		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
 
 	}
 	//Animacion 5 (neutro)
 	if (animacion == 5) {
-		Cursor(x, y); cout << "  ";
-		Cursor(x + 3, y); cout << "* ";
-		Cursor(x + 6, y); cout << "* ";
-		Cursor(x + 6, y); cout << "* ";
-		Cursor(x + 12, y); cout << "  ";
+		Pintar(x, y, "  ", ColorVerde, ColorRojo);
+		Pintar(x + 3, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 6, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 9, y, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 12, y, "  ", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 1); cout << "* ";
-		Cursor(x + 3, y + 1); cout << " *";
-		Cursor(x + 6, y + 1); cout << " *";
-		Cursor(x + 9, y + 1); cout << " *";
-		Cursor(x + 12, y + 1); cout << " *";
+		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 2); cout << "    *  *  *   ";
-		Cursor(x, y + 3); cout << " *  *  *  *  *";
+		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
+		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
+
 	}
 	//Animacion 6 (izquierda)
 	if (animacion == 6) {
-		Cursor((x + 1) - 2, y);cout<< "  ";
-		Cursor((x + 4) - 2, y);cout<< "* ";
-		Cursor((x + 7) - 2, y);cout<< "* ";
-		Cursor((x + 10) - 2, y);cout<< "* ";
-		Cursor((x + 13) - 2, y);cout<< "  ";
+		Pintar((x + 1) - 2, y, "  ", ColorVerde, ColorRojo);
+		Pintar((x + 4) - 2, y, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 7) - 2, y, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 10) - 2, y, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 13) - 2, y, "  ", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 1);cout<< "* ";
-		Cursor(x + 3, y + 1);cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1 );cout<< " *";
-		Cursor(x + 12, y + 1 );cout<< " *";
+		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 2 );cout<< "    *  *  *   ";
-		Cursor(x, y + 3 );cout<< " *  *  *  *  *";
+		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
+		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
 
 	}
 	//Animacion 7 (izquierda)
 
 	if (animacion == 7) {
-		Cursor((x + 1) - 3, y);cout<< "  ";
-		Cursor((x + 4) - 3, y);cout<< "* ";
-		Cursor((x + 7) - 3, y);cout<< "* ";
-		Cursor((x + 10) - 3, y);cout<< "* ";
-		Cursor((x + 13) - 3, y);cout<< "  ";
+		Pintar((x + 1) - 3, y, "  ", ColorVerde, ColorRojo);
+		Pintar((x + 4) - 3, y, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 7) - 3, y, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 10) - 3, y, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 13) - 3, y, "  ", ColorVerde, ColorRojo);
 
-		Cursor(x - 1, y + 1);cout<< "* ";
-		Cursor((x + 3) - 1, y + 1);cout<< " *";
-		Cursor((x + 6) - 1, y + 1);cout<< " *";
-		Cursor((x + 9) - 1, y + 1);cout<< " *";
-		Cursor((x + 12) - 1, y + 1);cout<< " *";
+		Pintar(x - 1, y + 1, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 3) - 1, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar((x + 6) - 1, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar((x + 9) - 1, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar((x + 12) - 1, y + 1, " *", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
+		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
 
 
 	}
 	//Animacion 8 (izquierda)
 
 	if (animacion == 8) {
-		Cursor((x + 1) - 2, y);cout<< "  ";
-		Cursor((x + 4) - 2, y);cout<< "* ";
-		Cursor((x + 7) - 2, y);cout<< "* ";
-		Cursor((x + 10) - 2, y);cout<< "* ";
-		Cursor((x + 13) - 2, y);cout<< "  ";
+		Pintar((x + 1) - 2, y, "  ", ColorVerde, ColorRojo);
+		Pintar((x + 4) - 2, y, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 7) - 2, y, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 10) - 2, y, "* ", ColorVerde, ColorRojo);
+		Pintar((x + 13) - 2, y, "  ", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 1);cout<< "* ";
-		Cursor(x + 3, y + 1);cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1);cout<< " *";
-		Cursor(x + 12, y + 1);cout<< " *";
+		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
+		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
+		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
+		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
 
 	}
 }
@@ -918,6 +891,7 @@ void Piso(int columnas) {
 //Funcion pintar + cursor + cout
 void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres) {
 	try {
+		Console::SetBufferSize(250, 50);
 
 		Console::BackgroundColor = fondo;
 		Console::ForegroundColor = ColorCaracteres;
@@ -930,10 +904,6 @@ void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor Colo
 	catch (...) {
 		//Sexoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 	}
-}
-void Cursor(int x, int y) {
-	Console::SetCursorPosition(x, y);
-
 }
 //Funcion borrar animacion
 void BorrarAnimacion(int x, int y, int columna, int fila) {
