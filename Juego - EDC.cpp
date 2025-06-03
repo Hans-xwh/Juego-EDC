@@ -19,6 +19,7 @@ void Piso(int columnas);
 void Vegetacion(int animacion, int x, int y);
 void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres);
 void BorrarAnimacion(int x, int y, int columna, int fila);
+void Cursor(int x, int y);
 /*=======================*/
 
 /* Teclas */
@@ -302,26 +303,29 @@ public:
 		y = nuevo_y;
 	}
 	void DibujarEnemigo() {
+		Console::BackgroundColor = ConsoleColor::Black;
 
-		ConsoleColor ColorNegro = ConsoleColor::Black;
-		ConsoleColor ColorRojo = ConsoleColor::DarkRed;
+	
 		//Cabeza
-		Pintar(x + 2, y, "   ", ColorNegro, ColorNegro);
-		Pintar(x + 1, y + 1, " \\ / ", ColorNegro, ColorRojo);
+		
+		Cursor(x + 2, y); cout << "   ";
+		Console::ForegroundColor = ConsoleColor::DarkRed;
+		Cursor(x + 1, y + 1); cout << " \\ / ";
 		//Ojos
-		Pintar(x, y + 2, "       ", ColorNegro, ColorRojo);
-		Pintar(x + 2, y + 2, " ", ColorRojo, ColorRojo);
-		Pintar(x + 4, y + 2, " ", ColorRojo, ColorRojo);
+		Cursor(x, y + 2); cout << "       ";
+		Pintar(x + 2, y + 2, " ", ConsoleColor::DarkRed, ConsoleColor::DarkRed);
+		Pintar(x + 4, y + 2, " ", ConsoleColor::DarkRed, ConsoleColor::DarkRed);
+		Console::BackgroundColor = ConsoleColor::Black;
 		//Cuerpo
-		Pintar(x, y + 3, "       ", ColorNegro, ColorRojo);
+		Cursor(x, y + 3); cout << "       ";
 
 		//Brazos:
-		Pintar(x + 1, y + 4, " ", ColorNegro, ColorNegro);
-		Pintar(x + 3, y + 4, " ", ColorNegro, ColorNegro);
-		Pintar(x + 5, y + 4, " ", ColorNegro, ColorNegro);
-		Pintar(x + 1, y + 5, " ", ColorNegro, ColorNegro);
-		Pintar(x + 3, y + 5, " ", ColorNegro, ColorNegro);
-		Pintar(x + 5, y + 5, " ", ColorNegro, ColorNegro);
+		Cursor(x + 1, y + 4); cout << " ";
+		Cursor(x + 3, y + 4); cout << " ";
+		Cursor(x + 5, y + 4) ;cout<<" ";
+		Cursor(x + 1, y + 5) ;cout<<" ";
+		Cursor(x + 3, y + 5) ;cout<<" ";
+		Cursor(x + 5, y + 5) ;cout<<" ";
 
 
 	}
@@ -516,7 +520,7 @@ int main() {
 
 	while (true) {
 		bool moverse = false;
-		
+
 		//Coordenadas Nubes
 		int AntiguoXNube1 = Nube_X_1; int AntiguoYNube1 = Nube_Y_1;
 		int AntiguoXNube2 = Nube_X_2; int AntiguoYNube2 = Nube_Y_2;
@@ -526,7 +530,7 @@ int main() {
 		//Coordenadas Personaje
 		int AntiguoX = x; int AntiguoY = y;
 
-		
+
 		// Verificar cooldown del disparo
 		if (!puedeDisparar) {
 			clock_t ahora = clock();
@@ -657,10 +661,10 @@ int main() {
 					int nuevoXEnemigo = AntiguoXEnemigo;
 					int nuevoYEnemigo = AntiguoYEnemigo;
 					if (nuevoXEnemigo <= x) {
-					nuevoXEnemigo++;
+						nuevoXEnemigo++;
 					}
 					if (nuevoXEnemigo >= x) {
-					nuevoXEnemigo--;
+						nuevoXEnemigo--;
 					}
 					ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
 					ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
@@ -672,10 +676,10 @@ int main() {
 				for (int i = 0; i < TamañoListaEnemigosFuertes; i++) {
 					int AntiguoXEnemigo = ListaEnemigosFuertes[i].getX();
 					int AntiguoYEnemigo = ListaEnemigosFuertes[i].getY();
-			
+
 					int NuevoXEnemigo = AntiguoXEnemigo;
 					int NuevoYEnemigo = AntiguoYEnemigo;
-			
+
 					if (NuevoXEnemigo < x) {
 						NuevoXEnemigo++;
 					}
@@ -685,35 +689,35 @@ int main() {
 					ListaEnemigosFuertes[i].setCursor(NuevoXEnemigo, NuevoYEnemigo);
 					ListaEnemigosFuertes[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
 					ListaEnemigosFuertes[i].DibujarEnemigo();
-			
-					}
+
 				}
+			}
 			/*=========================*/
 			//Restablecer intervalo
 			UltimoMomentoNube = ahora;
-			}
-			//Sleep(10);
-		
-			//Colisiones
-			Console::SetCursorPosition(0, 0);
-			cout << balaX;
-			Console::SetCursorPosition(0, 1);
-			for (int i = 0; i < TamañoListaEnemigos; i++) {
-				int enemigoX, enemigoY;
-				enemigoX = ListaEnemigos[i].getX() + 6;
-				enemigoY = ListaEnemigos[i].getY();
-		
-				if (balaX == ListaEnemigos[i].getX() + 6) {
-					ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
-				}
+		}
+		//Sleep(10);
+
+		//Colisiones
+		Console::SetCursorPosition(0, 0);
+		cout << balaX;
+		Console::SetCursorPosition(0, 1);
+		for (int i = 0; i < TamañoListaEnemigos; i++) {
+			int enemigoX, enemigoY;
+			enemigoX = ListaEnemigos[i].getX() + 6;
+			enemigoY = ListaEnemigos[i].getY();
+
+			if (balaX == ListaEnemigos[i].getX() + 6) {
+				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
 			}
 		}
-	
 
-	/*LLAMAR A LA FUNCION BALA */
+	}
+
+/*LLAMAR A LA FUNCION BALA */
 
 
-	return 0;
+return 0;
 }
 /*=========================================================*/
 
@@ -733,153 +737,154 @@ void Window() {
 //Funcion que define los arbustos
 void Vegetacion(int animacion, int x, int y) {
 	//Definiendo colores de la planta
-	ConsoleColor ColorVerde = ConsoleColor::DarkGreen;
-	ConsoleColor ColorRojo = ConsoleColor::DarkRed;
+	Console::ForegroundColor = ConsoleColor::DarkRed;
+	Console::BackgroundColor = ConsoleColor::DarkGreen;
+
+
 	//Animacion 1 (Neutro)
 	if (animacion == 1) {
-		Pintar(x, y, "  ", ColorVerde, ColorRojo);
-		Pintar(x + 3, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 6, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 9, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 12, y, "  ", ColorVerde, ColorRojo);
+		Cursor(x, y); cout << "  ";
+		Cursor(x + 3, y); cout << "* ";
+		Cursor(x + 6, y ); cout << "* ";
+		Cursor(x + 6, y ); cout << "* ";
+		Cursor(x + 12, y); cout << "  ";
 
-		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
+		Cursor(x, y + 1);cout<<"* ";
+		Cursor(x + 3, y + 1 );cout<< " *";
+		Cursor(x + 6, y + 1);cout<< " *";
+		Cursor(x + 9, y + 1);cout<< " *";
+		Cursor(x + 12, y + 1);cout<< " *";
 
-		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
-		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
+		Cursor(x, y + 2 );cout<< "    *  *  *   ";
+		Cursor(x, y + 3);cout<< " *  *  *  *  *";
 	}
 	//Animacion 2 (derecha)
 	if (animacion == 2) {
-		Pintar(x + 1, y, "  ", ColorVerde, ColorRojo);
-		Pintar(x + 4, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 7, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 10, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 13, y, "  ", ColorVerde, ColorRojo);
+		Cursor(x + 1, y);cout<< "  ";
+		Cursor(x + 4, y);cout<< "* ";
+		Cursor(x + 7, y);cout<< "* ";
+		Cursor(x + 10, y);cout<< "* ";
+		Cursor(x + 13, y);cout<< "  ";
 
-		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
+		Cursor(x, y + 1);cout<< "* ";
+		Cursor(x + 3, y + 1);cout<< " *";
+		Cursor(x + 6, y + 1);cout<< " *";
+		Cursor(x + 9, y + 1 );cout<< " *";
+		Cursor(x + 12, y + 1 );cout<< " *";
 
-		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
-		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
+		Cursor(x, y + 2);cout<< "    *  *  *   ";
+		Cursor(x, y + 3);cout<< " *  *  *  *  *";
 
 	}
 	//Animacion 3(derecha)
 	if (animacion == 3) {
-		Pintar(x + 4, y, "  ", ColorVerde, ColorRojo);
-		Pintar(x + 7, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 9, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 13, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 16, y, "  ", ColorVerde, ColorRojo);
+		Cursor(x + 4, y);cout<< "  ";
+		Cursor(x + 7, y);cout<< "* ";
+		Cursor(x + 6, y); cout << "* ";
+		Cursor(x + 13, y);cout<< "* ";
+		Cursor(x + 16, y);cout<< "  ";
 
-		Pintar(x + 2, y + 1, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 5, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 8, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 11, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 14, y + 1, " *", ColorVerde, ColorRojo);
+		Cursor(x + 2, y + 1);cout<< "* ";
+		Cursor(x + 5, y + 1);cout<< " *";
+		Cursor(x + 8, y + 1 );cout<< " *";
+		Cursor(x + 11, y + 1);cout<< " *";
+		Cursor(x + 14, y + 1);cout<< " *";
 
-		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
-		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
+		Cursor(x, y + 2);cout<< "    *  *  *   ";
+		Cursor(x, y + 3 );cout<< " *  *  *  *  *";
 
 
 	}
 	//Animacion 4 (Derecha)
 	if (animacion == 4) {
-		Pintar(x + 1, y, "  ", ColorVerde, ColorRojo);
-		Pintar(x + 4, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 7, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 10, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 13, y, "  ", ColorVerde, ColorRojo);
+		Cursor(x + 1, y);cout<< "  ";
+		Cursor(x + 4, y);cout<< "* ";
+		Cursor(x + 7, y);cout<< "* ";
+		Cursor(x + 10, y);cout<< "* ";
+		Cursor(x + 13, y);cout<< "  ";
 
-		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
+		Cursor(x, y + 1);cout<< "* ";
+		Cursor(x + 3, y + 1);cout<< " *";
+		Cursor(x + 6, y + 1);cout<< " *";
+		Cursor(x + 9, y + 1 );cout<< " *";
+		Cursor(x + 12, y + 1 ); cout << " *";
 
-		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
-		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
+		Cursor(x, y + 2);cout<< "    *  *  *   ";
+		Cursor(x, y + 3);cout<< " *  *  *  *  *";
 
 	}
 	//Animacion 5 (neutro)
 	if (animacion == 5) {
-		Pintar(x, y, "  ", ColorVerde, ColorRojo);
-		Pintar(x + 3, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 6, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 9, y, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 12, y, "  ", ColorVerde, ColorRojo);
+		Cursor(x, y); cout << "  ";
+		Cursor(x + 3, y); cout << "* ";
+		Cursor(x + 6, y); cout << "* ";
+		Cursor(x + 6, y); cout << "* ";
+		Cursor(x + 12, y); cout << "  ";
 
-		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
+		Cursor(x, y + 1); cout << "* ";
+		Cursor(x + 3, y + 1); cout << " *";
+		Cursor(x + 6, y + 1); cout << " *";
+		Cursor(x + 9, y + 1); cout << " *";
+		Cursor(x + 12, y + 1); cout << " *";
 
-		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
-		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
-
+		Cursor(x, y + 2); cout << "    *  *  *   ";
+		Cursor(x, y + 3); cout << " *  *  *  *  *";
 	}
 	//Animacion 6 (izquierda)
 	if (animacion == 6) {
-		Pintar((x + 1) - 2, y, "  ", ColorVerde, ColorRojo);
-		Pintar((x + 4) - 2, y, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 7) - 2, y, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 10) - 2, y, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 13) - 2, y, "  ", ColorVerde, ColorRojo);
+		Cursor((x + 1) - 2, y);cout<< "  ";
+		Cursor((x + 4) - 2, y);cout<< "* ";
+		Cursor((x + 7) - 2, y);cout<< "* ";
+		Cursor((x + 10) - 2, y);cout<< "* ";
+		Cursor((x + 13) - 2, y);cout<< "  ";
 
-		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
+		Cursor(x, y + 1);cout<< "* ";
+		Cursor(x + 3, y + 1);cout<< " *";
+		Cursor(x + 6, y + 1);cout<< " *";
+		Cursor(x + 9, y + 1 );cout<< " *";
+		Cursor(x + 12, y + 1 );cout<< " *";
 
-		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
-		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
+		Cursor(x, y + 2 );cout<< "    *  *  *   ";
+		Cursor(x, y + 3 );cout<< " *  *  *  *  *";
 
 	}
 	//Animacion 7 (izquierda)
 
 	if (animacion == 7) {
-		Pintar((x + 1) - 3, y, "  ", ColorVerde, ColorRojo);
-		Pintar((x + 4) - 3, y, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 7) - 3, y, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 10) - 3, y, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 13) - 3, y, "  ", ColorVerde, ColorRojo);
+		Cursor((x + 1) - 3, y);cout<< "  ";
+		Cursor((x + 4) - 3, y);cout<< "* ";
+		Cursor((x + 7) - 3, y);cout<< "* ";
+		Cursor((x + 10) - 3, y);cout<< "* ";
+		Cursor((x + 13) - 3, y);cout<< "  ";
 
-		Pintar(x - 1, y + 1, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 3) - 1, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar((x + 6) - 1, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar((x + 9) - 1, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar((x + 12) - 1, y + 1, " *", ColorVerde, ColorRojo);
+		Cursor(x - 1, y + 1);cout<< "* ";
+		Cursor((x + 3) - 1, y + 1);cout<< " *";
+		Cursor((x + 6) - 1, y + 1);cout<< " *";
+		Cursor((x + 9) - 1, y + 1);cout<< " *";
+		Cursor((x + 12) - 1, y + 1);cout<< " *";
 
-		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
-		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
+		Cursor(x, y + 2);cout<< "    *  *  *   ";
+		Cursor(x, y + 3);cout<< " *  *  *  *  *";
 
 
 	}
 	//Animacion 8 (izquierda)
 
 	if (animacion == 8) {
-		Pintar((x + 1) - 2, y, "  ", ColorVerde, ColorRojo);
-		Pintar((x + 4) - 2, y, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 7) - 2, y, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 10) - 2, y, "* ", ColorVerde, ColorRojo);
-		Pintar((x + 13) - 2, y, "  ", ColorVerde, ColorRojo);
+		Cursor((x + 1) - 2, y);cout<< "  ";
+		Cursor((x + 4) - 2, y);cout<< "* ";
+		Cursor((x + 7) - 2, y);cout<< "* ";
+		Cursor((x + 10) - 2, y);cout<< "* ";
+		Cursor((x + 13) - 2, y);cout<< "  ";
 
-		Pintar(x, y + 1, "* ", ColorVerde, ColorRojo);
-		Pintar(x + 3, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 6, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 9, y + 1, " *", ColorVerde, ColorRojo);
-		Pintar(x + 12, y + 1, " *", ColorVerde, ColorRojo);
+		Cursor(x, y + 1);cout<< "* ";
+		Cursor(x + 3, y + 1);cout<< " *";
+		Cursor(x + 6, y + 1);cout<< " *";
+		Cursor(x + 9, y + 1);cout<< " *";
+		Cursor(x + 12, y + 1);cout<< " *";
 
-		Pintar(x, y + 2, "    *  *  *   ", ColorVerde, ColorRojo);
-		Pintar(x, y + 3, " *  *  *  *  *", ColorVerde, ColorRojo);
+		Cursor(x, y + 2);cout<< "    *  *  *   ";
+		Cursor(x, y + 3);cout<< " *  *  *  *  *";
 
 	}
 }
@@ -925,6 +930,10 @@ void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor Colo
 	catch (...) {
 		//Sexoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 	}
+}
+void Cursor(int x, int y) {
+	Console::SetCursorPosition(x, y);
+
 }
 //Funcion borrar animacion
 void BorrarAnimacion(int x, int y, int columna, int fila) {
