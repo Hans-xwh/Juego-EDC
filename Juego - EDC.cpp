@@ -571,32 +571,10 @@ int main() {
 			}
 
 		}
-		/*ACTUALIZAR LAS BALAS */
-
-		ActualizarBala();
-
 		auto ahora = Clock::now();
-
-
-		if (ListaEnemigos.size() <= 2) {
-			if (ahora - UltimoMomentoEnemigo >= IntervaloEnemigos) {
-				int EnemigoX = 6; int EnemigoY = 29;
-				ListaEnemigos.push_back(Enemigos(EnemigoX, EnemigoY));
-				Enemigos UltimoEnemigo = ListaEnemigos.back();
-				UltimoEnemigo.DibujarEnemigo();
-				UltimoMomentoEnemigo = ahora;
-
-			}
-		}
-		if (ListaEnemigosFuertes.size() <= 1) {
-			if (ahora - UltimoMomentoEnemigoFuerte >= IntervaloEnemigosFuertes) {
-				int EnemigoX = 134; int EnemigoY = 29;
-				ListaEnemigosFuertes.push_back(Enemigos(EnemigoX, EnemigoY));
-				Enemigos UltimoEnemigo = ListaEnemigosFuertes.back();
-				UltimoEnemigo.DibujarEnemigo();
-				UltimoMomentoEnemigoFuerte = ahora;
-			}
-		}
+		
+		/*ACTUALIZAR LAS BALAS */
+		ActualizarBala(); 
 
 		if (ahora - UltimoMomentoNube >= Intervalo) {
 			/*    Nubes   */
@@ -680,26 +658,9 @@ int main() {
 
 			/*=========================*/
 			//Restablecer intervalo
-			UltimoMomentoNube = ahora;
+			UltimoMomento = ahora;
 		}
-		//Sleep(10);
-		
-		//Colisiones
-		Console::SetCursorPosition(0, 0);
-		cout << balaX;
-		Console::SetCursorPosition(0, 1);
-		for (int i = 0; i < ListaEnemigos.size(); i++) {
-			int enemigoX, enemigoY;
-			enemigoX = ListaEnemigos[i].getX() + 6;
-			enemigoY = ListaEnemigos[i].getY();
-
-			cout << ListaEnemigos.size() + 6;
-			if (balaX == ListaEnemigos[i].getX() + 6) {
-				cout << "Sexoooo";
-
-				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
-			}
-		}
+		Sleep(10);
 	}
 
 	/*LLAMAR A LA FUNCION BALA */
