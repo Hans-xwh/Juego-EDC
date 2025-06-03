@@ -38,9 +38,10 @@ const int velocidadBala = 1;
 
 auto ultimoMovimientoBala = Clock::now();
 const auto intervaloMovimientoBala = chrono::milliseconds(10); // Valor para mayor lentitud
+
 // ============================ //
 /* Personaje Principal */
-class Personaje {
+struct Personaje {
 private:
 	int x;
 	int y;
@@ -290,44 +291,45 @@ public:
 };
 /*=================================================================*/
 /* Clase Enemigos*/
-class Enemigos {
+struct Enemigos {
 private:
 	int x;
 	int y;
 public:
+	Enemigos() : x(6), y(29) {}
 	Enemigos(int _x, int _y) : x(_x), y(_y) {}
 	void setCursor(int nuevo_x, int nuevo_y) {
 		x = nuevo_x;
 		y = nuevo_y;
 	}
 	void DibujarEnemigo() {
-		
-			ConsoleColor ColorNegro = ConsoleColor::Black;
-			ConsoleColor ColorRojo = ConsoleColor::DarkRed;
-			//Cabeza
-			Pintar(x + 2, y, "   ", ColorNegro, ColorNegro);
-			Pintar(x + 1, y + 1, " \\ / ", ColorNegro, ColorRojo);
-			//Ojos
-			Pintar(x, y + 2, "       ", ColorNegro, ColorRojo);
-			Pintar(x + 2, y + 2, " ", ColorRojo, ColorRojo);
-			Pintar(x + 4, y + 2, " ", ColorRojo, ColorRojo);
-			//Cuerpo
-			Pintar(x, y + 3, "       ", ColorNegro, ColorRojo);
 
-			//Brazos:
-			Pintar(x + 1, y + 4, " ", ColorNegro, ColorNegro);
-			Pintar(x + 3, y + 4, " ", ColorNegro, ColorNegro);
-			Pintar(x + 5, y + 4, " ", ColorNegro, ColorNegro);
-			Pintar(x + 1, y + 5, " ", ColorNegro, ColorNegro);
-			Pintar(x + 3, y + 5, " ", ColorNegro, ColorNegro);
-			Pintar(x + 5, y + 5, " ", ColorNegro, ColorNegro);
-		
-		
+		ConsoleColor ColorNegro = ConsoleColor::Black;
+		ConsoleColor ColorRojo = ConsoleColor::DarkRed;
+		//Cabeza
+		Pintar(x + 2, y, "   ", ColorNegro, ColorNegro);
+		Pintar(x + 1, y + 1, " \\ / ", ColorNegro, ColorRojo);
+		//Ojos
+		Pintar(x, y + 2, "       ", ColorNegro, ColorRojo);
+		Pintar(x + 2, y + 2, " ", ColorRojo, ColorRojo);
+		Pintar(x + 4, y + 2, " ", ColorRojo, ColorRojo);
+		//Cuerpo
+		Pintar(x, y + 3, "       ", ColorNegro, ColorRojo);
+
+		//Brazos:
+		Pintar(x + 1, y + 4, " ", ColorNegro, ColorNegro);
+		Pintar(x + 3, y + 4, " ", ColorNegro, ColorNegro);
+		Pintar(x + 5, y + 4, " ", ColorNegro, ColorNegro);
+		Pintar(x + 1, y + 5, " ", ColorNegro, ColorNegro);
+		Pintar(x + 3, y + 5, " ", ColorNegro, ColorNegro);
+		Pintar(x + 5, y + 5, " ", ColorNegro, ColorNegro);
+
+
 	}
 	void BorrarEnemigo(int AntiguoX, int AntiguoY) {
 		BorrarAnimacion(AntiguoX, AntiguoY, 10, 6);
 	}
-	int getX(){
+	int getX() {
 		return x;
 	}
 	int getY() {
@@ -340,7 +342,7 @@ public:
 
 
 /* Clase  Nubes*/
-class Nubes {
+struct Nubes {
 private:
 	int x;
 	int y;
@@ -390,6 +392,7 @@ public:
 		BorrarAnimacion(AntiguoX - 4, AntiguoY, 20, 6);
 	}
 };
+
 
 /*=================================================================*/
 
@@ -504,8 +507,14 @@ int main() {
 
 	auto IntervaloEnemigos = chrono::milliseconds(6000);
 	auto IntervaloEnemigosFuertes = chrono::milliseconds(15000);
-	vector<Enemigos> ListaEnemigos;
-	vector<Enemigos> ListaEnemigosFuertes;
+	Enemigos ListaEnemigosFuertes[1];
+	Enemigos ListaEnemigos[2];
+	int TamañoListaEnemigos = sizeof(ListaEnemigos) / sizeof(ListaEnemigos[0]);
+	int TamañoListaEnemigosFuertes = sizeof(ListaEnemigosFuertes) / sizeof(ListaEnemigosFuertes[0]);
+	bool enemigosCreados = false;
+	bool enemigosFuertesCreados = false;
+	int IndiceEnemigos = 0; int IndiceEnemigosFuertes = 0;
+
 	while (true) {
 		bool moverse = false;
 		
@@ -578,25 +587,24 @@ int main() {
 		auto ahora = Clock::now();
 
 
-		if (ListaEnemigos.size() <= 2) {
-			if (ahora - UltimoMomentoEnemigo >= IntervaloEnemigos) {
-				int EnemigoX = 6; int EnemigoY = 29;
-				ListaEnemigos.push_back(Enemigos(EnemigoX, EnemigoY));
-				Enemigos UltimoEnemigo = ListaEnemigos.back();
-				UltimoEnemigo.DibujarEnemigo();
-				UltimoMomentoEnemigo = ahora;
+		if (ahora - UltimoMomentoEnemigo >= IntervaloEnemigos && IndiceEnemigos < TamañoListaEnemigos) {
+			int EnemigoX = 6; int EnemigoY = 29;
+			ListaEnemigos[IndiceEnemigos] = Enemigos(EnemigoX, EnemigoY);
+			ListaEnemigos[IndiceEnemigos].DibujarEnemigo();
+			enemigosCreados = true;
+			IndiceEnemigos++;
+			UltimoMomentoEnemigo = ahora;
+		}
 
-			}
+		if (ahora - UltimoMomentoEnemigoFuerte >= IntervaloEnemigosFuertes && IndiceEnemigosFuertes < TamañoListaEnemigosFuertes) {
+			int EnemigoX = 134; int EnemigoY = 29;
+			ListaEnemigosFuertes[IndiceEnemigosFuertes] = Enemigos(EnemigoX, EnemigoY);
+			ListaEnemigosFuertes[IndiceEnemigosFuertes].DibujarEnemigo();
+			enemigosFuertesCreados = true;
+			IndiceEnemigosFuertes++;
+			UltimoMomentoEnemigoFuerte = ahora;
 		}
-		if (ListaEnemigosFuertes.size() <= 1) {
-			if (ahora - UltimoMomentoEnemigoFuerte >= IntervaloEnemigosFuertes) {
-				int EnemigoX = 134; int EnemigoY = 29;
-				ListaEnemigosFuertes.push_back(Enemigos(EnemigoX, EnemigoY));
-				Enemigos UltimoEnemigo = ListaEnemigosFuertes.back();
-				UltimoEnemigo.DibujarEnemigo();
-				UltimoMomentoEnemigoFuerte = ahora;
-			}
-		}
+
 
 		if (ahora - UltimoMomentoNube >= Intervalo) {
 			/*    Nubes   */
@@ -642,65 +650,66 @@ int main() {
 			/*  Movimiento enemigos */
 
 			//Enemigo Normal
-			for (int i = 0; i < ListaEnemigos.size(); i++) {
-				int AntiguoXEnemigo = ListaEnemigos[i].getX();
-				int AntiguoYEnemigo = ListaEnemigos[i].getY();
+			if (enemigosCreados == true) {
+				for (int i = 0; i < TamañoListaEnemigos; i++) {
+					int AntiguoXEnemigo = ListaEnemigos[i].getX();
+					int AntiguoYEnemigo = ListaEnemigos[i].getY();
 
-				int nuevoXEnemigo = AntiguoXEnemigo;
-				int nuevoYEnemigo = AntiguoYEnemigo;
-				if (nuevoXEnemigo <= x) {
+					int nuevoXEnemigo = AntiguoXEnemigo;
+					int nuevoYEnemigo = AntiguoYEnemigo;
+					if (nuevoXEnemigo <= x) {
 					nuevoXEnemigo++;
-				}
-				if (nuevoXEnemigo >= x) {
+					}
+					if (nuevoXEnemigo >= x) {
 					nuevoXEnemigo--;
+					}
+					ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
+					ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
+					ListaEnemigos[i].DibujarEnemigo();
 				}
-				ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
-				ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
-				ListaEnemigos[i].DibujarEnemigo();
 			}
 			//Enemigos fuertes
-			for (int i = 0; i < ListaEnemigosFuertes.size(); i++) {
-				int AntiguoXEnemigo = ListaEnemigosFuertes[i].getX();
-				int AntiguoYEnemigo = ListaEnemigosFuertes[i].getY();
-
-				int NuevoXEnemigo = AntiguoXEnemigo;
-				int NuevoYEnemigo = AntiguoYEnemigo;
-
-				if (NuevoXEnemigo < x) {
-					NuevoXEnemigo++;
+			if (enemigosFuertesCreados == true) {
+				for (int i = 0; i < TamañoListaEnemigosFuertes; i++) {
+					int AntiguoXEnemigo = ListaEnemigosFuertes[i].getX();
+					int AntiguoYEnemigo = ListaEnemigosFuertes[i].getY();
+			
+					int NuevoXEnemigo = AntiguoXEnemigo;
+					int NuevoYEnemigo = AntiguoYEnemigo;
+			
+					if (NuevoXEnemigo < x) {
+						NuevoXEnemigo++;
+					}
+					if (NuevoXEnemigo > x) {
+						NuevoXEnemigo--;
+					}
+					ListaEnemigosFuertes[i].setCursor(NuevoXEnemigo, NuevoYEnemigo);
+					ListaEnemigosFuertes[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
+					ListaEnemigosFuertes[i].DibujarEnemigo();
+			
+					}
 				}
-				if (NuevoXEnemigo > x) {
-					NuevoXEnemigo--;
-				}
-				ListaEnemigosFuertes[i].setCursor(NuevoXEnemigo, NuevoYEnemigo);
-				ListaEnemigosFuertes[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
-				ListaEnemigosFuertes[i].DibujarEnemigo();
-
-			}
-
 			/*=========================*/
 			//Restablecer intervalo
 			UltimoMomentoNube = ahora;
-		}
-		//Sleep(10);
+			}
+			//Sleep(10);
 		
-		//Colisiones
-		Console::SetCursorPosition(0, 0);
-		cout << balaX;
-		Console::SetCursorPosition(0, 1);
-		for (int i = 0; i < ListaEnemigos.size(); i++) {
-			int enemigoX, enemigoY;
-			enemigoX = ListaEnemigos[i].getX() + 6;
-			enemigoY = ListaEnemigos[i].getY();
-
-			cout << ListaEnemigos.size() + 6;
-			if (balaX == ListaEnemigos[i].getX() + 6) {
-				cout << "Sexoooo";
-
-				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
+			//Colisiones
+			Console::SetCursorPosition(0, 0);
+			cout << balaX;
+			Console::SetCursorPosition(0, 1);
+			for (int i = 0; i < TamañoListaEnemigos; i++) {
+				int enemigoX, enemigoY;
+				enemigoX = ListaEnemigos[i].getX() + 6;
+				enemigoY = ListaEnemigos[i].getY();
+		
+				if (balaX == ListaEnemigos[i].getX() + 6) {
+					ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
+				}
 			}
 		}
-	}
+	
 
 	/*LLAMAR A LA FUNCION BALA */
 
