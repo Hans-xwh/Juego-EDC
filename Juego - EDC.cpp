@@ -7,7 +7,6 @@
 #include <chrono>
 #include <locale>
 #include <vector>
-#include "TestHeader.h"
 
 //Documentacion .NET ("https://learn.microsoft.com/en-us/dotnet/api/system.console?view=net-9.0")
 
