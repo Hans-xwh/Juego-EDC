@@ -24,6 +24,7 @@ void Vegetacion(int animacion, int x, int y);
 void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres);
 void BorrarAnimacion(int x, int y, int columna, int fila);
 void Cursor(int x, int y);
+void Corazones(int CoorX, int CoorY);
 /*=======================*/
 
 /* Teclas */
@@ -150,8 +151,12 @@ struct Personaje {
 private:
 	int x;
 	int y;
+	//nuevo
+	int vida;
 public:
-	Personaje(int _x, int _y) : x(_x), y(_y) {}
+	Personaje(int _x, int _y) : x(_x), y(_y) {
+		vida = 3; //nuevo
+	}
 	void setCursor(int CursorX, int CursorY) {
 		x = CursorX;
 		y = CursorY;
@@ -393,6 +398,32 @@ public:
 	void Borrar(int AntiguoX, int AntiguoY) {
 		BorrarAnimacion(AntiguoX - 1, AntiguoY, 12, 7);
 	}
+	//Nuevo 
+	void DibujarVida() {
+		int CoorX = 143; int CoorY = 1;
+		if (vida == 3) {
+			Corazones(CoorX, CoorY);
+			Corazones(CoorX -6, CoorY);
+			Corazones(CoorX-12, CoorY);
+		}
+		if (vida == 2) {
+			Corazones(CoorX, CoorY);
+			Corazones(CoorX - 6, CoorY);
+		}
+		if (vida == 1) {
+			Corazones(CoorX, CoorY);
+		}
+		if (vida == 0) {
+			Borrar(x, y);
+		}
+	}
+	void BorrarCorazones(int x, int y) {
+		BorrarAnimacion(x, y, 20, 4);
+	}
+	void setVida(int nuevaVida) {
+		vida = nuevaVida;
+	}
+	//
 };
 /*=================================================================*/
 /* Clase Enemigos*/
@@ -566,7 +597,7 @@ void ActualizarBala() {
 
 /*      Funcion Principal Main    */
 int main() {
-	setlocale(LC_ALL, "Spanish");
+	//setlocale(LC_ALL, "Spanish");
 	Window();
 	PlaySound(TEXT("horizon.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	//SE LLAMA A LA FUNCION DE DIBUJAR VENTANA/MAPA
@@ -584,6 +615,9 @@ int main() {
 	//Personaje
 	int x = 90; int y = 28;
 	Personaje Marco(x, y);
+	Marco.DibujarVida();  //nuevo
+	bool EstarVivo = true;
+	int vida = 3;
 	//Nubes
 	int movimiento_nube_1 = 1;
 	int FormaNube1 = 1;
@@ -631,7 +665,7 @@ int main() {
 
 	while (true) {
 		bool moverse = false;
-
+		bool VerificarDaño = false;
 		//Coordenadas Nubes
 		int AntiguoXNube1 = Nube_X_1; int AntiguoYNube1 = Nube_Y_1;
 		int AntiguoXNube2 = Nube_X_2; int AntiguoYNube2 = Nube_Y_2;
@@ -654,7 +688,7 @@ int main() {
 			int Tecla = _getch();
 			if (Tecla == 0 || Tecla == 224) {
 				Tecla = _getch();
-				if (Tecla == static_cast<int>(Teclas::DERECHA)) {
+				if (Tecla == static_cast<int>(Teclas::DERECHA) && EstarVivo == true) {
 					x++;
 					posicion = 2;
 					frame++;
@@ -663,7 +697,7 @@ int main() {
 					}
 					moverse = true;
 				}
-				if (Tecla == static_cast<int>(Teclas::IZQUIERDA)) {
+				if (Tecla == static_cast<int>(Teclas::IZQUIERDA) && EstarVivo == true) {
 					x--;
 					posicion = 1;
 					frame++;
@@ -672,14 +706,14 @@ int main() {
 					}
 					moverse = true;
 				}
-				if (Tecla == static_cast<int>(Teclas::ARRIBA)) {
+				if (Tecla == static_cast<int>(Teclas::ARRIBA) && EstarVivo == true) {
 					posicion = 3;
 					frame = 1;
 					Marco.Dibujar(posicion, frame);
 				}
 				Marco.setCursor(x, y);
 			}
-			else if ((Tecla == 'f' || Tecla == 'F' || Tecla == 32) && puedeDisparar)
+			else if ((Tecla == 'f' || Tecla == 'F' || Tecla == 32) && puedeDisparar && EstarVivo == true)
 			{
 				Disparar(x, y, posicion);
 				puedeDisparar = false; // Activa el cooldown
@@ -780,6 +814,11 @@ int main() {
 					ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
 					ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
 					ListaEnemigos[i].DibujarEnemigo();
+					if (nuevoXEnemigo+5 == x) {
+						vida--;
+						VerificarDaño = true;
+					}
+					
 				}
 			}
 			//Enemigos fuertes
@@ -800,7 +839,10 @@ int main() {
 					ListaEnemigosFuertes[i].setCursor(NuevoXEnemigo, NuevoYEnemigo);
 					ListaEnemigosFuertes[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
 					ListaEnemigosFuertes[i].DibujarEnemigo();
-
+					if (NuevoXEnemigo - 10 == x) {
+						vida--;
+						VerificarDaño = true;
+					}
 				}
 			}
 			/*=========================*/
@@ -822,7 +864,23 @@ int main() {
 				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
 			}
 		}
-
+		if (vida == 2 && VerificarDaño == true) {
+			Marco.setVida(2);
+			Marco.BorrarCorazones(130, 1);
+			Marco.DibujarVida();
+		}
+		if (vida == 1 && VerificarDaño == true) {
+			Marco.setVida(1);
+			Marco.BorrarCorazones(130, 1);
+			Marco.DibujarVida();
+		}
+		if (vida == 0 && VerificarDaño == true) {
+			EstarVivo = false;
+			Marco.setVida(0);
+			Marco.BorrarCorazones(130, 1);
+			Marco.DibujarVida();
+			
+		}
 	}
 
 /*LLAMAR A LA FUNCION BALA */
@@ -1055,5 +1113,17 @@ void BorrarAnimacion(int x, int y, int columna, int fila) {
 }
 /*======================================*/
 
+void Corazones(int CoorX, int CoorY) {
+	Console::BackgroundColor = ConsoleColor::DarkRed;
+
+	Cursor(CoorX, CoorY); cout << "  ";
+	Cursor(CoorX + 3, CoorY); cout << "  ";
+
+	Cursor(CoorX, CoorY + 1); cout << "     ";
+
+	Cursor(CoorX + 1, CoorY + 2); cout << "   ";
+	Cursor(CoorX + 2, CoorY + 3); cout << " ";
+
+}
 
 //Sexoooooo
