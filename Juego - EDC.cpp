@@ -618,6 +618,7 @@ int main() {
 	Marco.DibujarVida();  //nuevo
 	bool EstarVivo = true;
 	int vida = 3;
+	int inmortal = 0; //0=(No inmortal) 
 	//Nubes
 	int movimiento_nube_1 = 1;
 	int FormaNube1 = 1;
@@ -662,6 +663,7 @@ int main() {
 	bool enemigosCreados = false;
 	bool enemigosFuertesCreados = false;
 	int IndiceEnemigos = 0; int IndiceEnemigosFuertes = 0;
+	int nuevoXEnemigo = 0;
 
 	while (true) {
 		bool moverse = false;
@@ -803,7 +805,7 @@ int main() {
 					int AntiguoXEnemigo = ListaEnemigos[i].getX();
 					int AntiguoYEnemigo = ListaEnemigos[i].getY();
 
-					int nuevoXEnemigo = AntiguoXEnemigo;
+					nuevoXEnemigo = AntiguoXEnemigo;
 					int nuevoYEnemigo = AntiguoYEnemigo;
 					if (nuevoXEnemigo <= x) {
 						nuevoXEnemigo++;
@@ -814,11 +816,6 @@ int main() {
 					ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
 					ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
 					ListaEnemigos[i].DibujarEnemigo();
-					if (nuevoXEnemigo+5 == x) {
-						vida--;
-						VerificarDaño = true;
-					}
-					
 				}
 			}
 			//Enemigos fuertes
@@ -845,13 +842,17 @@ int main() {
 					}
 				}
 			}
+			if (inmortal > 0) { //Contador de inmortalidad.
+				inmortal--;
+			}
 			/*=========================*/
 			//Restablecer intervalo
 			UltimoMomentoNube = ahora;
 		}
 		//Sleep(10);
 
-		//Colisiones
+		//// Colisiones ////
+		//Bala -> Enemigos
 		Console::SetCursorPosition(0, 0);
 		cout << balaX;
 		Console::SetCursorPosition(0, 1);
@@ -864,6 +865,15 @@ int main() {
 				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
 			}
 		}
+
+		//Enemigos -> Jugador
+		if (nuevoXEnemigo + 5 == x + 2 && inmortal == 0) {
+			vida--;
+			VerificarDaño = true;
+			inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
+		}
+
+		//Comprobar daño al jugador
 		if (vida == 2 && VerificarDaño == true) {
 			Marco.setVida(2);
 			Marco.BorrarCorazones(130, 1);
