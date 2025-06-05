@@ -6,7 +6,6 @@
 #include <vector>
 #include <chrono>
 #include <locale>
-#include <vector>
 #include <mmsystem.h>
 //PARA COLOCAR UN BACKGROUND AL MENU SIMPLE
 #include <stdlib.h>
@@ -592,8 +591,107 @@ void ActualizarBala() {
 	}
 }
 
+/* Preguntas */
+struct Preguntas {
+	void Pregunta1() {
+		Console::BackgroundColor = ConsoleColor::Blue;
+		Console::ForegroundColor = ConsoleColor::Black;
+		Cursor(5, 0); cout << "                                                                                                _____ ";
+		Cursor(5, 1); cout << " _____         _               _                    _ _       _      _     _    _____          |___  |";
+		Cursor(5, 2); cout << "|     |_ _ ___| |   ___ ___   | |___    ___ ___ ___|_| |_ ___| |   _| |___| |  |  _  |___ ___ _ _|  _|";
+		Cursor(5, 3); cout << "|   --| | | .'| |  | -_|_ -|  | | .'|  |  _| .'| . | |  _| .'| |  | . | -_| |  |   __| -_|  _| | |_|  ";
+		Cursor(5, 4); cout << "|_____|___|__,|_|  |___|___|  |_|__,|  |___|__,|  _|_|_| |__,|_|  |___|___|_|  |__|  |___|_| |___|_|  ";
+		Cursor(5, 5); cout << "                                               |_|                                                    ";
 
+	}
+	void Pregunta2() {
+		Console::BackgroundColor = ConsoleColor::Blue;
+		Console::ForegroundColor = ConsoleColor::Black;
+		Cursor(5, 0); cout << "                                                                                                                    _____ ";
+		Cursor(5, 1); cout << " _____     _            ___                _    _ _ _           _         _              _     _    _____          |___  |";
+		Cursor(5, 2); cout << "|     |_ _|_|___ ___   |  _|_ _ ___    ___| |  | |_| |_ ___ ___| |_ ___ _| |___ ___    _| |___| |  |  _  |___ ___ _ _|  _|";
+		Cursor(5, 3); cout << "|  |  | | | | -_|   |  |  _| | | -_|  | -_| |  | | | . | -_|  _|  _| .'| . | . |  _|  | . | -_| |  |   __| -_|  _| | |_|  ";
+		Cursor(5, 4); cout << "|__  _|___|_|___|_|_|  |_| |___|___|  |___|_|  |_|_|___|___|_| |_| |__,|___|___|_|    |___|___|_|  |__|  |___|_| |___|_|  ";
+		Cursor(5, 5); cout << "   |__|                                                                                                                   ";
+	}
+	void Pregunta3() {
+		Console::BackgroundColor = ConsoleColor::Blue;
+		Console::ForegroundColor = ConsoleColor::Black;
+		Cursor(5, 0); cout << "   _  ___              _                  ____        ___ ___ "; 
+		Cursor(5, 1); cout << "  (_)/ __|  _ __ _ _ _| |_ ___   ___ ___ |__  | /\/\ ( _ )__ \\";
+		Cursor(5, 2); cout << " / /| (_| || / _` | | \  _/ _ \ / -_|_-<   / /  >  < / _ \ /_/";
+		Cursor(5, 3); cout << " \___\___\_,_\__,_|_||_\__\___/ \___/__/  /_/   \/\/ \___/(_) ";
+	}
+	void Pregunta4() {
+		Console::BackgroundColor = ConsoleColor::Blue;
+		Console::ForegroundColor = ConsoleColor::Black;
+		Cursor(5, 0); cout << "                                                                                                                    _____ "; 
+		Cursor(5, 1); cout << " _____         _                   _        _                     _                      _     _    _____          |___  |";
+		Cursor(5, 2); cout << "|     |_ _ ___| |   ___ ___    ___| |   ___|_|___    _____ ___   | |___ ___ ___ ___    _| |___| |  |  _  |___ ___ _ _|  _|";
+		Cursor(5, 3); cout << "|   --| | | .'| |  | -_|_ -|  | -_| |  |  _| | . |  |     |_ -|  | | .'|  _| . | . |  | . | -_| |  |   __| -_|  _| | |_|  ";
+		Cursor(5, 4); cout << "|_____|___|__,|_|  |___|___|  |___|_|  |_| |_|___|  |_|_|_|___|  |_|__,|_| |_  |___|  |___|___|_|  |__|  |___|_| |___|_|  ";
+		Cursor(5, 5); cout << "                                                                           |___|                                          ";
 
+	}
+	void Pregunta5() {
+		Console::BackgroundColor = ConsoleColor::Blue;
+		Console::ForegroundColor = ConsoleColor::Black;
+		Cursor(5, 0); cout << "   _  ___       __ _      _       _             _           _         _                _                   _            _  _  ___     __                                     _            _     _                                     _                             _            _  __     ___ ";
+		Cursor(5, 1); cout << "  (_)/ __|  _ _/_/| |  __| |___  | |___ ___  __(_)__ _ _  _(_)___ _ _| |_ ___ ___  ___| |___ _ __  ___ _ _| |_ ___ ___ | \| |/ _ \   / _|___ _ _ _ __  __ _   _ __  __ _ _ _| |_ ___   __| |___| |  _ __ _ _ ___  __ ___ ___ ___   __| |___   __ ___ _ __ _  _ _ _ (_)__ __ _ __(_)/_/ _ _|__ \\";
+		Cursor(5, 2); cout << " / /| (_| || / _` | | / _` / -_) | / _ (_-< (_-< / _` | || | / -_) ' \  _/ -_|_-< / -_) / -_) '  \/ -_) ' \  _/ _ (_-< | .` | (_) | |  _/ _ \ '_| '  \/ _` | | '_ \/ _` | '_|  _/ -_) / _` / -_) | | '_ \ '_/ _ \/ _/ -_|_-</ _ \ / _` / -_) / _/ _ \ '  \ || | ' \| / _/ _` / _| / _ \ ' \ /_/";
+		Cursor(5, 3); cout << " \___\___\_,_\__,_|_| \__,_\___| |_\___/__/ /__/_\__, |\_,_|_\___|_||_\__\___/__/ \___|_\___|_|_|_\___|_||_\__\___/__/ |_|\_|\___/  |_| \___/_| |_|_|_\__,_| | .__/\__,_|_|  \__\___| \__,_\___|_| | .__/_| \___/\__\___/__/\___/ \__,_\___| \__\___/_|_|_\_,_|_||_|_\__\__,_\__|_\___/_||_(_) ";
+		Cursor(5, 4); cout << "                                                 |___/                                                                                                       |_|                                   |_|                                                                                         ";
+	}
+	void Pregunta6() {
+		Console::BackgroundColor = ConsoleColor::Blue;
+		Console::ForegroundColor = ConsoleColor::Black;
+		Cursor(5, 0); cout << "                                                                                                                                                                    _____ ";
+		Cursor(5, 1); cout << " _____                                                  _                  _        _       _                   _             _          _     _    _____          |___  |";
+		Cursor(5, 2); cout << "|     |_ _ ___    ___ ___    ___ ___    ___ ___ ___ ___| |___ _____ ___   | |___   |_|___ _| |___ ___ ___ ___ _| |___ ___ ___|_|___    _| |___| |  |  _  |___ ___ _ _|  _|";
+		Cursor(5, 3); cout << "|  |  | | | -_|  | .'| . |  |_ -| -_|  | . |  _| . |  _| | .'|     | . |  | | .'|  | |   | . | -_| . | -_|   | . | -_|   |  _| | .'|  | . | -_| |  |   __| -_|  _| | |_|  ";
+		Cursor(5, 4); cout << "|__  _|___|___|  |__,|___|  |___|___|  |  _|_| |___|___|_|__,|_|_|_|___|  |_|__,|  |_|_|_|___|___|  _|___|_|_|___|___|_|_|___|_|__,|  |___|___|_|  |__|  |___|_| |___|_|  ";
+		Cursor(5, 5); cout << "   |__|                                |_|                                                       |_|                                                                  ";
+	}
+	string AlternativasPregunta1[4] = { "Arequipa", "Cusco", "Trujillo", "Lima" };
+	string AlternativasPregunta2[4] = { "Tupac Amaru II", "Miguel Grau", "Jose de San Martin", "Simon Bolivar" };
+	string AlternativasPregunta3[4] = { "54", "56", "64", "58" };
+	string AlternativasPregunta4[4] = { "Urubamba", "Ucayali", "Amazonas", "Mantaro" };
+	string AlternativasPregunta5[4] = { "Rombo", "Trapecio", "Paralelogramo", "Cuadrado" };
+	string AlternativasPregunta6[4] = { "Mochica", "Nazca", "Chimu", "Paracas" };
+	string AlternativasPregunta7[4] = { "Verbo", "Sustantivo", "Adverbio", "Adjetivo" };
+	string AlternativasPregunta8[4] = { "1810", "1821", "1824", "1830" };
+	string AlternativasPregunta9[4] = { "51", "47", "49", "45" };
+	string AlternativasPregunta10[4] = { "Emisor", "Receptor", "Ecuacion", "Mensaje" };
+
+	void DibujarPregunta(int pregunta) {
+
+		switch (pregunta){
+		case 1:
+			Pregunta1();
+			break;
+		case 2:
+			Pregunta2();
+			break;
+		case 3:
+			Pregunta3();
+			break;
+		case 4:
+			Pregunta4();
+			break;
+		case 5:
+			Pregunta5();
+			break;
+		case 6:
+			Pregunta6();
+			break;
+		
+		default:
+			break;
+		}
+		
+	}
+};
+/*=======================================================*/
 
 /*      Funcion Principal Main    */
 int main() {
@@ -605,7 +703,7 @@ int main() {
 
 	//SE LLAMA A LA FUNCION SELECCIONAR LA OPCION
 	seleccionar_opcion();
-
+	
 	//SE CONFIGURA QUE EL FONDO ESE AZUL DESPUES DE PRESIONAR CUALQUIER TECLA POR EL MOMENOT
 	Console::BackgroundColor = ConsoleColor::Blue;
 	Console::Clear();  // Limpia la consola
@@ -619,22 +717,27 @@ int main() {
 	bool EstarVivo = true;
 	int vida = 3;
 	int inmortal = 0; //0=(No inmortal) 
+
 	//Nubes
-	int movimiento_nube_1 = 1;
+
+	int direccionNube1 = 1;
 	int FormaNube1 = 1;
-	int Nube_X_1 = 120; int Nube_Y_1 = 10;
+	int Nube_X_1 = 120; int Nube_Y_1 = 6;
 	Nubes nube1(Nube_X_1, Nube_Y_1);
 
+	int direccionNube2 = 1;
 	int FormaNube2 = 2;
-	int Nube_X_2 = 30; int Nube_Y_2 = 5;
+	int Nube_X_2 = 30; int Nube_Y_2 = 10;
 	Nubes nube2(Nube_X_2, Nube_Y_2);
 
+	int direccionNube3 = 1;
 	int FormaNube3 = 3;
-	int Nube_X_3 = 50; int Nube_Y_3 = 20;
+	int Nube_X_3 = 50; int Nube_Y_3 = 19;
 	Nubes nube3(Nube_X_3, Nube_Y_3);
 
+	int direccionNube4 = 1;
 	int FormaNube4 = 4;
-	int Nube_X_4 = 120; int Nube_Y_4 = 5;
+	int Nube_X_4 = 120; int Nube_Y_4 = 14;
 	Nubes nube4(Nube_X_4, Nube_Y_4);
 
 	nube1.DibujarNube(FormaNube1);
@@ -664,6 +767,10 @@ int main() {
 	bool enemigosFuertesCreados = false;
 	int IndiceEnemigos = 0; int IndiceEnemigosFuertes = 0;
 	int nuevoXEnemigo = 0;
+
+	//Preguntas
+	Preguntas pregunta;
+	pregunta.DibujarPregunta(2);
 
 	while (true) {
 		bool moverse = false;
@@ -759,26 +866,45 @@ int main() {
 		if (ahora - UltimoMomentoNube >= Intervalo) {
 			/*    Nubes   */
 			//nube 1
-			//Nube_X_1++;
+			Nube_X_1-= 3 * direccionNube1;
+			//Rebote de nubes
+			if (Nube_X_1 >= 120 || Nube_X_1 <= 10) {
+				direccionNube1 *= -1;
+			}
+
 			nube1.setCursor(Nube_X_1, Nube_Y_1);
 			nube1.BorrarNube(AntiguoXNube1, AntiguoYNube1);
 			nube1.DibujarNube(FormaNube1);
+			
 
 			//nube 2
-			//Nube_X_2++;
+			Nube_X_2+= 2*direccionNube2;
+			//Rebote de nubes
+
+			if (Nube_X_2 >= 120 || Nube_X_2 <= 10) {
+				direccionNube2 *= -1;
+			}
 			nube2.setCursor(Nube_X_2, Nube_Y_2);
 			nube2.BorrarNube(AntiguoXNube2, AntiguoYNube2);
 			nube2.DibujarNube(FormaNube2);
 
 			//nube 3
-			//Nube_X_3++;
+			Nube_X_3+= 4 * direccionNube3;
+			//Rebote de nubes
 
+			if (Nube_X_3 >= 120 || Nube_X_3 <= 10) {
+				direccionNube3 *= -1;
+			}
 			nube3.setCursor(Nube_X_3, Nube_Y_3);
 			nube3.BorrarNube(AntiguoXNube3, AntiguoYNube3);
 			nube3.DibujarNube(FormaNube3);
 
 			//nube 4
-			//Nube_X_4++;
+			Nube_X_4-= 5 * direccionNube4;
+			//Rebote de nubes
+			if (Nube_X_4 >= 120 || Nube_X_4 <= 10) {
+				direccionNube4 *= -1;
+			}
 			nube4.setCursor(Nube_X_4, Nube_Y_4);
 			nube4.BorrarNube(AntiguoXNube4, AntiguoYNube4);
 			nube4.DibujarNube(FormaNube4);
@@ -805,7 +931,7 @@ int main() {
 					int AntiguoXEnemigo = ListaEnemigos[i].getX();
 					int AntiguoYEnemigo = ListaEnemigos[i].getY();
 
-					nuevoXEnemigo = AntiguoXEnemigo;
+					int nuevoXEnemigo = AntiguoXEnemigo;
 					int nuevoYEnemigo = AntiguoYEnemigo;
 					if (nuevoXEnemigo <= x) {
 						nuevoXEnemigo++;
@@ -816,6 +942,11 @@ int main() {
 					ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
 					ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
 					ListaEnemigos[i].DibujarEnemigo();
+					if (nuevoXEnemigo+10 == x) {
+						vida--;
+						VerificarDaño = true;
+					}
+					
 				}
 			}
 			//Enemigos fuertes
@@ -851,8 +982,7 @@ int main() {
 		}
 		//Sleep(10);
 
-		//// Colisiones ////
-		//Bala -> Enemigos
+		//Colisiones
 		Console::SetCursorPosition(0, 0);
 		cout << balaX;
 		Console::SetCursorPosition(0, 1);
@@ -865,7 +995,6 @@ int main() {
 				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
 			}
 		}
-
 		//Enemigos -> Jugador
 		if (nuevoXEnemigo + 5 == x + 2 && inmortal == 0) {
 			vida--;
@@ -889,7 +1018,7 @@ int main() {
 			Marco.setVida(0);
 			Marco.BorrarCorazones(130, 1);
 			Marco.DibujarVida();
-			
+
 		}
 	}
 
