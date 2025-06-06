@@ -147,6 +147,9 @@ const auto intervaloMovimientoBala = chrono::milliseconds(10); // PARA DISPAROS 
 
 auto ultimoMovimientoBala = Clock::now();
 
+/// === Variables personaje ===///
+int inmortal = 0; //0=(No inmortal) 
+
 
 // ============================ //
 /* Personaje Principal */
@@ -743,7 +746,6 @@ int main() {
 	Marco.DibujarVida();  //nuevo
 	bool EstarVivo = true;
 	int vida = 3;
-	int inmortal = 0; //0=(No inmortal) 
 
 	//Nubes
 
@@ -972,10 +974,12 @@ int main() {
 					ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
 					ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
 					ListaEnemigos[i].DibujarEnemigo();
+					/*
 					if (nuevoXEnemigo+10 == x) {
 						vida--;
 						VerificarDaño = true;
 					}
+					*/
 					
 				}
 			}
@@ -997,14 +1001,17 @@ int main() {
 					ListaEnemigosFuertes[i].setCursor(NuevoXEnemigo, NuevoYEnemigo);
 					ListaEnemigosFuertes[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
 					ListaEnemigosFuertes[i].DibujarEnemigo();
+					/*
 					if (NuevoXEnemigo - 10 == x) {
 						vida--;
 						VerificarDaño = true;
 					}
+					*/
 				}
 			}
 			if (inmortal > 0) { //Contador de inmortalidad.
 				inmortal--;
+				Marco.DibujarVida();
 			}
 			/*=========================*/
 			//Restablecer intervalo
@@ -1016,6 +1023,7 @@ int main() {
 		Console::SetCursorPosition(0, 0);
 		cout << balaX;
 		Console::SetCursorPosition(0, 1);
+		cout << inmortal;
 		for (int i = 0; i < TamañoListaEnemigos; i++) {
 			int enemigoX, enemigoY;
 			enemigoX = ListaEnemigos[i].getX() + 6;
@@ -1026,7 +1034,7 @@ int main() {
 			}
 		}
 		//Enemigos -> Jugador
-		if (nuevoXEnemigo + 5 == x + 2 && inmortal == 0) {
+		if (nuevoXEnemigo + 7 == x + 2 && inmortal == 0) {
 			vida--;
 			VerificarDaño = true;
 			inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
@@ -1283,7 +1291,12 @@ void BorrarAnimacion(int x, int y, int columna, int fila) {
 /*======================================*/
 
 void Corazones(int CoorX, int CoorY) {
-	Console::BackgroundColor = ConsoleColor::DarkRed;
+	if (inmortal <= 1) {
+		Console::BackgroundColor = ConsoleColor::DarkRed;
+	}
+	else {
+		Console::BackgroundColor = ConsoleColor::Yellow;
+	}
 
 	Cursor(CoorX, CoorY); cout << "  ";
 	Cursor(CoorX + 3, CoorY); cout << "  ";
@@ -1294,5 +1307,3 @@ void Corazones(int CoorX, int CoorY) {
 	Cursor(CoorX + 2, CoorY + 3); cout << " ";
 
 }
-
-//Sexoooooo
