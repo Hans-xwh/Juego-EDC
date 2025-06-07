@@ -1037,7 +1037,7 @@ int main() {
 					int AntiguoXEnemigo = ListaEnemigos[i].getX();
 					int AntiguoYEnemigo = ListaEnemigos[i].getY();
 
-					int nuevoXEnemigo = AntiguoXEnemigo;
+					nuevoXEnemigo = AntiguoXEnemigo;
 					int nuevoYEnemigo = AntiguoYEnemigo;
 					if (nuevoXEnemigo <= x) {
 						nuevoXEnemigo++;
