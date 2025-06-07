@@ -1023,7 +1023,9 @@ int main() {
 		Console::SetCursorPosition(0, 0);
 		cout << balaX;
 		Console::SetCursorPosition(0, 1);
-		cout << inmortal;
+		cout << inmortal << endl;
+		cout << "PlayerX: " << x << endl;
+		cout << "NuevoEnemigoX: " << nuevoXEnemigo;
 		for (int i = 0; i < TamañoListaEnemigos; i++) {
 			int enemigoX, enemigoY;
 			enemigoX = ListaEnemigos[i].getX() + 6;
@@ -1034,7 +1036,7 @@ int main() {
 			}
 		}
 		//Enemigos -> Jugador
-		if (nuevoXEnemigo + 7 == x + 2 && inmortal == 0) {
+		if (nuevoXEnemigo + 7 == x + 2 && inmortal == 0) {	//hay que ajustar esto
 			vida--;
 			VerificarDaño = true;
 			inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
