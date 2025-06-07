@@ -402,15 +402,15 @@ public:
 	}
 
 	void Borrar(int AntiguoX, int AntiguoY) {
-		BorrarAnimacion(AntiguoX - 1, AntiguoY, 12, 7);
+		BorrarAnimacion(AntiguoX - 1, AntiguoY-1, 12, 8);
 	}
 	//Nuevo 
 	void DibujarVida() {
 		int CoorX = 143; int CoorY = 1;
 		if (vida == 3) {
 			Corazones(CoorX, CoorY);
-			Corazones(CoorX -6, CoorY);
-			Corazones(CoorX-12, CoorY);
+			Corazones(CoorX - 6, CoorY);
+			Corazones(CoorX - 12, CoorY);
 		}
 		if (vida == 2) {
 			Corazones(CoorX, CoorY);
@@ -447,9 +447,9 @@ public:
 	void DibujarEnemigo() {
 		Console::BackgroundColor = ConsoleColor::Black;
 
-	
+
 		//Cabeza
-		
+
 		Cursor(x + 2, y); cout << "   ";
 		Console::ForegroundColor = ConsoleColor::DarkRed;
 		Cursor(x + 1, y + 1); cout << " \\ / ";
@@ -464,10 +464,10 @@ public:
 		//Brazos:
 		Cursor(x + 1, y + 4); cout << " ";
 		Cursor(x + 3, y + 4); cout << " ";
-		Cursor(x + 5, y + 4) ;cout<<" ";
-		Cursor(x + 1, y + 5) ;cout<<" ";
-		Cursor(x + 3, y + 5) ;cout<<" ";
-		Cursor(x + 5, y + 5) ;cout<<" ";
+		Cursor(x + 5, y + 4); cout << " ";
+		Cursor(x + 1, y + 5); cout << " ";
+		Cursor(x + 3, y + 5); cout << " ";
+		Cursor(x + 5, y + 5); cout << " ";
 
 
 	}
@@ -498,7 +498,7 @@ public:
 		x = nuevoX;
 		y = nuevoY;
 	}
-	void DibujarNube(int animacion) {
+	void DibujarNube(int animacion, string listaPreguntas[4]) {
 		ConsoleColor ColorGris = ConsoleColor::Gray;
 		ConsoleColor ColorNegro = ConsoleColor::Black;
 		ConsoleColor ColorAzul = ConsoleColor::Blue;
@@ -506,32 +506,34 @@ public:
 		Console::BackgroundColor = ConsoleColor::Gray;
 		Console::ForegroundColor = ConsoleColor::Black;
 		if (animacion == 1) {
-			Cursor(x, y); cout << "   ";
-			Cursor(x - 1, y + 1) ;cout<< "     ";
-			Cursor(x - 2, y + 2) ;cout<< " 5 + x ";
-			Cursor(x - 3, y + 3) ;cout<< "  =  10    ";
+			Cursor(x, y);         cout << "   ";
+			Cursor(x - 1, y + 1); cout << "     ";
+			Cursor(x - 2, y + 2); cout << listaPreguntas[0];
+			Cursor(x - 3, y + 3); cout << "           ";
+			
+	
 		}
 		if (animacion == 2) {
-			Cursor(x - 1, y) ;cout<< "Quien";
-			Cursor(x - 2, y + 1) ;cout<< "  es  ";
-			Cursor(x - 3, y + 2) ;cout<< "   Dina  ";
-			Cursor(x - 4, y + 3) ;cout<< " Boluarte?";
+			Cursor(x - 1, y);	  cout << "      ";
+			Cursor(x - 2, y + 1); cout << "       ";
+			Cursor(x - 3, y + 2); cout << listaPreguntas[1];
+			Cursor(x - 4, y + 3); cout << "           ";
 		}
 		if (animacion == 3) {
-			Cursor(x - 1, y + 1) ;cout<< "      ";
-			Cursor(x - 2, y + 2) ;cout<< "        ";
-			Cursor(x - 3, y + 3) ;cout<< "         ";
-			Cursor(x - 4, y + 4) ;cout<< "           ";
+			Cursor(x - 1, y + 1); cout << "      ";
+			Cursor(x - 2, y + 2); cout << "        ";
+			Cursor(x - 3, y + 3); cout << listaPreguntas[2];
+			Cursor(x - 4, y + 4); cout << "           ";
 		}
 		if (animacion == 4) {
-			Cursor(x, y) ;cout<< "   ";
-			Cursor(x - 1, y + 1) ;cout<< "     ";
-			Cursor(x - 2, y + 2) ;cout<< "       ";
-			Cursor(x - 3, y + 3) ;cout<< "         ";
+			Cursor(x, y); cout << "   ";
+			Cursor(x - 1, y + 1); cout << "     ";
+			Cursor(x - 2, y + 2); cout << listaPreguntas[3];
+			Cursor(x - 3, y + 3); cout << "           ";
 
 			// Lluvia
-			Pintar(x - 2, y + 4, "  |   |  ", ColorAzul, ColorAzulOscuro) ;
-			Pintar(x - 1, y + 5, " |  | | ", ColorAzul, ColorAzulOscuro) ;
+			Pintar(x - 2, y + 4, "  |   |  ", ColorAzul, ColorAzulOscuro);
+			Pintar(x - 1, y + 5, " |  | | ", ColorAzul, ColorAzulOscuro);
 		}
 	}
 	void BorrarNube(int AntiguoX, int AntiguoY) {
@@ -550,7 +552,7 @@ void Disparar(int personajeX, int personajeY, int direccionHorizontal, int direc
 
 	if (puedeDisparar && (ahora - ultimoDisparo) * 1000 / CLOCKS_PER_SEC >= cooldownDisparo) {
 		balaActiva = true;
-		
+
 
 		// Posición inicial basada en la dirección del personaje
 		if (direccionVertical == 1) { // Izquierda
@@ -599,10 +601,10 @@ void ActualizarBala() {
 		}
 		else if (balaDireccion == 3) { // Arriba (nuevo caso)
 			balaY -= velocidadBala;
-		}              
+		}
 
 		// 3. Verificar límites
-		if (balaX < 2 || balaX > 148 || balaY < 2) {
+		if (balaX < 2 || balaX > 148 || balaY < 6) {
 			balaActiva = false;
 			return;
 		}
@@ -647,15 +649,15 @@ struct Preguntas {
 	void Pregunta3() {
 		Console::BackgroundColor = ConsoleColor::Blue;
 		Console::ForegroundColor = ConsoleColor::Black;
-		Cursor(5, 0); cout << "   _  ___              _                  ____        ___ ___ "; 
-		Cursor(5, 1); cout << "  (_)/ __|  _ __ _ _ _| |_ ___   ___ ___ |__  | /\/\ ( _ )__ \\";
-		Cursor(5, 2); cout << " / /| (_| || / _` | | \  _/ _ \ / -_|_-<   / /  >  < / _ \ /_/";
-		Cursor(5, 3); cout << " \___\___\_,_\__,_|_||_\__\___/ \___/__/  /_/   \/\/ \___/(_) ";
+		Cursor(5, 0); cout << "   _  ___              _                  ____        ___ ___ ";
+		Cursor(5, 1); cout << "  (_)/ __|  _ __ _ _ _| |_ ___   ___ ___ |__  | /\\/\\ ( _ )__ \\";
+		Cursor(5, 2); cout << " / /| (_| || / _` | | \\  _/ _ \\ / -_|_-<   / /  >  < / _ \\ /_/";
+		Cursor(5, 3); cout << " \\___\\___\\_,_\\__,_|_||_\\__\\___/ \\___/__/  /_/   \\/\\/ \\___/(_) ";
 	}
 	void Pregunta4() {
 		Console::BackgroundColor = ConsoleColor::Blue;
 		Console::ForegroundColor = ConsoleColor::Black;
-		Cursor(5, 0); cout << "                                                                                                                    _____ "; 
+		Cursor(5, 0); cout << "                                                                                                                    _____ ";
 		Cursor(5, 1); cout << " _____         _                   _        _                     _                      _     _    _____          |___  |";
 		Cursor(5, 2); cout << "|     |_ _ ___| |   ___ ___    ___| |   ___|_|___    _____ ___   | |___ ___ ___ ___    _| |___| |  |  _  |___ ___ _ _|  _|";
 		Cursor(5, 3); cout << "|   --| | | .'| |  | -_|_ -|  | -_| |  |  _| | . |  |     |_ -|  | | .'|  _| . | . |  | . | -_| |  |   __| -_|  _| | |_|  ";
@@ -666,36 +668,28 @@ struct Preguntas {
 	void Pregunta5() {
 		Console::BackgroundColor = ConsoleColor::Blue;
 		Console::ForegroundColor = ConsoleColor::Black;
-		Cursor(5, 0); cout << "   _  ___       __ _      _       _             _           _         _                _                   _            _  _  ___     __                                     _            _     _                                     _                             _            _  __     ___ ";
-		Cursor(5, 1); cout << "  (_)/ __|  _ _/_/| |  __| |___  | |___ ___  __(_)__ _ _  _(_)___ _ _| |_ ___ ___  ___| |___ _ __  ___ _ _| |_ ___ ___ | \| |/ _ \   / _|___ _ _ _ __  __ _   _ __  __ _ _ _| |_ ___   __| |___| |  _ __ _ _ ___  __ ___ ___ ___   __| |___   __ ___ _ __ _  _ _ _ (_)__ __ _ __(_)/_/ _ _|__ \\";
-		Cursor(5, 2); cout << " / /| (_| || / _` | | / _` / -_) | / _ (_-< (_-< / _` | || | / -_) ' \  _/ -_|_-< / -_) / -_) '  \/ -_) ' \  _/ _ (_-< | .` | (_) | |  _/ _ \ '_| '  \/ _` | | '_ \/ _` | '_|  _/ -_) / _` / -_) | | '_ \ '_/ _ \/ _/ -_|_-</ _ \ / _` / -_) / _/ _ \ '  \ || | ' \| / _/ _` / _| / _ \ ' \ /_/";
-		Cursor(5, 3); cout << " \___\___\_,_\__,_|_| \__,_\___| |_\___/__/ /__/_\__, |\_,_|_\___|_||_\__\___/__/ \___|_\___|_|_|_\___|_||_\__\___/__/ |_|\_|\___/  |_| \___/_| |_|_|_\__,_| | .__/\__,_|_|  \__\___| \__,_\___|_| | .__/_| \___/\__\___/__/\___/ \__,_\___| \__\___/_|_|_\_,_|_||_|_\__\__,_\__|_\___/_||_(_) ";
-		Cursor(5, 4); cout << "                                                 |___/                                                                                                       |_|                                   |_|                                                                                         ";
+		Cursor(5, 0); cout << "  _  ___                                  _                                          _         _   _        ___ ";
+		Cursor(5, 1); cout << " (_)/ __|___ _ __  _ __  ___ _ _  ___ _ _| |_ ___   _ _  ___   __ ___ _ __ _  _ _ _ (_)__ __ _| |_(_)_ ____|__ \\";
+		Cursor(5, 2); cout << "/ /| (__/ _ \\ '  \\| '_ \\/ _ \\ ' \\/ -_) ' \\  _/ -_) | ' \\/ _ \\ / _/ _ \\ '  \\ || | ' \\| / _/ _` |  _| \\ V / _ \\/_/";
+		Cursor(5, 3); cout << "\\___\\___\\___/_|_|_| .__/\\___/_||_\\___|_||_\\__\\___| |_||_\\___/ \\__\\___/_|_|_\\_,_|_||_|_\\__\\__,_|\\__|_|\\_/\\___(_) ";
+		Cursor(5, 4); cout << "                  |_|                                                                                           ";
+
+
 	}
 	void Pregunta6() {
 		Console::BackgroundColor = ConsoleColor::Blue;
 		Console::ForegroundColor = ConsoleColor::Black;
-		Cursor(5, 0); cout << "                                                                                                                                                                    _____ ";
-		Cursor(5, 1); cout << " _____                                                  _                  _        _       _                   _             _          _     _    _____          |___  |";
-		Cursor(5, 2); cout << "|     |_ _ ___    ___ ___    ___ ___    ___ ___ ___ ___| |___ _____ ___   | |___   |_|___ _| |___ ___ ___ ___ _| |___ ___ ___|_|___    _| |___| |  |  _  |___ ___ _ _|  _|";
-		Cursor(5, 3); cout << "|  |  | | | -_|  | .'| . |  |_ -| -_|  | . |  _| . |  _| | .'|     | . |  | | .'|  | |   | . | -_| . | -_|   | . | -_|   |  _| | .'|  | . | -_| |  |   __| -_|  _| | |_|  ";
-		Cursor(5, 4); cout << "|__  _|___|___|  |__,|___|  |___|___|  |  _|_| |___|___|_|__,|_|_|_|___|  |_|__,|  |_|_|_|___|___|  _|___|_|_|___|___|_|_|___|_|__,|  |___|___|_|  |__|  |___|_| |___|_|  ";
-		Cursor(5, 5); cout << "   |__|                                |_|                                                       |_|                                                                  ";
+		Cursor(5, 0); cout << "  _    _   /\\/|       _         _                       _             _        ___           _____ ";
+		Cursor(5, 1); cout << " (_)  /_\\ |/\\/  ___  (_)_ _  __| |___ _ __  ___ _ _  __| |___ _ _  __(_)__ _  | _ \\___ _ _ _/_/__ \\";
+		Cursor(5, 2); cout << "/ /_ / _ \\| ' \\/ _ \\ | | ' \\/ _` / -_) '_ \\/ -_) ' \\/ _` / -_) ' \\/ _| / _` | |  _/ -_) '_| || |/_/";
+		Cursor(5, 3); cout << "\\___/_/ \\_\\_||_\\___/ |_|_||_\\__,_\\___| .__/\\___|_||_\\__,_\\___|_||_\\__|_\\__,_| |_| \\___|_|  \\_,_(_) ";
+		Cursor(5, 4); cout << "                                     |_|                                                           ";
+	
 	}
-	string AlternativasPregunta1[4] = { "Arequipa", "Cusco", "Trujillo", "Lima" };
-	string AlternativasPregunta2[4] = { "Tupac Amaru II", "Miguel Grau", "Jose de San Martin", "Simon Bolivar" };
-	string AlternativasPregunta3[4] = { "54", "56", "64", "58" };
-	string AlternativasPregunta4[4] = { "Urubamba", "Ucayali", "Amazonas", "Mantaro" };
-	string AlternativasPregunta5[4] = { "Rombo", "Trapecio", "Paralelogramo", "Cuadrado" };
-	string AlternativasPregunta6[4] = { "Mochica", "Nazca", "Chimu", "Paracas" };
-	string AlternativasPregunta7[4] = { "Verbo", "Sustantivo", "Adverbio", "Adjetivo" };
-	string AlternativasPregunta8[4] = { "1810", "1821", "1824", "1830" };
-	string AlternativasPregunta9[4] = { "51", "47", "49", "45" };
-	string AlternativasPregunta10[4] = { "Emisor", "Receptor", "Ecuacion", "Mensaje" };
 
 	void DibujarPregunta(int pregunta) {
 
-		switch (pregunta){
+		switch (pregunta) {
 		case 1:
 			Pregunta1();
 			break;
@@ -714,11 +708,14 @@ struct Preguntas {
 		case 6:
 			Pregunta6();
 			break;
-		
+
 		default:
 			break;
 		}
-		
+
+	}
+	void BorrarPregunta(int x, int y) {
+		BorrarAnimacion(x, y, 123, 6);
 	}
 };
 /*=======================================================*/
@@ -733,13 +730,13 @@ int main() {
 
 	//SE LLAMA A LA FUNCION SELECCIONAR LA OPCION
 	seleccionar_opcion();
-	
+
 	//SE CONFIGURA QUE EL FONDO ESE AZUL DESPUES DE PRESIONAR CUALQUIER TECLA POR EL MOMENOT
 	Console::BackgroundColor = ConsoleColor::Blue;
 	Console::Clear();  // Limpia la consola
 	PlaySound(TEXT("musica.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	Piso(150);
-	
+
 	//Personaje
 	int x = 90; int y = 28;
 	Personaje Marco(x, y);
@@ -747,32 +744,61 @@ int main() {
 	bool EstarVivo = true;
 	int vida = 3;
 
-	//Nubes
+	/* Preguntas */
+	Preguntas pregunta;
+	int NumeroPregunta = 1;
+	pregunta.DibujarPregunta(NumeroPregunta);
 
+	//Alternativas
+	string AlternativasPregunta1[4] = { "Arequipa", "  Cusco  ", "Trujillo  ", "  Lima  " };
+	string AlternativasPregunta2[4] = { "Tupac Amaru II", "Miguel Grau", "San Martin", "Simon Bolivar" };
+	string AlternativasPregunta3[4] = { "    54   ", "    56   ", "    64   ", "    58   " };
+	string AlternativasPregunta4[4] = { "Urubamba", "Ucayali", "Amazonas", "Mantaro" };
+	string AlternativasPregunta5[4] = { "Emisor", "Receptor", "Mensaje","Ecuacion" };
+	string AlternativasPregunta6[4] = { "   1821  ","   1810  ", "   1824  ", "   1830  " };
+	//Respuestas
+	
+	/*======================*/
+
+	/* Nubes */
+
+	//Nube 1
 	int direccionNube1 = 1;
 	int FormaNube1 = 1;
-	int Nube_X_1 = 120; int Nube_Y_1 = 6;
+	int Nube_X_1 = 110; int Nube_Y_1 = 6;
+	int Respuesta1 = 3;
 	Nubes nube1(Nube_X_1, Nube_Y_1);
 
+	//Nube 2
 	int direccionNube2 = 1;
 	int FormaNube2 = 2;
 	int Nube_X_2 = 30; int Nube_Y_2 = 10;
+	int Respuesta2 = 2;
 	Nubes nube2(Nube_X_2, Nube_Y_2);
 
+	//nube 3
 	int direccionNube3 = 1;
-	int FormaNube3 = 3;
-	int Nube_X_3 = 50; int Nube_Y_3 = 19;
+	int FormaNube3 = 4;
+	int Nube_X_3 = 110; int Nube_Y_3 = 14;
+	int Respuesta3 = 1;
 	Nubes nube3(Nube_X_3, Nube_Y_3);
 
+	//Nube 4
 	int direccionNube4 = 1;
-	int FormaNube4 = 4;
-	int Nube_X_4 = 120; int Nube_Y_4 = 14;
+	int FormaNube4 = 3;
+	int Nube_X_4 = 50; int Nube_Y_4 = 19;
+	int Respuesta4 = 1;
+
 	Nubes nube4(Nube_X_4, Nube_Y_4);
 
-	nube1.DibujarNube(FormaNube1);
-	nube2.DibujarNube(FormaNube2);
-	nube3.DibujarNube(FormaNube3);
-	nube4.DibujarNube(FormaNube4);
+	
+	//Dibujar Nubes
+	nube1.DibujarNube(FormaNube1,AlternativasPregunta1);
+	nube2.DibujarNube(FormaNube2,AlternativasPregunta1);
+	nube3.DibujarNube(FormaNube3,AlternativasPregunta1);
+	nube4.DibujarNube(FormaNube4,AlternativasPregunta1);
+
+	/*==========================================*/
 
 	//Controlar tiempo y animaciones 
 	int frame = 1;
@@ -782,7 +808,7 @@ int main() {
 	auto Intervalo = chrono::milliseconds(500);
 	Marco.Dibujar(1, 1);
 
-	//Enemigos
+	/* Enemigos */
 	auto UltimoMomentoEnemigo = Clock::now();
 	auto UltimoMomentoEnemigoFuerte = Clock::now();
 
@@ -796,12 +822,11 @@ int main() {
 	bool enemigosFuertesCreados = false;
 	int IndiceEnemigos = 0; int IndiceEnemigosFuertes = 0;
 	int nuevoXEnemigo = 0;
-
-	//Preguntas
-	Preguntas pregunta;
-	pregunta.DibujarPregunta(2);
-
+	/*========================================*/
+	
 	while (true) {
+		bool BalaNube = false;
+		bool CambioPregunta = false;
 		bool moverse = false;
 		bool VerificarDaño = false;
 		//Coordenadas Nubes
@@ -898,7 +923,7 @@ int main() {
 		if (ahora - UltimoMomentoNube >= Intervalo) {
 			/*    Nubes   */
 			//nube 1
-			Nube_X_1-= 3 * direccionNube1;
+			Nube_X_1 -= 1 * direccionNube1;
 			//Rebote de nubes
 			if (Nube_X_1 >= 120 || Nube_X_1 <= 10) {
 				direccionNube1 *= -1;
@@ -906,11 +931,22 @@ int main() {
 
 			nube1.setCursor(Nube_X_1, Nube_Y_1);
 			nube1.BorrarNube(AntiguoXNube1, AntiguoYNube1);
-			nube1.DibujarNube(FormaNube1);
-			
+			if (NumeroPregunta == 1) {
+				nube1.DibujarNube(FormaNube1, AlternativasPregunta1);
+			}if (NumeroPregunta == 2) {
+				nube1.DibujarNube(FormaNube1, AlternativasPregunta2);
+			}if (NumeroPregunta == 3) {
+				nube1.DibujarNube(FormaNube1, AlternativasPregunta3);
+			}if (NumeroPregunta == 4) {
+				nube1.DibujarNube(FormaNube1, AlternativasPregunta4);
+			}if (NumeroPregunta == 5) {
+				nube1.DibujarNube(FormaNube1, AlternativasPregunta5);
+			}if (NumeroPregunta == 6) {
+				nube1.DibujarNube(FormaNube1, AlternativasPregunta6);
+			}
 
 			//nube 2
-			Nube_X_2+= 2*direccionNube2;
+			Nube_X_2 += 1 * direccionNube2;
 			//Rebote de nubes
 
 			if (Nube_X_2 >= 120 || Nube_X_2 <= 10) {
@@ -918,10 +954,23 @@ int main() {
 			}
 			nube2.setCursor(Nube_X_2, Nube_Y_2);
 			nube2.BorrarNube(AntiguoXNube2, AntiguoYNube2);
-			nube2.DibujarNube(FormaNube2);
+			if (NumeroPregunta == 1) {
+				nube2.DibujarNube(FormaNube2, AlternativasPregunta1);
+			}if (NumeroPregunta == 2) {
+				nube2.DibujarNube(FormaNube2, AlternativasPregunta2);
+			}if (NumeroPregunta == 3) {
+				nube2.DibujarNube(FormaNube2, AlternativasPregunta3);
+			}if (NumeroPregunta == 4) {
+				nube2.DibujarNube(FormaNube2, AlternativasPregunta4);
+			}if (NumeroPregunta == 5) {
+				nube2.DibujarNube(FormaNube2, AlternativasPregunta5);
+			}if (NumeroPregunta == 6) {
+				nube2.DibujarNube(FormaNube2, AlternativasPregunta6);
+			}
+
 
 			//nube 3
-			Nube_X_3+= 4 * direccionNube3;
+			Nube_X_3 += 1 * direccionNube3;
 			//Rebote de nubes
 
 			if (Nube_X_3 >= 120 || Nube_X_3 <= 10) {
@@ -929,17 +978,42 @@ int main() {
 			}
 			nube3.setCursor(Nube_X_3, Nube_Y_3);
 			nube3.BorrarNube(AntiguoXNube3, AntiguoYNube3);
-			nube3.DibujarNube(FormaNube3);
+			if (NumeroPregunta == 1) {
+				nube3.DibujarNube(FormaNube3, AlternativasPregunta1);
+			}
+			if (NumeroPregunta == 2) {
+				nube3.DibujarNube(FormaNube3, AlternativasPregunta2);
+			}if (NumeroPregunta == 3) {
+				nube3.DibujarNube(FormaNube3, AlternativasPregunta3);
+			}if (NumeroPregunta == 4) {
+				nube3.DibujarNube(FormaNube3, AlternativasPregunta4);
+			}if (NumeroPregunta == 5) {
+				nube3.DibujarNube(FormaNube3, AlternativasPregunta5);
+			}if (NumeroPregunta == 6) {
+				nube3.DibujarNube(FormaNube3, AlternativasPregunta6);
+			}
 
 			//nube 4
-			Nube_X_4-= 5 * direccionNube4;
+			Nube_X_4 -= 1 * direccionNube4;
 			//Rebote de nubes
 			if (Nube_X_4 >= 120 || Nube_X_4 <= 10) {
 				direccionNube4 *= -1;
 			}
 			nube4.setCursor(Nube_X_4, Nube_Y_4);
 			nube4.BorrarNube(AntiguoXNube4, AntiguoYNube4);
-			nube4.DibujarNube(FormaNube4);
+			if (NumeroPregunta == 1) {
+				nube4.DibujarNube(FormaNube4, AlternativasPregunta1);
+			}if (NumeroPregunta == 2) {
+				nube4.DibujarNube(FormaNube4, AlternativasPregunta2);
+			}if (NumeroPregunta == 3) {
+				nube4.DibujarNube(FormaNube4, AlternativasPregunta3);
+			}if (NumeroPregunta == 4) {
+				nube4.DibujarNube(FormaNube4, AlternativasPregunta4);
+			}if (NumeroPregunta == 5) {
+				nube4.DibujarNube(FormaNube4, AlternativasPregunta5);
+			}if (NumeroPregunta == 6) {
+				nube4.DibujarNube(FormaNube4, AlternativasPregunta6);
+			}
 
 			/*===================*/
 
@@ -980,7 +1054,7 @@ int main() {
 						VerificarDaño = true;
 					}
 					*/
-					
+
 				}
 			}
 			//Enemigos fuertes
@@ -1019,7 +1093,7 @@ int main() {
 		}
 		//Sleep(10);
 
-		//Colisiones
+		/* Colisiones   */
 		Console::SetCursorPosition(0, 0);
 		cout << balaX;
 		Console::SetCursorPosition(0, 1);
@@ -1041,7 +1115,78 @@ int main() {
 			VerificarDaño = true;
 			inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
 		}
+		//Colision Balas / Nubes
+		if (NumeroPregunta == 1) {
+			if (balaX == Nube_X_3 && Nube_Y_3 == balaY) {
+				balaActiva = false;
+				CambioPregunta = true;
+				NumeroPregunta++;
+			}
+		}
+		if (NumeroPregunta == 2) {
+			if (Nube_X_4 == balaX && Nube_Y_4 == balaY) {
+				balaActiva = false;
+				CambioPregunta = true;
+				NumeroPregunta++;
+			}
+		}
+		if (NumeroPregunta == 3) {
+			if (Nube_X_2 == balaX && Nube_Y_2 == balaY) {
+				balaActiva = false;
+				CambioPregunta = true;
+				NumeroPregunta++;
+			}
+		}
+		if (NumeroPregunta == 4) {
+			if (Nube_X_4 == balaX && Nube_Y_4 == balaY) {
+				balaActiva = false;
+				CambioPregunta = true;
+				NumeroPregunta++;
+			}
+		}
+		if (NumeroPregunta == 5) {
+			if (Nube_X_3 == balaX && Nube_Y_3 == balaY) {
+				balaActiva = false;
+				CambioPregunta = true;
+				NumeroPregunta++;
+			}
+		}
+		if (NumeroPregunta == 6) {
+			if (Nube_X_1 == balaX && Nube_Y_1 == balaY) {
+				CambioPregunta = true;
+				balaActiva = false;
+				NumeroPregunta++;
+			}
+		}
+		if (CambioPregunta == true && NumeroPregunta == 2) {
+			pregunta.BorrarPregunta(5, 0);
+			pregunta.DibujarPregunta(NumeroPregunta);
+		}
+		if (CambioPregunta == true && NumeroPregunta == 3) {
+			
+			pregunta.BorrarPregunta(5, 0);
+			pregunta.DibujarPregunta(NumeroPregunta);
+		}
+		if (CambioPregunta == true && NumeroPregunta == 4) {
+			pregunta.BorrarPregunta(5, 0);
+			pregunta.DibujarPregunta(NumeroPregunta);
+		}
+		if (CambioPregunta == true && NumeroPregunta == 5) {
+			pregunta.BorrarPregunta(5, 0);
+			pregunta.DibujarPregunta(NumeroPregunta);
+		}
+		if (CambioPregunta == true && NumeroPregunta == 6) {
+			pregunta.BorrarPregunta(5, 0);
+			pregunta.DibujarPregunta(NumeroPregunta);
+		}
+		if (CambioPregunta == true && NumeroPregunta == 7) {
+			pregunta.BorrarPregunta(5, 0);
+			cout << "Has ganado";
+		}
 
+		
+
+		/*=================================*/
 		//Comprobar daño al jugador
 		if (vida == 2 && VerificarDaño == true) {
 			Marco.setVida(2);
@@ -1062,10 +1207,10 @@ int main() {
 		}
 	}
 
-/*LLAMAR A LA FUNCION BALA */
+	/*LLAMAR A LA FUNCION BALA */
 
 
-return 0;
+	return 0;
 }
 /*=========================================================*/
 
@@ -1092,72 +1237,72 @@ void Vegetacion(int animacion, int x, int y) {
 	if (animacion == 1) {
 		Cursor(x, y); cout << "  ";
 		Cursor(x + 3, y); cout << "* ";
-		Cursor(x + 6, y ); cout << "* ";
-		Cursor(x + 6, y ); cout << "* ";
+		Cursor(x + 6, y); cout << "* ";
+		Cursor(x + 6, y); cout << "* ";
 		Cursor(x + 12, y); cout << "  ";
 
-		Cursor(x, y + 1);cout<<"* ";
-		Cursor(x + 3, y + 1 );cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1);cout<< " *";
-		Cursor(x + 12, y + 1);cout<< " *";
+		Cursor(x, y + 1); cout << "* ";
+		Cursor(x + 3, y + 1); cout << " *";
+		Cursor(x + 6, y + 1); cout << " *";
+		Cursor(x + 9, y + 1); cout << " *";
+		Cursor(x + 12, y + 1); cout << " *";
 
-		Cursor(x, y + 2 );cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Cursor(x, y + 2); cout << "    *  *  *   ";
+		Cursor(x, y + 3); cout << " *  *  *  *  *";
 	}
 	//Animacion 2 (derecha)
 	if (animacion == 2) {
-		Cursor(x + 1, y);cout<< "  ";
-		Cursor(x + 4, y);cout<< "* ";
-		Cursor(x + 7, y);cout<< "* ";
-		Cursor(x + 10, y);cout<< "* ";
-		Cursor(x + 13, y);cout<< "  ";
+		Cursor(x + 1, y); cout << "  ";
+		Cursor(x + 4, y); cout << "* ";
+		Cursor(x + 7, y); cout << "* ";
+		Cursor(x + 10, y); cout << "* ";
+		Cursor(x + 13, y); cout << "  ";
 
-		Cursor(x, y + 1);cout<< "* ";
-		Cursor(x + 3, y + 1);cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1 );cout<< " *";
-		Cursor(x + 12, y + 1 );cout<< " *";
+		Cursor(x, y + 1); cout << "* ";
+		Cursor(x + 3, y + 1); cout << " *";
+		Cursor(x + 6, y + 1); cout << " *";
+		Cursor(x + 9, y + 1); cout << " *";
+		Cursor(x + 12, y + 1); cout << " *";
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Cursor(x, y + 2); cout << "    *  *  *   ";
+		Cursor(x, y + 3); cout << " *  *  *  *  *";
 
 	}
 	//Animacion 3(derecha)
 	if (animacion == 3) {
-		Cursor(x + 4, y);cout<< "  ";
-		Cursor(x + 7, y);cout<< "* ";
+		Cursor(x + 4, y); cout << "  ";
+		Cursor(x + 7, y); cout << "* ";
 		Cursor(x + 6, y); cout << "* ";
-		Cursor(x + 13, y);cout<< "* ";
-		Cursor(x + 16, y);cout<< "  ";
+		Cursor(x + 13, y); cout << "* ";
+		Cursor(x + 16, y); cout << "  ";
 
-		Cursor(x + 2, y + 1);cout<< "* ";
-		Cursor(x + 5, y + 1);cout<< " *";
-		Cursor(x + 8, y + 1 );cout<< " *";
-		Cursor(x + 11, y + 1);cout<< " *";
-		Cursor(x + 14, y + 1);cout<< " *";
+		Cursor(x + 2, y + 1); cout << "* ";
+		Cursor(x + 5, y + 1); cout << " *";
+		Cursor(x + 8, y + 1); cout << " *";
+		Cursor(x + 11, y + 1); cout << " *";
+		Cursor(x + 14, y + 1); cout << " *";
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3 );cout<< " *  *  *  *  *";
+		Cursor(x, y + 2); cout << "    *  *  *   ";
+		Cursor(x, y + 3); cout << " *  *  *  *  *";
 
 
 	}
 	//Animacion 4 (Derecha)
 	if (animacion == 4) {
-		Cursor(x + 1, y);cout<< "  ";
-		Cursor(x + 4, y);cout<< "* ";
-		Cursor(x + 7, y);cout<< "* ";
-		Cursor(x + 10, y);cout<< "* ";
-		Cursor(x + 13, y);cout<< "  ";
+		Cursor(x + 1, y); cout << "  ";
+		Cursor(x + 4, y); cout << "* ";
+		Cursor(x + 7, y); cout << "* ";
+		Cursor(x + 10, y); cout << "* ";
+		Cursor(x + 13, y); cout << "  ";
 
-		Cursor(x, y + 1);cout<< "* ";
-		Cursor(x + 3, y + 1);cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1 );cout<< " *";
-		Cursor(x + 12, y + 1 ); cout << " *";
+		Cursor(x, y + 1); cout << "* ";
+		Cursor(x + 3, y + 1); cout << " *";
+		Cursor(x + 6, y + 1); cout << " *";
+		Cursor(x + 9, y + 1); cout << " *";
+		Cursor(x + 12, y + 1); cout << " *";
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Cursor(x, y + 2); cout << "    *  *  *   ";
+		Cursor(x, y + 3); cout << " *  *  *  *  *";
 
 	}
 	//Animacion 5 (neutro)
@@ -1179,59 +1324,59 @@ void Vegetacion(int animacion, int x, int y) {
 	}
 	//Animacion 6 (izquierda)
 	if (animacion == 6) {
-		Cursor((x + 1) - 2, y);cout<< "  ";
-		Cursor((x + 4) - 2, y);cout<< "* ";
-		Cursor((x + 7) - 2, y);cout<< "* ";
-		Cursor((x + 10) - 2, y);cout<< "* ";
-		Cursor((x + 13) - 2, y);cout<< "  ";
+		Cursor((x + 1) - 2, y); cout << "  ";
+		Cursor((x + 4) - 2, y); cout << "* ";
+		Cursor((x + 7) - 2, y); cout << "* ";
+		Cursor((x + 10) - 2, y); cout << "* ";
+		Cursor((x + 13) - 2, y); cout << "  ";
 
-		Cursor(x, y + 1);cout<< "* ";
-		Cursor(x + 3, y + 1);cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1 );cout<< " *";
-		Cursor(x + 12, y + 1 );cout<< " *";
+		Cursor(x, y + 1); cout << "* ";
+		Cursor(x + 3, y + 1); cout << " *";
+		Cursor(x + 6, y + 1); cout << " *";
+		Cursor(x + 9, y + 1); cout << " *";
+		Cursor(x + 12, y + 1); cout << " *";
 
-		Cursor(x, y + 2 );cout<< "    *  *  *   ";
-		Cursor(x, y + 3 );cout<< " *  *  *  *  *";
+		Cursor(x, y + 2); cout << "    *  *  *   ";
+		Cursor(x, y + 3); cout << " *  *  *  *  *";
 
 	}
 	//Animacion 7 (izquierda)
 
 	if (animacion == 7) {
-		Cursor((x + 1) - 3, y);cout<< "  ";
-		Cursor((x + 4) - 3, y);cout<< "* ";
-		Cursor((x + 7) - 3, y);cout<< "* ";
-		Cursor((x + 10) - 3, y);cout<< "* ";
-		Cursor((x + 13) - 3, y);cout<< "  ";
+		Cursor((x + 1) - 3, y); cout << "  ";
+		Cursor((x + 4) - 3, y); cout << "* ";
+		Cursor((x + 7) - 3, y); cout << "* ";
+		Cursor((x + 10) - 3, y); cout << "* ";
+		Cursor((x + 13) - 3, y); cout << "  ";
 
-		Cursor(x - 1, y + 1);cout<< "* ";
-		Cursor((x + 3) - 1, y + 1);cout<< " *";
-		Cursor((x + 6) - 1, y + 1);cout<< " *";
-		Cursor((x + 9) - 1, y + 1);cout<< " *";
-		Cursor((x + 12) - 1, y + 1);cout<< " *";
+		Cursor(x - 1, y + 1); cout << "* ";
+		Cursor((x + 3) - 1, y + 1); cout << " *";
+		Cursor((x + 6) - 1, y + 1); cout << " *";
+		Cursor((x + 9) - 1, y + 1); cout << " *";
+		Cursor((x + 12) - 1, y + 1); cout << " *";
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Cursor(x, y + 2); cout << "    *  *  *   ";
+		Cursor(x, y + 3); cout << " *  *  *  *  *";
 
 
 	}
 	//Animacion 8 (izquierda)
 
 	if (animacion == 8) {
-		Cursor((x + 1) - 2, y);cout<< "  ";
-		Cursor((x + 4) - 2, y);cout<< "* ";
-		Cursor((x + 7) - 2, y);cout<< "* ";
-		Cursor((x + 10) - 2, y);cout<< "* ";
-		Cursor((x + 13) - 2, y);cout<< "  ";
+		Cursor((x + 1) - 2, y); cout << "  ";
+		Cursor((x + 4) - 2, y); cout << "* ";
+		Cursor((x + 7) - 2, y); cout << "* ";
+		Cursor((x + 10) - 2, y); cout << "* ";
+		Cursor((x + 13) - 2, y); cout << "  ";
 
-		Cursor(x, y + 1);cout<< "* ";
-		Cursor(x + 3, y + 1);cout<< " *";
-		Cursor(x + 6, y + 1);cout<< " *";
-		Cursor(x + 9, y + 1);cout<< " *";
-		Cursor(x + 12, y + 1);cout<< " *";
+		Cursor(x, y + 1); cout << "* ";
+		Cursor(x + 3, y + 1); cout << " *";
+		Cursor(x + 6, y + 1); cout << " *";
+		Cursor(x + 9, y + 1); cout << " *";
+		Cursor(x + 12, y + 1); cout << " *";
 
-		Cursor(x, y + 2);cout<< "    *  *  *   ";
-		Cursor(x, y + 3);cout<< " *  *  *  *  *";
+		Cursor(x, y + 2); cout << "    *  *  *   ";
+		Cursor(x, y + 3); cout << " *  *  *  *  *";
 
 	}
 }
