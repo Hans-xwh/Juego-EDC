@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "MisFunciones.h"
 #include <iostream>
 #include <conio.h>
 #include <string>
@@ -1114,6 +1115,7 @@ int main() {
 			vida--;
 			VerificarDaño = true;
 			inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
+			crash();
 		}
 		//Colision Balas / Nubes
 		if (NumeroPregunta == 1) {
