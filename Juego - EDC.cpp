@@ -90,19 +90,7 @@ void seleccionar_opcion() {
 
 
 //ESTABLECER COLORES
-void colores(int codigo) {
-	switch (codigo)
-	{
-	case 0:
-		Console::ForegroundColor = ConsoleColor::Black;
-		break;
-	case 1:
-		Console::ForegroundColor = ConsoleColor::Red;
-		break;
-	default:
-		break;
-	}
-}
+
 
 
 
