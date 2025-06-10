@@ -133,14 +133,107 @@ void dibujar_mapa(int menu[FILAS][COLUMNAS]) {
 		}
 	}
 }
+
+void loading() {
+	Console::Clear();
+
+	// Configuración inicial
+	int barWidth = 50;  // Ancho de la barra de carga
+	int barX = 50;      // Posición X centrada
+	int barY = 20;      // Posición Y vertical
+
+	// Dibujar marco de la barra de carga
+	Console::ForegroundColor = ConsoleColor::White;
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::SetCursorPosition(barX - 2, barY - 1);
+	cout << "CARGANDO JUEGO...";
+
+
+	Console::SetCursorPosition(barX - 1, barY);
+	cout << char(218); // Esquina superior izquierda (linea tipo esquina)
+
+	for (int i = 0; i < barWidth; i++) {
+		cout << char(196); // Línea horizontal (--)
+	}
+	cout << char(191); // Esquina superior derecha (linea tipo esquina)
+
+
+
+
+	Console::SetCursorPosition(barX - 1, barY + 1);
+	cout << char(179); // Línea vertical izquierda (|| en la izquierda)
+	Console::SetCursorPosition(barX + barWidth, barY + 1);
+	cout << char(179); // Línea vertical derecha (|| en la derecha)
+
+
+
+
+	Console::SetCursorPosition(barX - 1, barY + 2);
+	cout << char(192); // Esquina inferior izquierda (esquina izquierda abajo)
+
+	for (int i = 0; i < barWidth; i++) {
+		cout << char(196); // Línea horizontal abajo (---)
+	}
+	cout << char(217); // Esquina inferior derecha (esquina derecha abajo)
+
+
+	// Animación de carga
+	
+	for (int progreso = 0; progreso <= barWidth; progreso++) {
+
+		// Configurar color para la barra de progreso (fondo rojo)
+		Console::BackgroundColor = ConsoleColor::Red;
+		Console::ForegroundColor = ConsoleColor::Red;
+
+		// Dibujar el progreso
+		Console::SetCursorPosition(barX, barY + 1);
+		for (int i = 0; i < progreso; i++) {
+			cout << char(219); // Carácter de bloque sólido (ASCII 219)
+		}
+
+		// Mostrar porcentaje
+		Console::ForegroundColor = ConsoleColor::White;
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::SetCursorPosition(barX + barWidth + 3, barY + 1);
+		cout << int((float)progreso / barWidth * 100) << "%";
+
+		// Pequeña pausa para la animación
+		Sleep(40); // 40ms entre cada incremento
+	}
+
+	// Mensaje final
+	Console::SetCursorPosition(barX + 15, barY + 4);
+	cout << "LISTO!";
+	Sleep(100); // Esperar 100 milisengudos antes de continuar
+}
+
+
+void IniciarJuego() {
+	//VAMOS A COLOCAR UN MENU DE RECARGA DE UN PORCENTAJE 
+	PlaySound(NULL, 0, 0); // Detener música del menú
+
+	//Ejecuta la musica de loading
+	PlaySound(TEXT("loading.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	//Llama la funcion loading
+	loading();
+
+	PlaySound(NULL, 0, 0); // Detener música de loading
+
+}
+
 /*======================================*/
 void seleccionar_opcion() {
-	int tecla;
+	char tecla;
 	//PARA QUE INGRESE EL NUMERO PARA SELECCIONAR UNA PARTE DEL MUNDO
 	tecla = _getch();
 
-	PlaySound(NULL, 0, 0); // Detener música del menú
+	if (tecla == '1')
+	{
+		IniciarJuego();
+	}
+	
 }
+
 
 /*======================================*/
 //Funcion pintar + cursor + cout
@@ -201,10 +294,13 @@ void Disparar(int personajeX, int personajeY, int direccionHorizontal, int direc
 	}
 }
 
+/*======================================*/
+
 void Cursor(int x, int y) {
 	Console::SetCursorPosition(x, y);
 
 }
+
 /*======================================*/
 
 /*ACTUALIAZR BALA*/

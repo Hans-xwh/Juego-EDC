@@ -536,7 +536,7 @@ int main() {
 	//SE LLAMA A LA FUNCION SELECCIONAR LA OPCION
 	seleccionar_opcion();
 
-	//SE CONFIGURA QUE EL FONDO ESE AZUL DESPUES DE PRESIONAR CUALQUIER TECLA POR EL MOMENOT
+	//SE CONFIGURA QUE EL FONDO ESE AZUL DESPUES DE PRESIONAR LA TECLA 1
 	Console::BackgroundColor = ConsoleColor::Blue;
 	Console::Clear();  // Limpia la consola
 	PlaySound(TEXT("musica.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
