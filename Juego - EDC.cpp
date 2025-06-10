@@ -34,10 +34,6 @@ enum Teclas { DERECHA = 77, IZQUIERDA = 75, ARRIBA = 72 };
 /*----------*/
 
 
-/// === Variables personaje ===///
-int inmortal = 0; //0=(No inmortal) 
-
-
 // ============================ //
 /* Personaje Principal */
 struct Personaje {
@@ -1016,237 +1012,18 @@ int main() {
 
 		}
 	}
-
-	/*LLAMAR A LA FUNCION BALA */
-
-
 	return 0;
 }
 /*=========================================================*/
 
 
-/* Funciones Extras   */
-
-//Ventana del juego
-void Window() {
-	Console::CursorVisible = false;
-	Console::SetWindowSize(1, 1);
-	Console::SetBufferSize(150, 40);
-	Console::SetWindowSize(150, 40);
-	Console::Clear();
-}
-
-//Funcion que define los arbustos
-void Vegetacion(int animacion, int x, int y) {
-	//Definiendo colores de la planta
-	Console::ForegroundColor = ConsoleColor::DarkRed;
-	Console::BackgroundColor = ConsoleColor::DarkGreen;
-
-
-	//Animacion 1 (Neutro)
-	if (animacion == 1) {
-		Cursor(x, y); cout << "  ";
-		Cursor(x + 3, y); cout << "* ";
-		Cursor(x + 6, y); cout << "* ";
-		Cursor(x + 6, y); cout << "* ";
-		Cursor(x + 12, y); cout << "  ";
-
-		Cursor(x, y + 1); cout << "* ";
-		Cursor(x + 3, y + 1); cout << " *";
-		Cursor(x + 6, y + 1); cout << " *";
-		Cursor(x + 9, y + 1); cout << " *";
-		Cursor(x + 12, y + 1); cout << " *";
-
-		Cursor(x, y + 2); cout << "    *  *  *   ";
-		Cursor(x, y + 3); cout << " *  *  *  *  *";
-	}
-	//Animacion 2 (derecha)
-	if (animacion == 2) {
-		Cursor(x + 1, y); cout << "  ";
-		Cursor(x + 4, y); cout << "* ";
-		Cursor(x + 7, y); cout << "* ";
-		Cursor(x + 10, y); cout << "* ";
-		Cursor(x + 13, y); cout << "  ";
-
-		Cursor(x, y + 1); cout << "* ";
-		Cursor(x + 3, y + 1); cout << " *";
-		Cursor(x + 6, y + 1); cout << " *";
-		Cursor(x + 9, y + 1); cout << " *";
-		Cursor(x + 12, y + 1); cout << " *";
-
-		Cursor(x, y + 2); cout << "    *  *  *   ";
-		Cursor(x, y + 3); cout << " *  *  *  *  *";
-
-	}
-	//Animacion 3(derecha)
-	if (animacion == 3) {
-		Cursor(x + 4, y); cout << "  ";
-		Cursor(x + 7, y); cout << "* ";
-		Cursor(x + 6, y); cout << "* ";
-		Cursor(x + 13, y); cout << "* ";
-		Cursor(x + 16, y); cout << "  ";
-
-		Cursor(x + 2, y + 1); cout << "* ";
-		Cursor(x + 5, y + 1); cout << " *";
-		Cursor(x + 8, y + 1); cout << " *";
-		Cursor(x + 11, y + 1); cout << " *";
-		Cursor(x + 14, y + 1); cout << " *";
-
-		Cursor(x, y + 2); cout << "    *  *  *   ";
-		Cursor(x, y + 3); cout << " *  *  *  *  *";
-
-
-	}
-	//Animacion 4 (Derecha)
-	if (animacion == 4) {
-		Cursor(x + 1, y); cout << "  ";
-		Cursor(x + 4, y); cout << "* ";
-		Cursor(x + 7, y); cout << "* ";
-		Cursor(x + 10, y); cout << "* ";
-		Cursor(x + 13, y); cout << "  ";
-
-		Cursor(x, y + 1); cout << "* ";
-		Cursor(x + 3, y + 1); cout << " *";
-		Cursor(x + 6, y + 1); cout << " *";
-		Cursor(x + 9, y + 1); cout << " *";
-		Cursor(x + 12, y + 1); cout << " *";
-
-		Cursor(x, y + 2); cout << "    *  *  *   ";
-		Cursor(x, y + 3); cout << " *  *  *  *  *";
-
-	}
-	//Animacion 5 (neutro)
-	if (animacion == 5) {
-		Cursor(x, y); cout << "  ";
-		Cursor(x + 3, y); cout << "* ";
-		Cursor(x + 6, y); cout << "* ";
-		Cursor(x + 6, y); cout << "* ";
-		Cursor(x + 12, y); cout << "  ";
-
-		Cursor(x, y + 1); cout << "* ";
-		Cursor(x + 3, y + 1); cout << " *";
-		Cursor(x + 6, y + 1); cout << " *";
-		Cursor(x + 9, y + 1); cout << " *";
-		Cursor(x + 12, y + 1); cout << " *";
-
-		Cursor(x, y + 2); cout << "    *  *  *   ";
-		Cursor(x, y + 3); cout << " *  *  *  *  *";
-	}
-	//Animacion 6 (izquierda)
-	if (animacion == 6) {
-		Cursor((x + 1) - 2, y); cout << "  ";
-		Cursor((x + 4) - 2, y); cout << "* ";
-		Cursor((x + 7) - 2, y); cout << "* ";
-		Cursor((x + 10) - 2, y); cout << "* ";
-		Cursor((x + 13) - 2, y); cout << "  ";
-
-		Cursor(x, y + 1); cout << "* ";
-		Cursor(x + 3, y + 1); cout << " *";
-		Cursor(x + 6, y + 1); cout << " *";
-		Cursor(x + 9, y + 1); cout << " *";
-		Cursor(x + 12, y + 1); cout << " *";
-
-		Cursor(x, y + 2); cout << "    *  *  *   ";
-		Cursor(x, y + 3); cout << " *  *  *  *  *";
-
-	}
-	//Animacion 7 (izquierda)
-
-	if (animacion == 7) {
-		Cursor((x + 1) - 3, y); cout << "  ";
-		Cursor((x + 4) - 3, y); cout << "* ";
-		Cursor((x + 7) - 3, y); cout << "* ";
-		Cursor((x + 10) - 3, y); cout << "* ";
-		Cursor((x + 13) - 3, y); cout << "  ";
-
-		Cursor(x - 1, y + 1); cout << "* ";
-		Cursor((x + 3) - 1, y + 1); cout << " *";
-		Cursor((x + 6) - 1, y + 1); cout << " *";
-		Cursor((x + 9) - 1, y + 1); cout << " *";
-		Cursor((x + 12) - 1, y + 1); cout << " *";
-
-		Cursor(x, y + 2); cout << "    *  *  *   ";
-		Cursor(x, y + 3); cout << " *  *  *  *  *";
-
-
-	}
-	//Animacion 8 (izquierda)
-
-	if (animacion == 8) {
-		Cursor((x + 1) - 2, y); cout << "  ";
-		Cursor((x + 4) - 2, y); cout << "* ";
-		Cursor((x + 7) - 2, y); cout << "* ";
-		Cursor((x + 10) - 2, y); cout << "* ";
-		Cursor((x + 13) - 2, y); cout << "  ";
-
-		Cursor(x, y + 1); cout << "* ";
-		Cursor(x + 3, y + 1); cout << " *";
-		Cursor(x + 6, y + 1); cout << " *";
-		Cursor(x + 9, y + 1); cout << " *";
-		Cursor(x + 12, y + 1); cout << " *";
-
-		Cursor(x, y + 2); cout << "    *  *  *   ";
-		Cursor(x, y + 3); cout << " *  *  *  *  *";
-
-	}
-}
-
-//Funcion para el piso del mapa
-void Piso(int columnas) {
-	Console::BackgroundColor = ConsoleColor::Green;
-	for (int i = 0; i < columnas; i++) {
-		Console::SetCursorPosition(i, 35);
-		cout << " ";
-	}
-	for (int i = 0; i < columnas; i++) {
-		Console::SetCursorPosition(i, 36);
-		cout << " ";
-	}
-	for (int i = 0; i < columnas; i++) {
-		Console::SetCursorPosition(i, 37);
-		cout << " ";
-	}
-	for (int i = 0; i < columnas; i++) {
-		Console::SetCursorPosition(i, 38);
-		cout << " ";
-	}
-	for (int i = 0; i < columnas; i++) {
-		Console::SetCursorPosition(i, 39);
-		cout << " ";
-	}
-
-}
 
 
 
-void Cursor(int x, int y) {
-	Console::SetCursorPosition(x, y);
 
-}
-//Funcion borrar animacion
-void BorrarAnimacion(int x, int y, int columna, int fila) {
-	for (int i = 0; i < fila; i++) {
-		for (int j = 0; j < columna; j++) {
-			Pintar(x + j, y + i, " ", ConsoleColor::Blue, ConsoleColor::Blue);
-		}
-	}
-}
-/*======================================*/
 
-void Corazones(int CoorX, int CoorY) {
-	if (inmortal <= 1) {
-		Console::BackgroundColor = ConsoleColor::DarkRed;
-	}
-	else {
-		Console::BackgroundColor = ConsoleColor::Yellow;
-	}
 
-	Cursor(CoorX, CoorY); cout << "  ";
-	Cursor(CoorX + 3, CoorY); cout << "  ";
 
-	Cursor(CoorX, CoorY + 1); cout << "     ";
 
-	Cursor(CoorX + 1, CoorY + 2); cout << "   ";
-	Cursor(CoorX + 2, CoorY + 3); cout << " ";
 
-}
+
