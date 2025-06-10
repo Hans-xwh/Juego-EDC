@@ -8,7 +8,7 @@
 #include <Windows.h>
 #include <stdlib.h>
 #include <conio.h>
-
+#include <chrono>  // Necesario para std::chrono
 
 using namespace std;
 using namespace System;
@@ -29,7 +29,8 @@ const auto intervaloMovimientoBalaVertical = chrono::milliseconds(15); // PARA D
 
 const auto intervaloMovimientoBala = chrono::milliseconds(10); // PARA DISPAROS HORIZONTALES
 
-auto ultimoMovimientoBala = Clock::now();
+//RELOJ ESTABLE (AHORA)
+auto ultimoMovimientoBala = std::chrono::steady_clock::now();
 
 
 /*PARA EL MENU*/
@@ -133,8 +134,25 @@ void seleccionar_opcion() {
 }
 
 
-/* FUNCION DISPARAR */
+//Funcion pintar + cursor + cout
+void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres) {
+	try {
 
+		Console::BackgroundColor = fondo;
+		Console::ForegroundColor = ColorCaracteres;
+
+
+		Console::SetCursorPosition(x, y);
+
+		cout << caracter;
+	}
+	catch (...) {
+		//Sexoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+	}
+}
+
+
+/* FUNCION DISPARAR */
 void Disparar(int personajeX, int personajeY, int direccionHorizontal, int direccionVertical) {
 	clock_t ahora = clock();
 
@@ -163,4 +181,52 @@ void Disparar(int personajeX, int personajeY, int direccionHorizontal, int direc
 		puedeDisparar = false;
 	}
 }
+
+
+/*ACTUALIAZR BALA*/
+void ActualizarBala() {
+	auto ahora = std::chrono::steady_clock::now();
+
+	if (!balaActiva) return;
+
+
+	// Usar intervalo diferente para disparos verticales
+	auto intervalo = (balaDireccion == 3) ? intervaloMovimientoBalaVertical : intervaloMovimientoBala;
+
+	// Solo mover la bala si ha pasado el tiempo suficiente
+	if (ahora - ultimoMovimientoBala >= intervalo) {
+		// 1. Borrar la bala
+		Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue);
+
+		// 2. Mover la bala
+		if (balaDireccion == 1) {
+			balaX -= velocidadBala;
+		}// Izquierda
+		else if (balaDireccion == 2) { // Derecha
+			balaX += velocidadBala;
+		}
+		else if (balaDireccion == 3) { // Arriba (nuevo caso)
+			balaY -= velocidadBala;
+		}
+
+		// 3. Verificar límites
+		if (balaX < 2 || balaX > 148 || balaY < 6) {
+			balaActiva = false;
+			return;
+		}
+
+		// 4. Dibujar la bala
+		string simboloBala;
+		if (balaDireccion == 1) simboloBala = "<=";      // Izquierda
+		else if (balaDireccion == 2) simboloBala = "=>"; // Derecha
+		else if (balaDireccion == 3) simboloBala = "^^"; // Arriba (nuevo)
+
+		Pintar(balaX, balaY, simboloBala, ConsoleColor::Black, ConsoleColor::Yellow);
+
+		ultimoMovimientoBala = ahora; // Reiniciar el temporizador
+
+		return;
+	}
+}
+
 #endif

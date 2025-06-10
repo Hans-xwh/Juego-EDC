@@ -431,51 +431,6 @@ public:
 
 /*=================================================================*/
 
-/*ACTUALIAZR BALA*/
-void ActualizarBala() {
-	auto ahora = Clock::now();
-
-	if (!balaActiva) return;
-
-
-	// Usar intervalo diferente para disparos verticales
-	auto intervalo = (balaDireccion == 3) ? intervaloMovimientoBalaVertical : intervaloMovimientoBala;
-
-	// Solo mover la bala si ha pasado el tiempo suficiente
-	if (ahora - ultimoMovimientoBala >= intervalo) {
-		// 1. Borrar la bala
-		Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue);
-
-		// 2. Mover la bala
-		if (balaDireccion == 1) {
-			balaX -= velocidadBala;
-		}// Izquierda
-		else if (balaDireccion == 2) { // Derecha
-			balaX += velocidadBala;
-		}
-		else if (balaDireccion == 3) { // Arriba (nuevo caso)
-			balaY -= velocidadBala;
-		}
-
-		// 3. Verificar límites
-		if (balaX < 2 || balaX > 148 || balaY < 6) {
-			balaActiva = false;
-			return;
-		}
-
-		// 4. Dibujar la bala
-		string simboloBala;
-		if (balaDireccion == 1) simboloBala = "<=";      // Izquierda
-		else if (balaDireccion == 2) simboloBala = "=>"; // Derecha
-		else if (balaDireccion == 3) simboloBala = "^^"; // Arriba (nuevo)
-
-		Pintar(balaX, balaY, simboloBala, ConsoleColor::Black, ConsoleColor::Yellow);
-
-		ultimoMovimientoBala = ahora; // Reiniciar el temporizador
-
-		return;
-	}
-}
 
 /* Preguntas */
 struct Preguntas {
@@ -1262,22 +1217,7 @@ void Piso(int columnas) {
 
 }
 
-//Funcion pintar + cursor + cout
-void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor ColorCaracteres) {
-	try {
 
-		Console::BackgroundColor = fondo;
-		Console::ForegroundColor = ColorCaracteres;
-
-
-		Console::SetCursorPosition(x, y);
-
-		cout << caracter;
-	}
-	catch (...) {
-		//Sexoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-	}
-}
 
 void Cursor(int x, int y) {
 	Console::SetCursorPosition(x, y);
