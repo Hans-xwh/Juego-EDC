@@ -10,6 +10,7 @@
 #include <mmsystem.h>
 //PARA COLOCAR UN BACKGROUND AL MENU SIMPLE
 #include <stdlib.h>
+
 //PARA EJECUTAR EL AUDIO
 #pragma comment(lib, "winmm.lib") 
 //Documentacion .NET ("https://learn.microsoft.com/en-us/dotnet/api/system.console?view=net-9.0")
@@ -17,6 +18,7 @@
 using namespace System;
 using namespace std;
 using Clock = chrono::steady_clock;
+
 /*  Protipo de funciones */
 void Window();
 void Piso(int columnas);
@@ -31,22 +33,6 @@ void Corazones(int CoorX, int CoorY);
 enum Teclas { DERECHA = 77, IZQUIERDA = 75, ARRIBA = 72 };
 /*----------*/
 
-
-/* VARIABLES GLOBALES*/
-// ===== VARIABLES DE BALA ===== //
-bool balaActiva = false;
-int balaX, balaY;
-int balaDireccion;
-bool puedeDisparar = true;       // control de cooldown
-clock_t ultimoDisparo = 0;      // tiempo del último disparo
-const int cooldownDisparo = 500; // 500ms = 0.5s entre disparos
-const int velocidadBala = 1;
-
-const auto intervaloMovimientoBalaVertical = chrono::milliseconds(15); // PARA DISPAROS VERTICALES
-
-const auto intervaloMovimientoBala = chrono::milliseconds(10); // PARA DISPAROS HORIZONTALES
-
-auto ultimoMovimientoBala = Clock::now();
 
 /// === Variables personaje ===///
 int inmortal = 0; //0=(No inmortal) 
@@ -445,40 +431,7 @@ public:
 
 /*=================================================================*/
 
-
-/* FUNCION DISPARAR */
-
-void Disparar(int personajeX, int personajeY, int direccionHorizontal, int direccionVertical) {
-	clock_t ahora = clock();
-
-	if (puedeDisparar && (ahora - ultimoDisparo) * 1000 / CLOCKS_PER_SEC >= cooldownDisparo) {
-		balaActiva = true;
-
-
-		// Posición inicial basada en la dirección del personaje
-		if (direccionVertical == 1) { // Izquierda
-			balaX = personajeX + 4;  // Centrar el disparo respecto al personaje
-			balaY = personajeY - 1;  // Posición inicial (encima del personaje)
-			balaDireccion = 3;       // 3 = dirección hacia arriba (nuevo código)
-		}
-		else { // Derecha
-			balaDireccion = direccionHorizontal; // 1 = izquierda, 2 = derecha
-			if (direccionHorizontal == 1) { // Izquierda
-				balaX = personajeX - 3;
-			}
-			else { // Derecha
-				balaX = personajeX + 9;
-			}
-			balaY = personajeY + 4; // Altura del arma (para disparo horizontal)
-		}
-
-		ultimoDisparo = ahora;
-		puedeDisparar = false;
-	}
-}
-
 /*ACTUALIAZR BALA*/
-
 void ActualizarBala() {
 	auto ahora = Clock::now();
 
@@ -1325,6 +1278,7 @@ void Pintar(int x, int y, string caracter, ConsoleColor fondo, ConsoleColor Colo
 		//Sexoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 	}
 }
+
 void Cursor(int x, int y) {
 	Console::SetCursorPosition(x, y);
 

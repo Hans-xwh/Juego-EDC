@@ -15,6 +15,23 @@ using namespace System;
 
 
 
+/* VARIABLES GLOBALES*/
+// ===== VARIABLES DE BALA ===== //
+bool balaActiva = false;
+int balaX, balaY;
+int balaDireccion;
+bool puedeDisparar = true;       // control de cooldown
+clock_t ultimoDisparo = 0;      // tiempo del último disparo
+const int cooldownDisparo = 500; // 500ms = 0.5s entre disparos
+const int velocidadBala = 1;
+
+const auto intervaloMovimientoBalaVertical = chrono::milliseconds(15); // PARA DISPAROS VERTICALES
+
+const auto intervaloMovimientoBala = chrono::milliseconds(10); // PARA DISPAROS HORIZONTALES
+
+auto ultimoMovimientoBala = Clock::now();
+
+
 /*PARA EL MENU*/
 const int FILAS = 40;
 const int COLUMNAS = 150;
@@ -113,5 +130,37 @@ void seleccionar_opcion() {
 	tecla = _getch();
 
 	PlaySound(NULL, 0, 0); // Detener música del menú
+}
+
+
+/* FUNCION DISPARAR */
+
+void Disparar(int personajeX, int personajeY, int direccionHorizontal, int direccionVertical) {
+	clock_t ahora = clock();
+
+	if (puedeDisparar && (ahora - ultimoDisparo) * 1000 / CLOCKS_PER_SEC >= cooldownDisparo) {
+		balaActiva = true;
+
+
+		// Posición inicial basada en la dirección del personaje
+		if (direccionVertical == 1) { // Izquierda
+			balaX = personajeX + 4;  // Centrar el disparo respecto al personaje
+			balaY = personajeY - 1;  // Posición inicial (encima del personaje)
+			balaDireccion = 3;       // 3 = dirección hacia arriba (nuevo código)
+		}
+		else { // Derecha
+			balaDireccion = direccionHorizontal; // 1 = izquierda, 2 = derecha
+			if (direccionHorizontal == 1) { // Izquierda
+				balaX = personajeX - 3;
+			}
+			else { // Derecha
+				balaX = personajeX + 9;
+			}
+			balaY = personajeY + 4; // Altura del arma (para disparo horizontal)
+		}
+
+		ultimoDisparo = ahora;
+		puedeDisparar = false;
+	}
 }
 #endif
