@@ -32,15 +32,6 @@ enum Teclas { DERECHA = 77, IZQUIERDA = 75, ARRIBA = 72 };
 /*----------*/
 
 
-void seleccionar_opcion() {
-	int tecla;
-	//PARA QUE INGRESE EL NUMERO PARA SELECCIONAR UNA PARTE DEL MUNDO
-	tecla = _getch();
-
-	PlaySound(NULL, 0, 0); // Detener música del menú
-}
-
-
 /* VARIABLES GLOBALES*/
 // ===== VARIABLES DE BALA ===== //
 bool balaActiva = false;
