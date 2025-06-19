@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "MisFunciones.h"
+#include "segundo_nivel.h"
 #include <iostream>
 #include <conio.h>
 #include <string>
@@ -1010,20 +1011,17 @@ int main() {
 			Marco.BorrarCorazones(130, 1);
 			Marco.DibujarVida();
 
+
+			Console::BackgroundColor = ConsoleColor::Black;
+			Console::ForegroundColor = ConsoleColor::White;
+			Console::Clear();
+			break;
 		}
 	}
+
+	//FUNCION QUE EJECUTA EL SEGUNDO NIVEL
+	ejecutar_segundo_nivel();
+
 	return 0;
 }
 /*=========================================================*/
-
-
-
-
-
-
-
-
-
-
-
-

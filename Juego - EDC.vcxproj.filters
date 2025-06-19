@@ -29,6 +29,9 @@
     <ClInclude Include="MisFunciones.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="segundo_nivel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Juego - EDC.cpp">
