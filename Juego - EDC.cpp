@@ -531,8 +531,6 @@ int main() {
 	//setlocale(LC_ALL, "Spanish");
 	Window();
 	PlaySound(TEXT("horizon.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-	//SE LLAMA A LA FUNCION DE DIBUJAR VENTANA/MAPA
-	dibujar_mapa(menu_matriz);
 
 	//SE LLAMA A LA FUNCION SELECCIONAR LA OPCION
 	seleccionar_opcion();
