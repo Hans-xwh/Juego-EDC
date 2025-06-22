@@ -74,7 +74,25 @@ int LaberintoMatriz[40][150] = {
 int personaje_fila = 1;
 int personaje_columna = 1;
 
-int Pregunta(int numero,int y) {
+
+
+struct Personajito {	//HW
+	int x = 1;	//Horizontal inicial
+	int y = 4;	//Vertical inicial
+	int height = 4; //De arriba hacia abajo
+	int width = 3;
+
+	string personaje[4] = {
+	" o ",
+	"-0-",
+	" # ",
+	"/ \\"
+	};
+}persona;
+
+
+
+int Pregunta(int numero,int y) {	//Mostrat pregunta
 	bool continuar = false;
 	Console::BackgroundColor = ConsoleColor::Black;
 	Console::Clear();
@@ -157,17 +175,13 @@ int Pregunta(int numero,int y) {
 	}
 
 }
-string personaje[4] = {
-	" o ",
-	"-0-",
-	" # ",
-	"/ \\"
-};
 
-struct Personaje2 {
+
+/*
+struct Personaje2 {	//No usado
 	int x;
 	int y;
-	Personaje2(int _x, int _y) : x(_x), y(_y) {} 
+	Personaje2(int _x, int _y) : x(_x), y(_y) {}
 	void dibujar_personaje(int fila, int columna) {
 		for (int i = 0; i < 4; i++) {
 			//SE MUEVE EL CURSOR PARA IMPRIMIR EL PERSONAJE DE ARRIBA HACIA ABAJO
@@ -184,6 +198,7 @@ struct Personaje2 {
 	}
 
 };
+*/
 
 void configurar_ventana_mapa() {
 	Console::SetWindowSize(150, 40);
@@ -226,22 +241,96 @@ void Laberinto() {
 	Console::BackgroundColor = ConsoleColor::Gray;
 	Console::Clear();
 	DibujarLaberinto(LaberintoMatriz);
-	while (true) {
+}
 
+void DibujaPersona(int caso) {	//HW
+	Console::BackgroundColor = ConsoleColor::Gray;
+
+	if (caso == 0) {//borrar personaje
+		for (int i = 0; i < persona.height; i++) {
+			Console::SetCursorPosition(persona.x, persona.y + i);
+			for (int j = 0; j < persona.width; j++) {
+				cout << " ";
+			}
+			cout << endl;
+		}
+		return;
+	}
+
+	//dibujar personaje
+	for (int i = 0; i < persona.height; i++) {
+		Console::SetCursorPosition(persona.x, persona.y + i);
+		cout << persona.personaje[i];
 	}
 }
 
+bool checkColi(int x, int y) { //false=NoMover  true=SiMover
+	for (int i = 0; i < persona.height; i++) {
+		for (int j = 0; j < persona.width; j++) {
+			if (LaberintoMatriz[y+i][x+j] == 1) {
+				return false;
+			}
+		}
+	}
+	return true;
+	
+}
 
 
 
 
 /* Funcion Principal del juego */
 
-void ejecutar_segundo_nivel() {
+void ejecutar_segundo_nivel() {	//HW
+
 	configurar_ventana_mapa();
 	int NumeroPregunta = 1;
-	int cambio = Pregunta(NumeroPregunta, 15);
+
+	int cambio = 1;	//Pregunta(NumeroPregunta, 15);
+	cout << cambio << endl << NumeroPregunta;
+	//system("pause");
 	Laberinto();
+
+	int tecla = 0;
+	Console::BackgroundColor = ConsoleColor::Gray;
+	DibujaPersona(1);
+	while (true) {
+		tecla = _getch(); //72=arriba 75=izquierda 77=derecha  80=abajo
+
+		if (tecla == 72 && persona.y - 1 > 0) {	//mover hacia arriba
+			if (checkColi(persona.x, persona.y - 1)) {
+				DibujaPersona(0); //caso 0 = borrar
+				persona.y--;
+				DibujaPersona(1); //caso 1 = dibujar
+			}
+		}
+		else if (tecla == 80 && persona.y + persona.height + 1 < 40) { //mover hacia abajo
+			if (checkColi(persona.x, persona.y + 1)) {
+				DibujaPersona(0);
+				persona.y++;
+				DibujaPersona(1);
+			}
+		}
+		else if (tecla == 75 && persona.x - 1 > 0) { //mover hacia izquierda
+			if (checkColi(persona.x - 1, persona.y)) {
+				DibujaPersona(0);
+				persona.x--;
+				DibujaPersona(1);
+			}
+		}
+		else if (tecla == 77 && persona.x + persona.width + 1 < 150) { //mover hacia derecha
+			if (checkColi(persona.x + 1, persona.y)) {
+				DibujaPersona(0);
+				persona.x++;
+				DibujaPersona(1);
+			}
+		}
+		else {
+			continue;
+		}
+	}
+
+
 	
 }
 /*==========================*/
