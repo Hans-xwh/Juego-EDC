@@ -1045,12 +1045,27 @@ int main() {
 			Console::BackgroundColor = ConsoleColor::Black;
 			Console::ForegroundColor = ConsoleColor::White;
 			Console::Clear();
+			// Ejecutar segundo nivel al perder
+			ejecutar_segundo_nivel();
+			break;
+		}
+		// Verificar si se respondieron todas las preguntas
+		if (NumeroPregunta == 7) {
+			Console::BackgroundColor = ConsoleColor::Black;
+			Console::ForegroundColor = ConsoleColor::White;
+			Console::Clear();
+			Console::SetCursorPosition(50, 15);
+			cout << "¡Felicidades! Has respondido todas las preguntas correctamente!";
+			Sleep(1000);
+			Console::SetCursorPosition(50, 20);
+			cout << "ES LA HORA DEL LABERINTO";
+			Sleep(3000);
+
+			// Ejecutar segundo nivel al completar todas las preguntas
+			ejecutar_segundo_nivel();
 			break;
 		}
 	}
-
-	//FUNCION QUE EJECUTA EL SEGUNDO NIVEL
-	ejecutar_segundo_nivel();
 
 	return 0;
 }
