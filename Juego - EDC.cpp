@@ -286,7 +286,7 @@ public:
 	}
 
 	void Borrar(int AntiguoX, int AntiguoY) {
-		BorrarAnimacion(AntiguoX - 1, AntiguoY-1, 12, 8);
+		BorrarAnimacion(AntiguoX - 1, AntiguoY - 1, 12, 8);
 	}
 	//Nuevo 
 	void DibujarVida() {
@@ -394,8 +394,8 @@ public:
 			Cursor(x - 1, y + 1); cout << "     ";
 			Cursor(x - 2, y + 2); cout << listaPreguntas[0];
 			Cursor(x - 3, y + 3); cout << "           ";
-			
-	
+
+
 		}
 		if (animacion == 2) {
 			Cursor(x - 1, y);	  cout << "      ";
@@ -421,7 +421,7 @@ public:
 		}
 	}
 	void BorrarNube(int AntiguoX, int AntiguoY) {
-		BorrarAnimacion(AntiguoX - 4, AntiguoY, 20, 6);
+		BorrarAnimacion(AntiguoX - 4, AntiguoY, 17, 6);
 	}
 };
 
@@ -490,7 +490,7 @@ struct Preguntas {
 		Cursor(5, 2); cout << "/ /_ / _ \\| ' \\/ _ \\ | | ' \\/ _` / -_) '_ \\/ -_) ' \\/ _` / -_) ' \\/ _| / _` | |  _/ -_) '_| || |/_/";
 		Cursor(5, 3); cout << "\\___/_/ \\_\\_||_\\___/ |_|_||_\\__,_\\___| .__/\\___|_||_\\__,_\\___|_||_\\__|_\\__,_| |_| \\___|_|  \\_,_(_) ";
 		Cursor(5, 4); cout << "                                     |_|                                                           ";
-	
+
 	}
 
 	void DibujarPregunta(int pregunta) {
@@ -542,6 +542,7 @@ int main() {
 	Console::Clear();  // Limpia la consola
 	PlaySound(TEXT("musica.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	Piso(150);
+	
 
 	//Personaje
 	int x = 90; int y = 28;
@@ -563,8 +564,11 @@ int main() {
 	string AlternativasPregunta5[4] = { "Emisor", "Receptor", "Mensaje","Ecuacion" };
 	string AlternativasPregunta6[4] = { "   1821  ","   1810  ", "   1824  ", "   1830  " };
 	//Respuestas
-	
+
 	/*======================*/
+	//Pajaro
+
+	Pajaro(135, 15, NumeroPregunta);
 
 	/* Nubes */
 
@@ -597,12 +601,12 @@ int main() {
 
 	Nubes nube4(Nube_X_4, Nube_Y_4);
 
-	
+
 	//Dibujar Nubes
-	nube1.DibujarNube(FormaNube1,AlternativasPregunta1);
-	nube2.DibujarNube(FormaNube2,AlternativasPregunta1);
-	nube3.DibujarNube(FormaNube3,AlternativasPregunta1);
-	nube4.DibujarNube(FormaNube4,AlternativasPregunta1);
+	nube1.DibujarNube(FormaNube1, AlternativasPregunta1);
+	nube2.DibujarNube(FormaNube2, AlternativasPregunta1);
+	nube3.DibujarNube(FormaNube3, AlternativasPregunta1);
+	nube4.DibujarNube(FormaNube4, AlternativasPregunta1);
 
 	/*==========================================*/
 
@@ -629,7 +633,7 @@ int main() {
 	int IndiceEnemigos = 0; int IndiceEnemigosFuertes = 0;
 	int nuevoXEnemigo = 0;
 	/*========================================*/
-	
+
 	while (true) {
 		bool BalaNube = false;
 		bool CambioPregunta = false;
@@ -731,7 +735,7 @@ int main() {
 			//nube 1
 			Nube_X_1 -= 1 * direccionNube1;
 			//Rebote de nubes
-			if (Nube_X_1 >= 120 || Nube_X_1 <= 10) {
+			if (Nube_X_1 >= 110 || Nube_X_1 <= 10) {
 				direccionNube1 *= -1;
 			}
 
@@ -755,7 +759,7 @@ int main() {
 			Nube_X_2 += 1 * direccionNube2;
 			//Rebote de nubes
 
-			if (Nube_X_2 >= 120 || Nube_X_2 <= 10) {
+			if (Nube_X_2 >= 110 || Nube_X_2 <= 10) {
 				direccionNube2 *= -1;
 			}
 			nube2.setCursor(Nube_X_2, Nube_Y_2);
@@ -802,7 +806,7 @@ int main() {
 			//nube 4
 			Nube_X_4 -= 1 * direccionNube4;
 			//Rebote de nubes
-			if (Nube_X_4 >= 120 || Nube_X_4 <= 10) {
+			if (Nube_X_4 >= 110 || Nube_X_4 <= 10) {
 				direccionNube4 *= -1;
 			}
 			nube4.setCursor(Nube_X_4, Nube_Y_4);
@@ -928,6 +932,10 @@ int main() {
 				balaActiva = false;
 				CambioPregunta = true;
 				NumeroPregunta++;
+				//Pajaro
+
+				Pajaro(135, 15, NumeroPregunta);
+
 			}
 		}
 		if (NumeroPregunta == 2) {
@@ -935,6 +943,10 @@ int main() {
 				balaActiva = false;
 				CambioPregunta = true;
 				NumeroPregunta++;
+				//Pajaro
+				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
+				Pajaro(135, 15, NumeroPregunta);
+
 			}
 		}
 		if (NumeroPregunta == 3) {
@@ -942,6 +954,11 @@ int main() {
 				balaActiva = false;
 				CambioPregunta = true;
 				NumeroPregunta++;
+				//Pajaro
+				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
+
+				Pajaro(135, 15, NumeroPregunta);
+
 			}
 		}
 		if (NumeroPregunta == 4) {
@@ -949,6 +966,11 @@ int main() {
 				balaActiva = false;
 				CambioPregunta = true;
 				NumeroPregunta++;
+				//Pajaro
+				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
+
+				Pajaro(135, 15, NumeroPregunta);
+
 			}
 		}
 		if (NumeroPregunta == 5) {
@@ -956,6 +978,11 @@ int main() {
 				balaActiva = false;
 				CambioPregunta = true;
 				NumeroPregunta++;
+				//Pajaro
+				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
+
+				Pajaro(135, 15, NumeroPregunta);
+
 			}
 		}
 		if (NumeroPregunta == 6) {
@@ -963,6 +990,11 @@ int main() {
 				CambioPregunta = true;
 				balaActiva = false;
 				NumeroPregunta++;
+				//Pajaro
+				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
+
+				Pajaro(135, 15, NumeroPregunta);
+
 			}
 		}
 		if (CambioPregunta == true && NumeroPregunta == 2) {
@@ -970,7 +1002,7 @@ int main() {
 			pregunta.DibujarPregunta(NumeroPregunta);
 		}
 		if (CambioPregunta == true && NumeroPregunta == 3) {
-			
+
 			pregunta.BorrarPregunta(5, 0);
 			pregunta.DibujarPregunta(NumeroPregunta);
 		}
@@ -991,7 +1023,7 @@ int main() {
 			cout << "Has ganado";
 		}
 
-		
+
 
 		/*=================================*/
 		//Comprobar daño al jugador
