@@ -23,7 +23,7 @@ bool balaActiva = false;
 int balaX, balaY;
 int balaDireccion;
 bool puedeDisparar = true;       // control de cooldown
-clock_t ultimoDisparo = 0;      // tiempo del último disparo
+clock_t ultimoDisparo = 0;      // tiempo del Ãºltimo disparo
 const int cooldownDisparo = 500; // 500ms = 0.5s entre disparos
 const int velocidadBala = 1;
 
@@ -137,10 +137,10 @@ void dibujar_mapa(int menu[FILAS][COLUMNAS]) {
 void loading() {
 	Console::Clear();
 
-	// Configuración inicial
+	// ConfiguraciÃ³n inicial
 	int barWidth = 50;  // Ancho de la barra de carga
-	int barX = 50;      // Posición X centrada
-	int barY = 20;      // Posición Y vertical
+	int barX = 50;      // PosiciÃ³n X centrada
+	int barY = 20;      // PosiciÃ³n Y vertical
 
 	// Dibujar marco de la barra de carga
 	Console::ForegroundColor = ConsoleColor::White;
@@ -153,7 +153,7 @@ void loading() {
 	cout << char(218); // Esquina superior izquierda (linea tipo esquina)
 
 	for (int i = 0; i < barWidth; i++) {
-		cout << char(196); // Línea horizontal (--)
+		cout << char(196); // LÃ­nea horizontal (--)
 	}
 	cout << char(191); // Esquina superior derecha (linea tipo esquina)
 
@@ -161,9 +161,9 @@ void loading() {
 
 
 	Console::SetCursorPosition(barX - 1, barY + 1);
-	cout << char(179); // Línea vertical izquierda (|| en la izquierda)
+	cout << char(179); // LÃ­nea vertical izquierda (|| en la izquierda)
 	Console::SetCursorPosition(barX + barWidth, barY + 1);
-	cout << char(179); // Línea vertical derecha (|| en la derecha)
+	cout << char(179); // LÃ­nea vertical derecha (|| en la derecha)
 
 
 
@@ -172,13 +172,13 @@ void loading() {
 	cout << char(192); // Esquina inferior izquierda (esquina izquierda abajo)
 
 	for (int i = 0; i < barWidth; i++) {
-		cout << char(196); // Línea horizontal abajo (---)
+		cout << char(196); // LÃ­nea horizontal abajo (---)
 	}
 	cout << char(217); // Esquina inferior derecha (esquina derecha abajo)
 
 
-	// Animación de carga
-	
+	// AnimaciÃ³n de carga
+
 	for (int progreso = 0; progreso <= barWidth; progreso++) {
 
 		// Configurar color para la barra de progreso (fondo rojo)
@@ -188,7 +188,7 @@ void loading() {
 		// Dibujar el progreso
 		Console::SetCursorPosition(barX, barY + 1);
 		for (int i = 0; i < progreso; i++) {
-			cout << char(219); // Carácter de bloque sólido (ASCII 219)
+			cout << char(219); // CarÃ¡cter de bloque sÃ³lido (ASCII 219)
 		}
 
 		// Mostrar porcentaje
@@ -197,7 +197,7 @@ void loading() {
 		Console::SetCursorPosition(barX + barWidth + 3, barY + 1);
 		cout << int((float)progreso / barWidth * 100) << "%";
 
-		// Pequeña pausa para la animación
+		// PequeÃ±a pausa para la animaciÃ³n
 		Sleep(40); // 40ms entre cada incremento
 	}
 
@@ -210,14 +210,14 @@ void loading() {
 
 void IniciarJuego() {
 	//VAMOS A COLOCAR UN MENU DE RECARGA DE UN PORCENTAJE 
-	PlaySound(NULL, 0, 0); // Detener música del menú
+	PlaySound(NULL, 0, 0); // Detener mÃºsica del menÃº
 
 	//Ejecuta la musica de loading
 	PlaySound(TEXT("loading.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	//Llama la funcion loading
 	loading();
 
-	PlaySound(NULL, 0, 0); // Detener música de loading
+	PlaySound(NULL, 0, 0); // Detener mÃºsica de loading
 
 }
 
@@ -231,7 +231,7 @@ void seleccionar_opcion() {
 	{
 		IniciarJuego();
 	}
-	
+
 }
 
 
@@ -272,11 +272,11 @@ void Disparar(int personajeX, int personajeY, int direccionHorizontal, int direc
 		balaActiva = true;
 
 
-		// Posición inicial basada en la dirección del personaje
+		// PosiciÃ³n inicial basada en la direcciÃ³n del personaje
 		if (direccionVertical == 1) { // Izquierda
 			balaX = personajeX + 4;  // Centrar el disparo respecto al personaje
-			balaY = personajeY - 1;  // Posición inicial (encima del personaje)
-			balaDireccion = 3;       // 3 = dirección hacia arriba (nuevo código)
+			balaY = personajeY - 1;  // PosiciÃ³n inicial (encima del personaje)
+			balaDireccion = 3;       // 3 = direcciÃ³n hacia arriba (nuevo cÃ³digo)
 		}
 		else { // Derecha
 			balaDireccion = direccionHorizontal; // 1 = izquierda, 2 = derecha
@@ -329,7 +329,7 @@ void ActualizarBala() {
 			balaY -= velocidadBala;
 		}
 
-		// 3. Verificar límites
+		// 3. Verificar lÃ­mites
 		if (balaX < 2 || balaX > 148 || balaY < 6) {
 			balaActiva = false;
 			return;
@@ -561,4 +561,58 @@ void Window() {
 	Console::SetWindowSize(150, 40);
 	Console::Clear();
 }
+
+void Pajaro(int x, int y, int pregunta) {
+	Console::BackgroundColor = ConsoleColor::DarkGreen;
+	Console::ForegroundColor = ConsoleColor::DarkRed;
+	Cursor(x + 5, y); cout << "/";
+	Cursor(x + 4, y + 1); cout << "/";
+	Cursor(x + 3, y + 2); cout << "//";
+	Console::ForegroundColor = ConsoleColor::DarkRed;
+	Cursor(x + 2, y + 3); cout << "<(o)";
+	Console::ForegroundColor = ConsoleColor::DarkYellow;
+	Cursor(x + 2, y + 4); cout << "(\\_\\\\";
+	Cursor(x + 3, y + 5); cout << "(_\\_\\\\";
+	Console::ForegroundColor = ConsoleColor::Black;
+	Cursor(x + 4, y + 6); cout << "_|_";
+	Console::BackgroundColor = ConsoleColor::DarkGray;
+	Cursor(x, y + 7); cout << "               ";
+	
+
+	if (pregunta == 1) {
+		Cursor(x-4, y - 5);cout<<"Alli el cielo";
+		Cursor(x - 8, y - 4); cout << "siempre esta nublado...";
+		Cursor(x - 4, y - 3); cout << "pero el ceviche"; 
+		Cursor(x - 4, y - 2); cout << "siempre brilla.";
+	}
+	if (pregunta == 2) {
+		Cursor(x - 7, y - 5); cout << "En Peru y Argentina lo";
+		Cursor(x - 6, y - 4); cout << "recuerdan con honor";
+		Cursor(x - 4, y - 3); cout << ",fue general y";
+		Cursor(x - 4, y - 2); cout << "libertador";
+	}
+	if (pregunta == 3) {
+
+		Cursor(x - 3, y - 3); cout << " Es el doble";
+		Cursor(x +1, y - 2); cout << "de 28";
+		
+	}
+	if (pregunta == 4) {
+		Cursor(x - 7, y - 5); cout << "Su nombre empieza ";
+		Cursor(x - 6, y - 4); cout << " como 'Aventura'";
+		Cursor(x - 7, y - 3); cout << "y cruza la mitad de";
+		Cursor(x - 4, y - 2); cout << " Sudamerica.";
+	}
+	if (pregunta == 5) {
+		Cursor(x -1, y - 3); cout << "Â¿Matematica?";
+	}
+	if (pregunta == 6) {
+		Cursor(x - 8, y - 5); cout << "El aÃ±o termina en 21...";
+		Cursor(x - 8, y - 4); cout << "y esta muy cerca del";
+		Cursor(x - 8, y - 3); cout << "inicio de la decada de ";
+		Cursor(x - 4, y - 2); cout << "los 20";
+	}
+}
+
+
 #endif
