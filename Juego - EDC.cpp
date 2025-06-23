@@ -901,13 +901,13 @@ int main() {
 		}
 		//Sleep(10);
 
-		/* Colisiones   */
-		Console::SetCursorPosition(0, 0);
+		/* Colisiones   */ 
+		/*Console::SetCursorPosition(0, 0);
 		cout << balaX;
 		Console::SetCursorPosition(0, 1);
 		cout << inmortal << endl;
 		cout << "PlayerX: " << x << endl;
-		cout << "NuevoEnemigoX: " << nuevoXEnemigo;
+		cout << "NuevoEnemigoX: " << nuevoXEnemigo; */
 		for (int i = 0; i < TamañoListaEnemigos; i++) {
 			int enemigoX, enemigoY;
 			enemigoX = ListaEnemigos[i].getX() + 6;

@@ -286,7 +286,7 @@ void ejecutar_segundo_nivel() {	//HW
 	configurar_ventana_mapa();
 	int NumeroPregunta = 1;
 
-	int cambio = 1;	//Pregunta(NumeroPregunta, 15);
+	int cambio = Pregunta(NumeroPregunta, 15);
 	cout << cambio << endl << NumeroPregunta;
 	//system("pause");
 	Laberinto();
