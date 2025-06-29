@@ -935,75 +935,67 @@ int main() {
 
 		//Colision Balas / Nubes
 		if (NumeroPregunta == 1) {
-			if (balaX == Nube_X_3 && Nube_Y_3 == balaY) {
-				balaActiva = false;
+			if (balaX >= Nube_X_3 - 5 && balaX <= Nube_X_3 + 5 &&
+				balaY >= Nube_Y_3 && balaY <= Nube_Y_3 + 4) 
+			{
 				CambioPregunta = true;
+				balaActiva = false;
 				NumeroPregunta++;
-				//Pajaro
-
 				Pajaro(135, 15, NumeroPregunta);
-
 			}
 		}
+
 		if (NumeroPregunta == 2) {
-			if (Nube_X_4 == balaX && Nube_Y_4 == balaY) {
-				balaActiva = false;
+			if (balaX >= Nube_X_4 - 5 && balaX <= Nube_X_4 + 5 &&
+				balaY >= Nube_Y_4 && balaY <= Nube_Y_4 + 4) {
 				CambioPregunta = true;
+				balaActiva = false;
 				NumeroPregunta++;
-				//Pajaro
-				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
 				Pajaro(135, 15, NumeroPregunta);
-
 			}
 		}
+		// Pregunta 3 (nube 2)
 		if (NumeroPregunta == 3) {
-			if (Nube_X_2 == balaX && Nube_Y_2 == balaY) {
-				balaActiva = false;
+			if (balaX >= Nube_X_2 - 5 && balaX <= Nube_X_2 + 5 &&
+				balaY >= Nube_Y_2 && balaY <= Nube_Y_2 + 4) {
 				CambioPregunta = true;
+				balaActiva = false;
 				NumeroPregunta++;
-				//Pajaro
-				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
-
 				Pajaro(135, 15, NumeroPregunta);
-
 			}
 		}
+		// Pregunta 4 (nube 4)
 		if (NumeroPregunta == 4) {
-			if (Nube_X_4 == balaX && Nube_Y_4 == balaY) {
-				balaActiva = false;
+			if (balaX >= Nube_X_4 - 5 && balaX <= Nube_X_4 + 5 &&
+				balaY >= Nube_Y_4 && balaY <= Nube_Y_4 + 4) {
 				CambioPregunta = true;
+				balaActiva = false;
 				NumeroPregunta++;
-				//Pajaro
-				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
-
 				Pajaro(135, 15, NumeroPregunta);
-
 			}
 		}
+		// Pregunta 5 (nube 3)
 		if (NumeroPregunta == 5) {
-			if (Nube_X_3 == balaX && Nube_Y_3 == balaY) {
-				balaActiva = false;
+			if (balaX >= Nube_X_3 - 5 && balaX <= Nube_X_3 + 5 &&
+				balaY >= Nube_Y_3 && balaY <= Nube_Y_3 + 4) {
 				CambioPregunta = true;
+				balaActiva = false;
 				NumeroPregunta++;
-				//Pajaro
-				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
-
 				Pajaro(135, 15, NumeroPregunta);
-
 			}
 		}
+		// Pregunta 6 (nube 1)
 		if (NumeroPregunta == 6) {
-			if (Nube_X_1 == balaX && Nube_Y_1 == balaY) {
+			if (balaX >= Nube_X_1 - 5 && balaX <= Nube_X_1 + 5 &&
+				balaY >= Nube_Y_1 && balaY <= Nube_Y_1 + 4) {
 				CambioPregunta = true;
 				balaActiva = false;
 				NumeroPregunta++;
-				//Pajaro
-				BorrarAnimacion(135 - 8, 15 - 5, 23, 4);
-
 				Pajaro(135, 15, NumeroPregunta);
-
 			}
 		}
+
+
 		if (CambioPregunta == true && NumeroPregunta == 2) {
 			pregunta.BorrarPregunta(5, 0);
 			pregunta.DibujarPregunta(NumeroPregunta);
@@ -1063,7 +1055,7 @@ int main() {
 			Console::BackgroundColor = ConsoleColor::Black;
 			Console::ForegroundColor = ConsoleColor::White;
 			Console::Clear();
-			Console::SetCursorPosition(50, 15);
+			Console::SetCursorPosition(48, 15);
 			cout << "¡Felicidades! Has respondido todas las preguntas correctamente!";
 			Sleep(1000);
 			Console::SetCursorPosition(50, 20);
