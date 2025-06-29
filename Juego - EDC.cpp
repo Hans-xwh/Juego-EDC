@@ -924,6 +924,15 @@ int main() {
 			inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
 			//crash();
 		}
+
+		//MOSTRAR EL NUMERO DE PREGUNTAS CONTESTADAS
+		Console::BackgroundColor = ConsoleColor::Black;
+		Console::ForegroundColor = ConsoleColor::White;
+		Console::SetCursorPosition(125, 7);
+		int contador_respuestas = NumeroPregunta - 1;
+		cout << "Preguntas Contestadas: " << contador_respuestas;
+
+
 		//Colision Balas / Nubes
 		if (NumeroPregunta == 1) {
 			if (balaX == Nube_X_3 && Nube_Y_3 == balaY) {
