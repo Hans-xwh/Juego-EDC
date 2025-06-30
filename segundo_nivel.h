@@ -70,7 +70,7 @@ int personaje_columna = 1;
 
 
 
-struct Personajito {	//HW
+struct Personajito {	
 	int x = 1;	//Horizontal inicial
 	int y = 4;	//Vertical inicial
 	int height = 4; //De arriba hacia abajo
@@ -369,7 +369,7 @@ bool checkColi(int x, int y) { //false=NoMover  true=SiMover
 
 /* Funcion Principal del juego */
 
-void ejecutar_segundo_nivel() {	//HW
+void ejecutar_segundo_nivel() {	
 
 	configurar_ventana_mapa();
 	int NumeroPregunta = 1;
