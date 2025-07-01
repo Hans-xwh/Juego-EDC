@@ -315,13 +315,16 @@ public:
 	}
 	//
 };
+
 /*=================================================================*/
 /* Clase Enemigos*/
 struct Enemigos {
 private:
 	int x;
 	int y;
+	
 public:
+	bool vivo = true;
 	Enemigos() : x(6), y(29) {}
 	Enemigos(int _x, int _y) : x(_x), y(_y) {}
 	void setCursor(int nuevo_x, int nuevo_y) {
@@ -329,29 +332,30 @@ public:
 		y = nuevo_y;
 	}
 	void DibujarEnemigo() {
-		Console::BackgroundColor = ConsoleColor::Black;
+		if (vivo) {
+			Console::BackgroundColor = ConsoleColor::Black;
 
 
-		//Cabeza
+			//Cabeza
+			Cursor(x + 2, y); cout << "   ";
+			Console::ForegroundColor = ConsoleColor::DarkRed;
+			Cursor(x + 1, y + 1); cout << " \\ / ";
+			//Ojos
+			Cursor(x, y + 2); cout << "       ";
+			Pintar(x + 2, y + 2, " ", ConsoleColor::DarkRed, ConsoleColor::DarkRed);
+			Pintar(x + 4, y + 2, " ", ConsoleColor::DarkRed, ConsoleColor::DarkRed);
+			Console::BackgroundColor = ConsoleColor::Black;
+			//Cuerpo
+			Cursor(x, y + 3); cout << "       ";
 
-		Cursor(x + 2, y); cout << "   ";
-		Console::ForegroundColor = ConsoleColor::DarkRed;
-		Cursor(x + 1, y + 1); cout << " \\ / ";
-		//Ojos
-		Cursor(x, y + 2); cout << "       ";
-		Pintar(x + 2, y + 2, " ", ConsoleColor::DarkRed, ConsoleColor::DarkRed);
-		Pintar(x + 4, y + 2, " ", ConsoleColor::DarkRed, ConsoleColor::DarkRed);
-		Console::BackgroundColor = ConsoleColor::Black;
-		//Cuerpo
-		Cursor(x, y + 3); cout << "       ";
-
-		//Brazos:
-		Cursor(x + 1, y + 4); cout << " ";
-		Cursor(x + 3, y + 4); cout << " ";
-		Cursor(x + 5, y + 4); cout << " ";
-		Cursor(x + 1, y + 5); cout << " ";
-		Cursor(x + 3, y + 5); cout << " ";
-		Cursor(x + 5, y + 5); cout << " ";
+			//Brazos:
+			Cursor(x + 1, y + 4); cout << " ";
+			Cursor(x + 3, y + 4); cout << " ";
+			Cursor(x + 5, y + 4); cout << " ";
+			Cursor(x + 1, y + 5); cout << " ";
+			Cursor(x + 3, y + 5); cout << " ";
+			Cursor(x + 5, y + 5); cout << " ";
+		}
 
 
 	}
@@ -913,11 +917,23 @@ int main() {
 			enemigoX = ListaEnemigos[i].getX() + 6;
 			enemigoY = ListaEnemigos[i].getY();
 
+			Console::SetCursorPosition(0, 0);
+			cout << enemigoX;
+
 			if (balaX == ListaEnemigos[i].getX() + 6) {
 				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
+				ListaEnemigos[i].vivo = false;
+			}
+
+			if (enemigoX  == x + 2 && inmortal == 0) {	//hay que ajustar esto
+				vida--;
+				VerificarDaño = true;
+				inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
+				//crash();
 			}
 		}
 		//Enemigos -> Jugador
+
 		if (nuevoXEnemigo + 7 == x + 2 && inmortal == 0) {	//hay que ajustar esto
 			vida--;
 			VerificarDaño = true;
