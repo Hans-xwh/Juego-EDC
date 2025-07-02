@@ -912,6 +912,8 @@ int main() {
 		cout << inmortal << endl;
 		cout << "PlayerX: " << x << endl;
 		cout << "NuevoEnemigoX: " << nuevoXEnemigo; */
+
+		//// Colisiones y daño
 		for (int i = 0; i < TamañoListaEnemigos; i++) {
 			int enemigoX, enemigoY;
 			enemigoX = ListaEnemigos[i].getX() + 6;
@@ -923,6 +925,7 @@ int main() {
 			if (balaX == ListaEnemigos[i].getX() + 6) {
 				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
 				ListaEnemigos[i].vivo = false;
+				balaActiva = false;		//Hay que desactivar los enemigos :v
 			}
 
 			if (enemigoX  == x + 2 && inmortal == 0) {	//hay que ajustar esto

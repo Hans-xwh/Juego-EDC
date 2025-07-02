@@ -312,7 +312,7 @@ void BorrarAnimacion(int x, int y, int columna, int fila) {
 }
 
 /*======================================*/
-/* FUNCION DISPARAR */
+/* FUNCION DISPARAR BALA*/
 void Disparar(int personajeX, int personajeY, int direccionHorizontal, int direccionVertical) {
 	clock_t ahora = clock();
 
