@@ -324,7 +324,7 @@ private:
 	int y;
 	
 public:
-	bool vivo = true;
+	int vivo = 0;	//0 = vivo; >1 = muerto
 	Enemigos() : x(6), y(29) {}
 	Enemigos(int _x, int _y) : x(_x), y(_y) {}
 	void setCursor(int nuevo_x, int nuevo_y) {
@@ -332,7 +332,7 @@ public:
 		y = nuevo_y;
 	}
 	void DibujarEnemigo() {
-		if (vivo) {
+		if (vivo == 0) {
 			Console::BackgroundColor = ConsoleColor::Black;
 
 
@@ -857,9 +857,12 @@ int main() {
 					if (nuevoXEnemigo >= x) {
 						nuevoXEnemigo--;
 					}
-					ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
-					ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
-					ListaEnemigos[i].DibujarEnemigo();
+
+					if (ListaEnemigos[i].vivo == 0) {
+						ListaEnemigos[i].setCursor(nuevoXEnemigo, nuevoYEnemigo);
+						ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
+						ListaEnemigos[i].DibujarEnemigo();
+					}
 					/*
 					if (nuevoXEnemigo+10 == x) {
 						vida--;
@@ -913,8 +916,8 @@ int main() {
 		cout << "PlayerX: " << x << endl;
 		cout << "NuevoEnemigoX: " << nuevoXEnemigo; */
 
-		//// Colisiones y daño
-		for (int i = 0; i < TamañoListaEnemigos; i++) {
+		//// Colisiones y daño ////
+		for (int i = 0; i < TamañoListaEnemigos; i++) {	//Hw
 			int enemigoX, enemigoY;
 			enemigoX = ListaEnemigos[i].getX() + 6;
 			enemigoY = ListaEnemigos[i].getY();
@@ -922,13 +925,13 @@ int main() {
 			Console::SetCursorPosition(0, 0);
 			cout << enemigoX;
 
-			if (balaX == ListaEnemigos[i].getX() + 6) {
+			if (balaX == ListaEnemigos[i].getX() + 6 && ListaEnemigos[i].vivo == 0) {	//El numerito es el offset de colision
 				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
-				ListaEnemigos[i].vivo = false;
+				ListaEnemigos[i].vivo = 7; //Numero de frames que el enemigo va a estar muerto
 				balaActiva = false;		//Hay que desactivar los enemigos :v
 			}
 
-			if (enemigoX  == x + 2 && inmortal == 0) {	//hay que ajustar esto
+			if (enemigoX  == x + 2 && inmortal == 0 && ListaEnemigos[i].vivo == 0) {	
 				vida--;
 				VerificarDaño = true;
 				inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
@@ -937,12 +940,12 @@ int main() {
 		}
 		//Enemigos -> Jugador
 
-		if (nuevoXEnemigo + 7 == x + 2 && inmortal == 0) {	//hay que ajustar esto
+		/*if (nuevoXEnemigo + 7 == x + 2 && inmortal == 0) {	//hay que ajustar esto
 			vida--;
 			VerificarDaño = true;
 			inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
 			//crash();
-		}
+		}*/
 
 		//MOSTRAR EL NUMERO DE PREGUNTAS CONTESTADAS
 		Console::BackgroundColor = ConsoleColor::Black;
