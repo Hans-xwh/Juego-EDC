@@ -319,11 +319,9 @@ public:
 /*=================================================================*/
 /* Clase Enemigos*/
 struct Enemigos {
-private:
+public:
 	int x;
 	int y;
-	
-public:
 	int vivo = 0;	//0 = vivo; >1 = muerto
 	Enemigos() : x(6), y(29) {}
 	Enemigos(int _x, int _y) : x(_x), y(_y) {}
@@ -361,9 +359,6 @@ public:
 	}
 	void BorrarEnemigo(int AntiguoX, int AntiguoY) {
 		BorrarAnimacion(AntiguoX, AntiguoY, 10, 6);
-	}
-	int getX() {
-		return x;
 	}
 	int getY() {
 		return y;
@@ -846,7 +841,7 @@ int main() {
 			//Enemigo Normal
 			if (enemigosCreados == true) {
 				for (int i = 0; i < TamañoListaEnemigos; i++) {
-					int AntiguoXEnemigo = ListaEnemigos[i].getX();
+					int AntiguoXEnemigo = ListaEnemigos[i].x;
 					int AntiguoYEnemigo = ListaEnemigos[i].getY();
 
 					nuevoXEnemigo = AntiguoXEnemigo;
@@ -863,6 +858,10 @@ int main() {
 						ListaEnemigos[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
 						ListaEnemigos[i].DibujarEnemigo();
 					}
+					else {
+						ListaEnemigos[i].vivo--;
+						ListaEnemigos[i].x = 6; //regresar a posición inicial
+					}
 					/*
 					if (nuevoXEnemigo+10 == x) {
 						vida--;
@@ -875,7 +874,7 @@ int main() {
 			//Enemigos fuertes
 			if (enemigosFuertesCreados == true) {
 				for (int i = 0; i < TamañoListaEnemigosFuertes; i++) {
-					int AntiguoXEnemigo = ListaEnemigosFuertes[i].getX();
+					int AntiguoXEnemigo = ListaEnemigosFuertes[i].x;
 					int AntiguoYEnemigo = ListaEnemigosFuertes[i].getY();
 
 					int NuevoXEnemigo = AntiguoXEnemigo;
@@ -919,16 +918,23 @@ int main() {
 		//// Colisiones y daño ////
 		for (int i = 0; i < TamañoListaEnemigos; i++) {	//Hw
 			int enemigoX, enemigoY;
-			enemigoX = ListaEnemigos[i].getX() + 6;
+			enemigoX = ListaEnemigos[i].x + 6;	//Offset para las colisiones. 6 funciona bien.
 			enemigoY = ListaEnemigos[i].getY();
 
 			Console::SetCursorPosition(0, 0);
-			cout << enemigoX;
+			cout << "enemigo1 = " << ListaEnemigos[0].x << " " << ListaEnemigos[0].vivo;
+			Console::SetCursorPosition(0, 1);
+			cout << "enemigo2 = " << ListaEnemigos[1].x << " " << ListaEnemigos[1].vivo;
+			Console::SetCursorPosition(0, 2);
+			cout << "bala = " << balaX;
 
-			if (balaX == ListaEnemigos[i].getX() + 6 && ListaEnemigos[i].vivo == 0) {	//El numerito es el offset de colision
-				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].getX(), enemigoY);
+			if (balaX == enemigoX && ListaEnemigos[i].vivo == 0) {
+				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].x, enemigoY);
 				ListaEnemigos[i].vivo = 7; //Numero de frames que el enemigo va a estar muerto
-				balaActiva = false;		//Hay que desactivar los enemigos :v
+				Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue);		//Borra la bala actual
+				balaX = 148;		//evita colisiones accidentales con los enemigos
+				balaActiva = false;
+				
 			}
 
 			if (enemigoX  == x + 2 && inmortal == 0 && ListaEnemigos[i].vivo == 0) {	
@@ -936,7 +942,7 @@ int main() {
 				VerificarDaño = true;
 				inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
 				//crash();
-			}
+			} //Que no se note que el 7 es mi numero favorito xd -Hw
 		}
 		//Enemigos -> Jugador
 

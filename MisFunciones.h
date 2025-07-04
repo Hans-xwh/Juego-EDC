@@ -375,6 +375,7 @@ void ActualizarBala() {
 		// 3. Verificar límites
 		if (balaX < 2 || balaX > 148 || balaY < 6) {
 			balaActiva = false;
+			balaX = 148;	//evita colisiones accidentales con los enemigos -Hw
 			return;
 		}
 
