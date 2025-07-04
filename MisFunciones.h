@@ -621,6 +621,14 @@ void Pajaro(int x, int y, int pregunta) {
 	Cursor(x + 4, y + 6); cout << "_|_";
 	Console::BackgroundColor = ConsoleColor::DarkGray;
 	Cursor(x, y + 7); cout << "               ";
+
+	//Borrar pregunta
+	Console::BackgroundColor = ConsoleColor::Blue;
+	Cursor(x - 8, y - 5); cout << "                       ";
+	Cursor(x - 8, y - 4); cout << "                       ";
+	Cursor(x - 8, y - 3); cout << "                       ";
+	Cursor(x - 8, y - 2); cout << "                       ";
+	Console::BackgroundColor = ConsoleColor::DarkGray;
 	
 
 	if (pregunta == 1) {
