@@ -7,6 +7,7 @@
 #include <conio.h>
 #include <random>
 #include <chrono>  // Necesario para std::chrono
+#include <string>
 /*======================================*/
 
 /*======================================*/
@@ -346,6 +347,7 @@ void DibujaPersona(int caso) {	//HW
 	}
 
 	//dibujar personaje
+	Console::ForegroundColor = ConsoleColor::DarkYellow; // Color amarillo oscuro
 	for (int i = 0; i < persona.height; i++) {
 		Console::SetCursorPosition(persona.x, persona.y + i);
 		cout << persona.personaje[i];
@@ -364,7 +366,42 @@ bool checkColi(int x, int y) { //false=NoMover  true=SiMover
 
 }
 
+void MostrarPantallaNegra() {
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::Clear();
+	Console::ForegroundColor = ConsoleColor::White;
+	Cursor(60, 20); 
+	cout << "Has encontrado una alternativa";
+	Sleep(3000); 
+}
 
+
+void VerificarColisionAlternativas() {
+	// Verificar colisión con la primera alternativa (A)
+	if ((persona.x >= alternativa1.x && persona.x <= alternativa1.x + 2) &&
+		(persona.y >= alternativa1.y && persona.y <= alternativa1.y + 1)) 
+	{
+		MostrarPantallaNegra();
+	}
+	// Verificar colisión con la segunda alternativa (B)
+	else if ((persona.x >= alternativa2.x && persona.x <= alternativa2.x + 2) &&
+		(persona.y >= alternativa2.y && persona.y <= alternativa2.y + 1)) 
+	{
+		MostrarPantallaNegra();
+	}
+	// Verificar colisión con tecera alternativa (C)
+	else if ((persona.x >= alternativa3.x && persona.x <= alternativa3.x + 2) &&
+		(persona.y >= alternativa3.y && persona.y <= alternativa3.y + 1)) 
+	{
+		MostrarPantallaNegra();
+	}
+	// Verificar colisión con la cuarta alternativa (D)
+	else if ((persona.x >= alternativa4.x && persona.x <= alternativa4.x + 2) &&
+		(persona.y >= alternativa4.y && persona.y <= alternativa4.y + 1)) 
+	{
+		MostrarPantallaNegra();
+	}
+}
 
 
 /* Funcion Principal del juego */
@@ -385,48 +422,70 @@ void ejecutar_segundo_nivel() {
 	* alternativa3.x y alternativa3.y
 	* alternativa4.x y alternativa4.y
 	*/
+
+	// Configurar el contador de tiempo
+	Console::ForegroundColor = ConsoleColor::White;
+	Console::BackgroundColor = ConsoleColor::Black;
+	Cursor(130, 0); cout << "Tiempo: 0s";
+
+	//El Steady_clock mide 2 puntos de tiempo
+	//En este caso, guarda el momento inicial
+	auto tiempo_inicio = chrono::steady_clock::now(); // Iniciar el cronómetro
+
+
 	int tecla = 0;
 	Console::BackgroundColor = ConsoleColor::Gray;
 	DibujaPersona(1);
+
 	while (true) {
-		tecla = _getch(); //72=arriba 75=izquierda 77=derecha  80=abajo
+		// Actualizar el contador de tiempo cada segundo
+		//En este caso, guarda el momento final
+		auto tiempo_real = chrono::steady_clock::now();
+		//El count() sirve para obtener el valor numerico al usar el duration cast
+		//duration cast convierte varios tipo de intervalos de tiempo ya sea segundos o milisegundos
+		auto Cronometro = chrono::duration_cast<chrono::seconds>(tiempo_real - tiempo_inicio).count();
 
-		if (tecla == 72 && persona.y - 1 > 0) {	//mover hacia arriba
-			if (checkColi(persona.x, persona.y - 1)) {
-				DibujaPersona(0); //caso 0 = borrar
-				persona.y--;
-				DibujaPersona(1); //caso 1 = dibujar
+		Console::ForegroundColor = ConsoleColor::White;
+		Console::BackgroundColor = ConsoleColor::Black;
+		Cursor(130, 0); cout << "Tiempo: " << Cronometro << "s";
+
+		if (_kbhit()) {
+			tecla = _getch(); //72=arriba 75=izquierda 77=derecha  80=abajo
+
+			if (tecla == 72 && persona.y - 1 > 0) { //mover hacia arriba
+				if (checkColi(persona.x, persona.y - 1)) {
+					DibujaPersona(0); //caso 0 = borrar
+					persona.y--;
+					DibujaPersona(1); //caso 1 = dibujar
+				}
+			}
+			else if (tecla == 80 && persona.y + persona.height + 1 < 40) { //mover hacia abajo
+				if (checkColi(persona.x, persona.y + 1)) {
+					DibujaPersona(0);
+					persona.y++;
+					DibujaPersona(1);
+				}
+			}
+			else if (tecla == 75 && persona.x - 1 > 0) { //mover hacia izquierda
+				if (checkColi(persona.x - 1, persona.y)) {
+					DibujaPersona(0);
+					persona.x--;
+					DibujaPersona(1);
+				}
+			}
+			else if (tecla == 77 && persona.x + persona.width + 1 < 150) { //mover hacia derecha
+				if (checkColi(persona.x + 1, persona.y)) {
+					DibujaPersona(0);
+					persona.x++;
+					DibujaPersona(1);
+				}
 			}
 		}
-		else if (tecla == 80 && persona.y + persona.height + 1 < 40) { //mover hacia abajo
-			if (checkColi(persona.x, persona.y + 1)) {
-				DibujaPersona(0);
-				persona.y++;
-				DibujaPersona(1);
-			}
-		}
-		else if (tecla == 75 && persona.x - 1 > 0) { //mover hacia izquierda
-			if (checkColi(persona.x - 1, persona.y)) {
-				DibujaPersona(0);
-				persona.x--;
-				DibujaPersona(1);
-			}
-		}
-		else if (tecla == 77 && persona.x + persona.width + 1 < 150) { //mover hacia derecha
-			if (checkColi(persona.x + 1, persona.y)) {
-				DibujaPersona(0);
-				persona.x++;
-				DibujaPersona(1);
-			}
-		}
-		else {
-			continue;
-		}
+		VerificarColisionAlternativas();
+		Sleep(10); // Pequeña pausa para no saturar la CPU
 	}
-
-
-
 }
+
 /*==========================*/
 
 
