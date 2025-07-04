@@ -320,8 +320,8 @@ public:
 /* Clase Enemigos*/
 struct Enemigos {
 public:
-	int x;
-	int y;
+	int x = 0;
+	int y = 0;
 	int vivo = 0;	//0 = vivo; >1 = muerto
 	Enemigos() : x(6), y(29) {}
 	Enemigos(int _x, int _y) : x(_x), y(_y) {}
@@ -360,9 +360,10 @@ public:
 	void BorrarEnemigo(int AntiguoX, int AntiguoY) {
 		BorrarAnimacion(AntiguoX, AntiguoY, 10, 6);
 	}
+	/*
 	int getY() {
 		return y;
-	}
+	}*/
 };
 
 
@@ -842,7 +843,7 @@ int main() {
 			if (enemigosCreados == true) {
 				for (int i = 0; i < TamañoListaEnemigos; i++) {
 					int AntiguoXEnemigo = ListaEnemigos[i].x;
-					int AntiguoYEnemigo = ListaEnemigos[i].getY();
+					int AntiguoYEnemigo = ListaEnemigos[i].y;
 
 					nuevoXEnemigo = AntiguoXEnemigo;
 					int nuevoYEnemigo = AntiguoYEnemigo;
@@ -875,7 +876,7 @@ int main() {
 			if (enemigosFuertesCreados == true) {
 				for (int i = 0; i < TamañoListaEnemigosFuertes; i++) {
 					int AntiguoXEnemigo = ListaEnemigosFuertes[i].x;
-					int AntiguoYEnemigo = ListaEnemigosFuertes[i].getY();
+					int AntiguoYEnemigo = ListaEnemigosFuertes[i].y;
 
 					int NuevoXEnemigo = AntiguoXEnemigo;
 					int NuevoYEnemigo = AntiguoYEnemigo;
@@ -886,9 +887,16 @@ int main() {
 					if (NuevoXEnemigo > x) {
 						NuevoXEnemigo--;
 					}
-					ListaEnemigosFuertes[i].setCursor(NuevoXEnemigo, NuevoYEnemigo);
-					ListaEnemigosFuertes[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
-					ListaEnemigosFuertes[i].DibujarEnemigo();
+
+					if (ListaEnemigosFuertes[i].vivo == 0) {
+						ListaEnemigosFuertes[i].setCursor(NuevoXEnemigo, NuevoYEnemigo);
+						ListaEnemigosFuertes[i].BorrarEnemigo(AntiguoXEnemigo, AntiguoYEnemigo);
+						ListaEnemigosFuertes[i].DibujarEnemigo();
+					}
+					else {
+						ListaEnemigosFuertes[i].vivo--;
+						ListaEnemigosFuertes[i].x = 134; //regresar a posición inicial
+					}
 					/*
 					if (NuevoXEnemigo - 10 == x) {
 						vida--;
@@ -915,11 +923,11 @@ int main() {
 		cout << "PlayerX: " << x << endl;
 		cout << "NuevoEnemigoX: " << nuevoXEnemigo; */
 
-		//// Colisiones y daño ////
+		//// Colisiones y daño enemigos normales ////
 		for (int i = 0; i < TamañoListaEnemigos; i++) {	//Hw
 			int enemigoX, enemigoY;
 			enemigoX = ListaEnemigos[i].x + 6;	//Offset para las colisiones. 6 funciona bien.
-			enemigoY = ListaEnemigos[i].getY();
+			enemigoY = ListaEnemigos[i].y;
 
 			Console::SetCursorPosition(0, 0);
 			cout << "enemigo1 = " << ListaEnemigos[0].x << " " << ListaEnemigos[0].vivo;
@@ -944,15 +952,22 @@ int main() {
 				//crash();
 			} //Que no se note que el 7 es mi numero favorito xd -Hw
 		}
-		//Enemigos -> Jugador
 
-		/*if (nuevoXEnemigo + 7 == x + 2 && inmortal == 0) {	//hay que ajustar esto
+		//// Colisiones y daño enemigos fuertes ////
+		if (balaX == ListaEnemigosFuertes[0].x && ListaEnemigosFuertes[0].vivo == 0) { //Solo hay asi que me salto iterar sobre la lista xd -Hw
+			ListaEnemigosFuertes[0].BorrarEnemigo(ListaEnemigosFuertes[0].x, ListaEnemigosFuertes[0].y);
+			ListaEnemigosFuertes[0].vivo = 7; //Numero de frames que el enemigo va a estar muerto
+			Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue);		//Borra la bala actual
+			balaX = 148;		//evita colisiones accidentales con los enemigos
+			balaActiva = false;
+		}
+		if (ListaEnemigosFuertes[0].x -6 == x && inmortal == 0 && ListaEnemigosFuertes[0].vivo == 0) {
 			vida--;
 			VerificarDaño = true;
 			inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
 			//crash();
-		}*/
-
+		} //Que no se note que el 7 es mi numero favorito xd -Hw
+		
 		//MOSTRAR EL NUMERO DE PREGUNTAS CONTESTADAS
 		Console::BackgroundColor = ConsoleColor::Black;
 		Console::ForegroundColor = ConsoleColor::White;
@@ -967,6 +982,7 @@ int main() {
 				balaY >= Nube_Y_3 && balaY <= Nube_Y_3 + 4) 
 			{
 				CambioPregunta = true;
+				Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue); //Borrar la bala, para que no se quede dibujada -HW
 				balaActiva = false;
 				NumeroPregunta++;
 				Pajaro(135, 15, NumeroPregunta);
