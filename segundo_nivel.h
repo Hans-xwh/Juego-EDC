@@ -406,10 +406,10 @@ void VerificarColisionAlternativas() {
 
 /* Funcion Principal del juego */
 
-void ejecutar_segundo_nivel() {	
+void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	-Hw
 
 	configurar_ventana_mapa();
-	int NumeroPregunta = 1;
+	int NumeroPregunta = 1+po;
 
 	int cambio = Pregunta(NumeroPregunta, 15);
 	cout << cambio << endl << NumeroPregunta;
@@ -426,7 +426,7 @@ void ejecutar_segundo_nivel() {
 	// Configurar el contador de tiempo
 	Console::ForegroundColor = ConsoleColor::White;
 	Console::BackgroundColor = ConsoleColor::Black;
-	Cursor(130, 0); cout << "Tiempo: 0s";
+	Cursor(130, 0); cout << "Tiempo: 0s ";
 
 	//El Steady_clock mide 2 puntos de tiempo
 	//En este caso, guarda el momento inicial
@@ -436,6 +436,7 @@ void ejecutar_segundo_nivel() {
 	int tecla = 0;
 	Console::BackgroundColor = ConsoleColor::Gray;
 	DibujaPersona(1);
+	const int tiempoLimite = 120;
 
 	while (true) {
 		// Actualizar el contador de tiempo cada segundo
@@ -447,7 +448,12 @@ void ejecutar_segundo_nivel() {
 
 		Console::ForegroundColor = ConsoleColor::White;
 		Console::BackgroundColor = ConsoleColor::Black;
-		Cursor(130, 0); cout << "Tiempo: " << Cronometro << "s";
+		//Cursor(130, 0); cout << "Tiempo: " << Cronometro << "s";		//Mostrat tiempo transcurrido
+		Cursor(130, 0); cout << "Tiempo: " << tiempoLimite - Cronometro << "s ";
+
+		if (tiempoLimite - Cronometro <= 0) {
+			break;
+		}
 
 		if (_kbhit()) {
 			tecla = _getch(); //72=arriba 75=izquierda 77=derecha  80=abajo

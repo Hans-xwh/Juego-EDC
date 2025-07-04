@@ -1091,7 +1091,9 @@ int main() {
 			Console::ForegroundColor = ConsoleColor::White;
 			Console::Clear();
 			// Ejecutar segundo nivel al perder
-			ejecutar_segundo_nivel();
+			for (int i = 0; i < 4; i++) {
+				ejecutar_segundo_nivel(i);
+			}
 			break;
 		}
 		// Verificar si se respondieron todas las preguntas
@@ -1107,7 +1109,9 @@ int main() {
 			Sleep(3000);
 
 			// Ejecutar segundo nivel al completar todas las preguntas
-			ejecutar_segundo_nivel();
+			for (int i = 0; i < 4; i++) {
+				ejecutar_segundo_nivel(i);
+			}
 			break;
 		}
 	}
