@@ -420,6 +420,7 @@ int VerificarColisionAlternativas() {
 /* Funcion Principal del juego */
 
 void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	-Hw
+	Window();
 
 	configurar_ventana_mapa();
 	int NumeroPregunta = 1+po;
