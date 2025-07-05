@@ -532,10 +532,11 @@ int main() {
 	Window();
 
 	//// DESCOMENTAR ESTO PARA PROBAR SOLO SEGUNDO NIVEL ////
-	for (int i = 0; i < 4; i++) {
-		ejecutar_segundo_nivel(i);
-	}
-	return 0;
+	//for (int i = 0; i < 4; i++) {
+		//ejecutar_segundo_nivel(i);
+	//}
+	//return 0;
+	ejecutar_segundo_nivel(3);
 
 
 
