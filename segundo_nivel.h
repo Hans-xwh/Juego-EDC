@@ -60,20 +60,13 @@ int LaberintoMatriz[40][150] = {
 
 };
 
-
-
-
-
-
 //definen la posición actual del personaje
-int personaje_fila = 1;
-int personaje_columna = 1;
-
-
+const int perInicial_x = 1;
+const int perInicial_Y = 1;
 
 struct Personajito {	
-	int x = 1;	//Horizontal inicial
-	int y = 4;	//Vertical inicial
+	int x = perInicial_x;	//Horizontal inicial
+	int y = perInicial_Y;	//Vertical inicial
 	int height = 4; //De arriba hacia abajo
 	int width = 3;
 
@@ -84,6 +77,13 @@ struct Personajito {
 	"/ \\"
 	};
 }persona;
+
+
+struct Respuestas {
+	int correcta;
+	int x = 0;
+	int y = 0;
+}respuesta;
 
 
 
@@ -110,6 +110,7 @@ int Pregunta(int numero, int y) {	//Mostrat pregunta
 		Cursor(10, y + 5); cout << "  \\_____\\__,_|\\__,_|_|  \\___||___/  \\___|_| | .__/ \\__,_|_|___/ |_| |_| |_|\\__,_|___/  \\__, |_|  \\__,_|_| |_|\\__,_|\\___|";
 		Cursor(10, y + 6); cout << "                                            | |                                         __/ |                           ";
 		Cursor(10, y + 7); cout << "                                            |_|                                        |___/                            ";
+		respuesta.correcta = 2;
 
 	}
 	if (numero == 2) {
@@ -119,6 +120,7 @@ int Pregunta(int numero, int y) {	//Mostrat pregunta
 		Cursor(1, y + 3); cout << " |  _ <  __/\\__ \\ (_) | |\\ V /  __/ |    |  __/ (__| |_| | (_| | (__| | (_) | | | |  _     / __/  | |  |_____|  >  <  |_   _| | |  | | |_____|  >  < ";
 		Cursor(1, y + 4); cout << " |_| \\_\\___||___/\\___/|_| \\_/ \\___|_|     \\___|\\___|\\__,_|\\__,_|\\___|_|\\___/|_| |_| (_)   |_____| | |          /_/\\_\\   |_|   |_|  | |         /_/\\_\\";
 		Cursor(1, y + 5); cout << "                                                                                                   \\_\\                            /_/                ";
+		respuesta.correcta = 3;
 
 	}
 	if (numero == 3) {
@@ -128,6 +130,7 @@ int Pregunta(int numero, int y) {	//Mostrat pregunta
 		Cursor(10, y + 2); cout << "  / _ \\| ' \\/ _ \\ / -_) ' \\  / _` | || / -_) / -_) | | ' \\/ _ \\ '  \\| '_ \\ '_/ -_) | '_ \\ (_-</ _ \\ | / _` | | |_| || | ' \\/ _` |";
 		Cursor(10, y + 3); cout << " /_/ \\_\\_||_\\___/ \\___|_||_| \\__, |\\_,_\\___| \\___|_| |_||_\\___/_|_|_|_.__/_| \\___| | .__/_/__/\\___/ |_\\__,_| |____\\_,_|_||_\\__,_|";
 		Cursor(10, y + 4); cout << "                                |_|                                                |_|                                           ";
+		respuesta.correcta = 1;
 	}
 	if (numero == 4) {
 
@@ -137,6 +140,7 @@ int Pregunta(int numero, int y) {	//Mostrat pregunta
 		Cursor(20, y + 3); cout << "  / ___ \\ |_| | || (_) | |    | (_| |  __/ | | (_| | |  _ <  __/ | (_| | |_| |\\ V /| | (_| | (_| | (_| |";
 		Cursor(20, y + 4); cout << " /_/   \\_\\__,_|\\__\\___/|_|     \\__,_|\\___| |_|\\__,_| |_| \\_\\___|_|\\__,_|\\__|_| \\_/ |_|\\__,_|\\__,_|\\__,_|";
 		Cursor(20, y + 5); cout << "                                                                                                         ";
+		respuesta.correcta = 1;
 	}
 	Sleep(8000);
 	Console::Clear();
@@ -313,15 +317,15 @@ struct PosicionAlternativa {
 	int y;
 }; PosicionAlternativa alternativa1; PosicionAlternativa alternativa2; PosicionAlternativa alternativa3; PosicionAlternativa alternativa4;
 
-void GenerarRespuestasAleatorias() {
+void GenerarRespuestasAleatorias() {	//Esta funcion solo se encarga de dibujar las alternativas
 	int cantidad = 0;
 	int randomX = 0;
 	int randomY = 0;
 	while(true) {
 		do {
-			randomX = NumeroRandom(1, 150);
-			randomY = NumeroRandom(1, 40);
-		} while (LaberintoMatriz[randomX][randomY] == 1);
+			randomX = NumeroRandom(1, 148);	//dos menor al limite, sino crashea
+			randomY = NumeroRandom(1, 39);
+		} while (LaberintoMatriz[randomX][randomY] != 0 && LaberintoMatriz[randomX+1][randomY] != 0);
 		int randomrespuesta = NumeroRandom(1, 5);
 
 			if (LaberintoMatriz[randomY][randomX] == 0) {
@@ -331,6 +335,11 @@ void GenerarRespuestasAleatorias() {
 					Cursor(randomX, randomY); cout << "A)";
 					alternativa1.x = randomX;
 					alternativa1.y = randomY;
+
+					if (respuesta.correcta == 1) {
+						respuesta.x = alternativa1.x;
+						respuesta.y = alternativa1.y;
+					}
 					cantidad++;
 				}
 				if (cantidad == 1 && randomrespuesta == 5) {
@@ -339,6 +348,11 @@ void GenerarRespuestasAleatorias() {
 					Cursor(randomX, randomY); cout << "B)";
 					alternativa2.x = randomX;
 					alternativa2.y = randomY;
+
+					if (respuesta.correcta == 2) {
+						respuesta.x = alternativa2.x;
+						respuesta.y = alternativa2.y;
+					}
 					cantidad++;
 				}
 				if (cantidad == 2 && randomrespuesta == 1) {
@@ -347,6 +361,11 @@ void GenerarRespuestasAleatorias() {
 					Cursor(randomX, randomY); cout << "C)";
 					alternativa3.x = randomX;
 					alternativa3.y = randomY;
+
+					if (respuesta.correcta == 3) {
+						respuesta.x = alternativa3.x;
+						respuesta.y = alternativa3.y;
+					}
 					cantidad++;
 				}
 				if (cantidad == 3 && randomrespuesta == 2) {
@@ -355,8 +374,14 @@ void GenerarRespuestasAleatorias() {
 					Cursor(randomX, randomY); cout << "D)";
 					alternativa4.x = randomX;
 					alternativa4.y = randomY;
+
+					if (respuesta.correcta == 4) {
+						respuesta.x = alternativa4.x;
+						respuesta.y = alternativa4.y;
+					}
 					cantidad++;
-				}if (cantidad == 4) {
+				}
+				if (cantidad == 4) {
 					break;
 				}
 		
@@ -396,6 +421,7 @@ void configurar_ventana_mapa() {
 	Console::Clear();
 	Console::CursorVisible = false;
 }
+
 void DibujarLaberinto(int matriz[40][150]) {
 	for (int i = 0; i < 40; i++) {
 		for (int j = 0; j < 150; j++) {
@@ -448,13 +474,14 @@ void DibujaPersona(int caso) {	//HW
 	}
 
 	//dibujar personaje
-	Console::ForegroundColor = ConsoleColor::DarkYellow; // Color amarillo oscuro
+	Console::ForegroundColor = ConsoleColor::Blue; // Color Azul
 	for (int i = 0; i < persona.height; i++) {
 		Console::SetCursorPosition(persona.x, persona.y + i);
 		cout << persona.personaje[i];
 	}
 }
 
+//Colision con paredes de laberinto para movimiento
 bool checkColi(int x, int y) { //false=NoMover  true=SiMover
 	for (int i = 0; i < persona.height; i++) {
 		for (int j = 0; j < persona.width; j++) {
@@ -478,7 +505,7 @@ void MostrarPantallaNegra() {
 
 }
 
-
+/// No usado ///
 int VerificarColisionAlternativas() {
 	// Verificar colisión con la primera alternativa (A)
 	if ((persona.x >= alternativa1.x && persona.x <= alternativa1.x + 2) &&
@@ -513,9 +540,43 @@ int VerificarColisionAlternativas() {
 	}
 }
 
+bool checkAlternColi(int x, int y) {	//Check Alternativas Collision
+	for (int i = 0; i < persona.height; i++) {
+		for (int j = 0; j < persona.width; j++) {
+			if (j+x == respuesta.x && i+y == respuesta.y) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void GanasteTemporal() {
+	Console::ForegroundColor = ConsoleColor::White;
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::Clear();
+	Cursor(47, 15); cout << " _ _____                                    _        _ " << endl;
+	Cursor(47, 16); cout << "(_) ____|___    ___ ___  _ __ _ __ ___  ___| |_ ___ | |" << endl;
+	Cursor(47, 17); cout << "| |  _| / __|  / __/ _ \\| '__| '__/ _ \\/ __| __/ _ \\| |" << endl;
+	Cursor(47, 18); cout << "| | |___\\__ \\ | (_| (_) | |  | | |  __/ (__| || (_) |_|" << endl;
+	Cursor(47, 19); cout << "|_|_____|___/  \\___\\___/|_|  |_|  \\___|\\___|\\__\\___/(_)" << endl;
+
+	Sleep(2000);
+}
+void TiempoFuera() {
+	Console::ForegroundColor = ConsoleColor::White;
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::Clear();
+	Cursor(40, 15); cout << " _ _____ _                              _____                     _ " << endl;
+	Cursor(40, 16); cout << "(_)_   _(_) ___ _ __ ___  _ __   ___   |  ___|   _  ___ _ __ __ _| |" << endl;
+	Cursor(40, 17); cout << "| | | | | |/ _ \\ '_ ` _ \\| '_ \\ / _ \\  | |_ | | | |/ _ \\ '__/ _` | |" << endl;
+	Cursor(40, 18); cout << "| | | | | |  __/ | | | | | |_) | (_) | |  _|| |_| |  __/ | | (_| |_|" << endl;
+	Cursor(40, 19); cout << "|_| |_| |_|\\___|_| |_| |_| .__/ \\___/| |_|   \\__,_|\\___|_|  \\__,_(_)" << endl;
+	Cursor(40, 20); cout << "                         |_|                                       ";
+	Sleep(2000);
+}
 
 /* Funcion Principal del juego */
-
 void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	-Hw
 	Window();
 
@@ -547,9 +608,9 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	-Hw
 	int tecla = 0;
 	Console::BackgroundColor = ConsoleColor::Gray;
 	DibujaPersona(1);
-	const int tiempoLimite = 120;
+	const int tiempoLimite = 90;	//Esta constante define el tiempo maximo
 
-	while (true) {
+	while (true) {	//Bucle principal segundo nivel -Hw
 		// Actualizar el contador de tiempo cada segundo
 		//En este caso, guarda el momento final
 		auto tiempo_real = chrono::steady_clock::now();
@@ -563,6 +624,7 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	-Hw
 		Cursor(130, 0); cout << "Tiempo: " << tiempoLimite - Cronometro << "s ";
 
 		if (tiempoLimite - Cronometro <= 0) {
+			TiempoFuera();
 			break;
 		}
 
@@ -598,7 +660,11 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	-Hw
 				}
 			}
 		}
-		if (VerificarColisionAlternativas() == 1) {
+		if (checkAlternColi(persona.x, persona.y)) {
+			GanasteTemporal();
+
+			persona.x = perInicial_x;
+			persona.y = perInicial_Y;
 			return;
 		}
 		Sleep(10); // Pequeña pausa para no saturar la CPU
