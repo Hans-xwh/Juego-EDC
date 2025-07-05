@@ -530,6 +530,15 @@ struct Preguntas {
 int main() {
 	//setlocale(LC_ALL, "Spanish");
 	Window();
+
+	//// DESCOMENTAR ESTO PARA PROBAR SOLO SEGUNDO NIVEL ////
+	for (int i = 0; i < 4; i++) {
+		ejecutar_segundo_nivel(i);
+	}
+	return 0;
+
+
+
 	PlaySound(TEXT("horizon.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
 	//SE LLAMA A LA FUNCION SELECCIONAR LA OPCION

@@ -218,10 +218,13 @@ struct PosicionAlternativa {
 
 void GenerarRespuestasAleatorias() {
 	int cantidad = 0;
-	
+	int randomX = 0;
+	int randomY = 0;
 	while(true) {
-		int randomX = NumeroRandom(1, 150);
-		int randomY = NumeroRandom(1, 40);
+		do {
+			randomX = NumeroRandom(1, 150);
+			randomY = NumeroRandom(1, 40);
+		} while (LaberintoMatriz[randomX][randomY] == 1);
 		int randomrespuesta = NumeroRandom(1, 5);
 
 			if (LaberintoMatriz[randomY][randomX] == 0) {
@@ -371,7 +374,7 @@ void MostrarPantallaNegra() {
 	Console::BackgroundColor = ConsoleColor::Black;
 	Console::Clear();
 	Console::ForegroundColor = ConsoleColor::White;
-	Cursor(60, 20); 
+	Cursor(60, 20);
 	cout << "Has encontrado una alternativa";
 	Sleep(1000);
 	return;
@@ -407,6 +410,9 @@ int VerificarColisionAlternativas() {
 	{
 		MostrarPantallaNegra();
 		return 1;
+	}
+	else {
+		return 0;
 	}
 }
 
