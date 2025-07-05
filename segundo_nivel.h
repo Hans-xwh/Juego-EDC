@@ -164,6 +164,7 @@ int Pregunta(int numero, int y) {	//Mostrat pregunta
 	Cursor(68, y + 5); cout << " |_|";
 	Sleep(1000);
 	if (numero == 1) {
+		Console::Clear();
 		Cursor(40, 10); 	cout << "     _  __     ____ _     _             ";
 		Cursor(40, 10 + 1); cout << "    / \\ \\ \\   / ___| |__ (_)_ __   __ _ ";
 		Cursor(40, 10 + 2); cout << "   / _ \\ | | | |   | '_ \\| | '_ \\ / _` |";
@@ -372,34 +373,40 @@ void MostrarPantallaNegra() {
 	Console::ForegroundColor = ConsoleColor::White;
 	Cursor(60, 20); 
 	cout << "Has encontrado una alternativa";
-	Sleep(3000); 
+	Sleep(1000);
+	return;
+
 }
 
 
-void VerificarColisionAlternativas() {
+int VerificarColisionAlternativas() {
 	// Verificar colisión con la primera alternativa (A)
 	if ((persona.x >= alternativa1.x && persona.x <= alternativa1.x + 2) &&
 		(persona.y >= alternativa1.y && persona.y <= alternativa1.y + 1)) 
 	{
 		MostrarPantallaNegra();
+		return 1;
 	}
 	// Verificar colisión con la segunda alternativa (B)
 	else if ((persona.x >= alternativa2.x && persona.x <= alternativa2.x + 2) &&
 		(persona.y >= alternativa2.y && persona.y <= alternativa2.y + 1)) 
 	{
 		MostrarPantallaNegra();
+		return 1;
 	}
 	// Verificar colisión con tecera alternativa (C)
 	else if ((persona.x >= alternativa3.x && persona.x <= alternativa3.x + 2) &&
 		(persona.y >= alternativa3.y && persona.y <= alternativa3.y + 1)) 
 	{
 		MostrarPantallaNegra();
+		return 1;
 	}
 	// Verificar colisión con la cuarta alternativa (D)
 	else if ((persona.x >= alternativa4.x && persona.x <= alternativa4.x + 2) &&
 		(persona.y >= alternativa4.y && persona.y <= alternativa4.y + 1)) 
 	{
 		MostrarPantallaNegra();
+		return 1;
 	}
 }
 
@@ -487,7 +494,9 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	-Hw
 				}
 			}
 		}
-		VerificarColisionAlternativas();
+		if (VerificarColisionAlternativas() == 1) {
+			return;
+		}
 		Sleep(10); // Pequeña pausa para no saturar la CPU
 	}
 }
