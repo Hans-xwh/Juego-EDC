@@ -734,7 +734,6 @@ int main() {
 			auto duracion = chrono::duration_cast<chrono::seconds>(ahora - inicioJuego);
 			tiempoTranscurrido = duracion.count();
 			MostrarCronometro(tiempoTranscurrido);
-			cronometro = cronometro + tiempoTranscurrido;
 		}
 
 		if (ahora - UltimoMomentoEnemigo >= IntervaloEnemigos && IndiceEnemigos < TamañoListaEnemigos) {
@@ -1127,6 +1126,10 @@ int main() {
 		}
 		// Verificar si se respondieron todas las preguntas
 		if (NumeroPregunta == 7) {
+			// Detener el cronómetro
+			cronometroActivo = false;
+			cronometro = tiempoTranscurrido;
+
 			Console::BackgroundColor = ConsoleColor::Black;
 			Console::ForegroundColor = ConsoleColor::White;
 			Console::Clear();
@@ -1144,8 +1147,9 @@ int main() {
 			break;
 		}
 	}
+	Console::Clear();
 	//Ejecutar el Progreso Final
-
+	ProgresoFinal();
 
 
 

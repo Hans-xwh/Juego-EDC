@@ -591,7 +591,7 @@ void TiempoFuera() {
 }
 
 /* Funcion Principal del juego */
-void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	-Hw
+void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	
 	Window();
 
 	configurar_ventana_mapa();
@@ -683,6 +683,13 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset	-Hw
 		}
 		Sleep(10); // Pequeña pausa para no saturar la CPU
 	}
+}
+
+
+void ProgresoFinal() {
+	Console::ForegroundColor = ConsoleColor::White;
+	Cursor(10, 10);
+	cout << cronometro;
 }
 
 /*==========================*/
