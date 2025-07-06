@@ -9,11 +9,16 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <chrono>  // Necesario para std::chrono
+#include <thread>
 /*======================================*/
 
 /*======================================*/
 using namespace std;
 using namespace System;
+
+//Para evitar colocar std:: cada vez que se emplea la liberia chrono
+using namespace std::chrono;
+
 /*======================================*/
 
 
@@ -26,6 +31,9 @@ bool puedeDisparar = true;       // control de cooldown
 clock_t ultimoDisparo = 0;      // tiempo del último disparo
 const int cooldownDisparo = 500; // 500ms = 0.5s entre disparos
 const int velocidadBala = 1;
+
+//Para contar cuanto tiempo se tarda el jugador en completar el primer nivel
+int cronometro = 0;
 
 const auto intervaloMovimientoBalaVertical = chrono::milliseconds(15); // PARA DISPAROS VERTICALES
 
@@ -200,6 +208,17 @@ void dibujar_mapa(int menu[FILAS][COLUMNAS]) {
 		}
 	}
 }
+
+void MostrarCronometro(int segundos) {
+
+	Console::BackgroundColor = ConsoleColor::Black;
+	Console::ForegroundColor = ConsoleColor::White;
+
+	// Posición donde quieres mostrar el cronómetro (ejemplo: esquina superior derecha)
+	Cursor(130, 10);
+	cout << "Cronometro: " << segundos << "s";
+}
+
 
 void loading() {
 	Console::Clear();
@@ -686,37 +705,37 @@ void Pajaro(int x, int y, int pregunta) {
 	
 
 	if (pregunta == 1) {
-		Cursor(x-4, y - 5);cout<<"Alli el cielo";
+		Cursor(x-2, y - 5);cout<<"Alli el cielo";
 		Cursor(x - 8, y - 4); cout << "siempre esta nublado...";
-		Cursor(x - 4, y - 3); cout << "pero el ceviche"; 
-		Cursor(x - 4, y - 2); cout << "siempre brilla.";
+		Cursor(x - 2, y - 3); cout << "pero el ceviche"; 
+		Cursor(x - 2, y - 2); cout << "siempre brilla.";
 	}
 	if (pregunta == 2) {
 		Cursor(x - 7, y - 5); cout << "En Peru y Argentina lo";
 		Cursor(x - 6, y - 4); cout << "recuerdan con honor";
-		Cursor(x - 4, y - 3); cout << ",fue general y";
-		Cursor(x - 4, y - 2); cout << "libertador";
+		Cursor(x - 2, y - 3); cout << ",fue general y";
+		Cursor(x - 2, y - 2); cout << "libertador";
 	}
 	if (pregunta == 3) {
 
 		Cursor(x - 3, y - 3); cout << " Es el doble";
-		Cursor(x +1, y - 2); cout << "de 28";
+		Cursor(x + 1, y - 2); cout << "de 28";
 		
 	}
 	if (pregunta == 4) {
 		Cursor(x - 7, y - 5); cout << "Su nombre empieza ";
 		Cursor(x - 6, y - 4); cout << " como 'Aventura'";
-		Cursor(x - 7, y - 3); cout << "y cruza la mitad de";
-		Cursor(x - 4, y - 2); cout << " Sudamerica.";
+		Cursor(x - 5, y - 3); cout << "y cruza la mitad de";
+		Cursor(x - 2, y - 2); cout << " Sudamerica.";
 	}
 	if (pregunta == 5) {
 		Cursor(x -1, y - 3); cout << "¿Matematica?";
 	}
 	if (pregunta == 6) {
-		Cursor(x - 8, y - 5); cout << "El año termina en 21...";
-		Cursor(x - 8, y - 4); cout << "y esta muy cerca del";
-		Cursor(x - 8, y - 3); cout << "inicio de la decada de ";
-		Cursor(x - 4, y - 2); cout << "los 20";
+		Cursor(x - 6, y - 5); cout << "El termina en 21...";
+		Cursor(x - 6, y - 4); cout << "y esta muy cerca del";
+		Cursor(x - 7, y - 3); cout << "inicio de la decada de ";
+		Cursor(x - 2, y - 2); cout << "los 20";
 	}
 }
 

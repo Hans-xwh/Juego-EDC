@@ -29,7 +29,17 @@ void BorrarAnimacion(int x, int y, int columna, int fila);
 void Cursor(int x, int y);
 void Corazones(int CoorX, int CoorY);
 /*=======================*/
+//VARIABLES GLOBALES
 
+int contador_eliminados = 0;
+
+
+// Variables para el cronómetro
+// Variables para el cronómetro
+auto inicioJuego = Clock::now();
+int tiempoTranscurrido = 0;
+bool cronometroActivo = true;
+/*=======================*/
 /* Teclas */
 enum Teclas { DERECHA = 77, IZQUIERDA = 75, ARRIBA = 72 };
 /*----------*/
@@ -575,7 +585,7 @@ int main() {
 	/*======================*/
 	//Pajaro
 
-	Pajaro(135, 15, NumeroPregunta);
+	Pajaro(135, 17, NumeroPregunta);
 
 	/* Nubes */
 
@@ -639,6 +649,8 @@ int main() {
 	bool enemigosFuertesCreados = false;
 	int IndiceEnemigos = 0; int IndiceEnemigosFuertes = 0;
 	int nuevoXEnemigo = 0;
+
+	inicioJuego = Clock::now();
 	/*========================================*/
 
 	while (true) {
@@ -717,6 +729,13 @@ int main() {
 
 		auto ahora = Clock::now();
 
+		// Actualizar cronómetro
+		if (cronometroActivo) {
+			auto duracion = chrono::duration_cast<chrono::seconds>(ahora - inicioJuego);
+			tiempoTranscurrido = duracion.count();
+			MostrarCronometro(tiempoTranscurrido);
+			cronometro = cronometro + tiempoTranscurrido;
+		}
 
 		if (ahora - UltimoMomentoEnemigo >= IntervaloEnemigos && IndiceEnemigos < TamañoListaEnemigos) {
 			int EnemigoX = 6; int EnemigoY = 29;
@@ -933,7 +952,7 @@ int main() {
 		cout << "NuevoEnemigoX: " << nuevoXEnemigo; */
 
 		//// Colisiones y daño enemigos normales ////
-		for (int i = 0; i < TamañoListaEnemigos; i++) {	//Hw
+		for (int i = 0; i < TamañoListaEnemigos; i++) {	
 			int enemigoX, enemigoY;
 			enemigoX = ListaEnemigos[i].x + 6;	//Offset para las colisiones. 6 funciona bien.
 			enemigoY = ListaEnemigos[i].y;
@@ -951,39 +970,42 @@ int main() {
 				Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue);		//Borra la bala actual
 				balaX = 148;		//evita colisiones accidentales con los enemigos
 				balaActiva = false;
-				
+				contador_eliminados++;
 			}
 
 			if (enemigoX  == x + 2 && inmortal == 0 && ListaEnemigos[i].vivo == 0) {	
 				vida--;
 				VerificarDaño = true;
 				inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
-				//crash();
-			} //Que no se note que el 7 es mi numero favorito xd -Hw
+				
+			} 
 		}
 
 		//// Colisiones y daño enemigos fuertes ////
-		if (balaX == ListaEnemigosFuertes[0].x && ListaEnemigosFuertes[0].vivo == 0) { //Solo hay asi que me salto iterar sobre la lista xd -Hw
+		if (balaX == ListaEnemigosFuertes[0].x && ListaEnemigosFuertes[0].vivo == 0) { //Solo hay asi que me salto iterar sobre la lista
 			ListaEnemigosFuertes[0].BorrarEnemigo(ListaEnemigosFuertes[0].x, ListaEnemigosFuertes[0].y);
 			ListaEnemigosFuertes[0].vivo = 7; //Numero de frames que el enemigo va a estar muerto
 			Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue);		//Borra la bala actual
 			balaX = 148;		//evita colisiones accidentales con los enemigos
 			balaActiva = false;
+			contador_eliminados++;
 		}
 		if (ListaEnemigosFuertes[0].x -6 == x && inmortal == 0 && ListaEnemigosFuertes[0].vivo == 0) {
 			vida--;
 			VerificarDaño = true;
 			inmortal = 7;	//Este numero ajusta el tiempo de inmortalidad
 			//crash();
-		} //Que no se note que el 7 es mi numero favorito xd -Hw
+		} 
 		
 		//MOSTRAR EL NUMERO DE PREGUNTAS CONTESTADAS
 		Console::BackgroundColor = ConsoleColor::Black;
 		Console::ForegroundColor = ConsoleColor::White;
-		Console::SetCursorPosition(125, 7);
+		Cursor(125, 6);
 		int contador_respuestas = NumeroPregunta - 1;
 		cout << "Preguntas Contestadas: " << contador_respuestas;
 
+		Cursor(126, 8);
+		cout << "Enemigos Eliminados: " << contador_eliminados;
 
 		//Colision Balas / Nubes
 		if (NumeroPregunta == 1) {
@@ -991,10 +1013,10 @@ int main() {
 				balaY >= Nube_Y_3 && balaY <= Nube_Y_3 + 4) 
 			{
 				CambioPregunta = true;
-				Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue); //Borrar la bala, para que no se quede dibujada -HW
+				Pintar(balaX, balaY, "  ", ConsoleColor::Blue, ConsoleColor::Blue); //Borrar la bala, para que no se quede dibujada
 				balaActiva = false;
 				NumeroPregunta++;
-				Pajaro(135, 15, NumeroPregunta);
+				Pajaro(135, 17, NumeroPregunta);
 			}
 		}
 
@@ -1004,7 +1026,7 @@ int main() {
 				CambioPregunta = true;
 				balaActiva = false;
 				NumeroPregunta++;
-				Pajaro(135, 15, NumeroPregunta);
+				Pajaro(135, 17, NumeroPregunta);
 			}
 		}
 		// Pregunta 3 (nube 2)
@@ -1014,7 +1036,7 @@ int main() {
 				CambioPregunta = true;
 				balaActiva = false;
 				NumeroPregunta++;
-				Pajaro(135, 15, NumeroPregunta);
+				Pajaro(135, 17, NumeroPregunta);
 			}
 		}
 		// Pregunta 4 (nube 4)
@@ -1024,7 +1046,7 @@ int main() {
 				CambioPregunta = true;
 				balaActiva = false;
 				NumeroPregunta++;
-				Pajaro(135, 15, NumeroPregunta);
+				Pajaro(135, 17, NumeroPregunta);
 			}
 		}
 		// Pregunta 5 (nube 3)
@@ -1034,7 +1056,7 @@ int main() {
 				CambioPregunta = true;
 				balaActiva = false;
 				NumeroPregunta++;
-				Pajaro(135, 15, NumeroPregunta);
+				Pajaro(135, 17, NumeroPregunta);
 			}
 		}
 		// Pregunta 6 (nube 1)
@@ -1044,7 +1066,7 @@ int main() {
 				CambioPregunta = true;
 				balaActiva = false;
 				NumeroPregunta++;
-				Pajaro(135, 15, NumeroPregunta);
+				Pajaro(135, 17, NumeroPregunta);
 			}
 		}
 
@@ -1099,11 +1121,9 @@ int main() {
 			Console::BackgroundColor = ConsoleColor::Black;
 			Console::ForegroundColor = ConsoleColor::White;
 			Console::Clear();
-			// Ejecutar segundo nivel al perder
-			for (int i = 0; i < 4; i++) {
-				ejecutar_segundo_nivel(i);
-			}
-			break;
+			// Ejecutar la pantalla de inicio SI pierde
+			main();
+			
 		}
 		// Verificar si se respondieron todas las preguntas
 		if (NumeroPregunta == 7) {
@@ -1124,6 +1144,10 @@ int main() {
 			break;
 		}
 	}
+	//Ejecutar el Progreso Final
+
+
+
 
 	return 0;
 }
