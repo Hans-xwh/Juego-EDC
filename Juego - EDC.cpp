@@ -31,8 +31,6 @@ void Corazones(int CoorX, int CoorY);
 /*=======================*/
 //VARIABLES GLOBALES
 
-int contador_eliminados = 0;
-
 
 // Variables para el cronómetro
 // Variables para el cronómetro
@@ -1140,7 +1138,7 @@ int main() {
 			cout << "ES LA HORA DEL LABERINTO";
 			Sleep(3000);
 
-			// Ejecutar segundo nivel al completar todas las preguntas
+			//Ejecutar segundo nivel al completar todas las preguntas
 			for (int i = 0; i < 4; i++) {
 				ejecutar_segundo_nivel(i);
 			}
@@ -1150,7 +1148,7 @@ int main() {
 	Console::Clear();
 	//Ejecutar el Progreso Final
 	ProgresoFinal();
-
+	_getch();
 
 
 	return 0;

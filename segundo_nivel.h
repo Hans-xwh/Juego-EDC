@@ -612,7 +612,8 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset
 	// Configurar el contador de tiempo
 	Console::ForegroundColor = ConsoleColor::White;
 	Console::BackgroundColor = ConsoleColor::Black;
-	Cursor(130, 0); cout << "Tiempo: 0s ";
+	Cursor(130, 0); 
+	cout << "Tiempo: 0s ";
 
 	//El Steady_clock mide 2 puntos de tiempo
 	//En este caso, guarda el momento inicial
@@ -622,7 +623,7 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset
 	int tecla = 0;
 	Console::BackgroundColor = ConsoleColor::Gray;
 	DibujaPersona(1);
-	const int tiempoLimite = 90;	//Esta constante define el tiempo maximo
+	const int tiempoLimite = 60;	//Esta constante define el tiempo maximo
 
 	while (true) {	//Bucle principal segundo nivel -Hw
 		// Actualizar el contador de tiempo cada segundo
@@ -687,9 +688,70 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset
 
 
 void ProgresoFinal() {
+	Console::ForegroundColor = ConsoleColor::Yellow;
+	Cursor(110, 2);
+	cout << "HAS COMPLETADO EL JUEGO";
+	Cursor(110, 4);
+	cout << "FELICIDADES JUGADOR!!";
+	Console::ForegroundColor = ConsoleColor::Yellow;
+	
+	Cursor(5, 0);     cout << "                                  ...:::::::::------::::::::....                                   ";
+	Cursor(5, 1);     cout << "                             ..:::------------------------------:::..                              ";
+	Cursor(5, 2);     cout << "                          .::-------=====+++++++++++++++++=====------::..                          ";
+	Cursor(5, 3);     cout << "            ......      .:-----==+++++++====------------===+++++++==----:..                        ";
+	Cursor(5, 4);     cout << "        .::--------::...:---=+++++=----::------------------------=++++=----. ..:::-----:::..       ";
+	Cursor(5, 5);     cout << "     .:----------------:--=+++----:.....:----------------------------=+=---::---------------:.     ";
+	Cursor(5, 6);     cout << "    .:-------------------------:........:-----------------------------------------------------.    ";
+	Cursor(5, 7);     cout << "   .:--------------------------:........:-----------------------------=+=----------------------:.  ";
+	Cursor(5, 8);     cout << "  .:------:.    .:--------==---.........:-----------------------------++=----------....:-------:.. ";
+	Cursor(5, 9);     cout << " ..------.        .:------==---.........:-----------------------------++=--------.       .------:. ";
+	Cursor(5, 10);    cout << " ..-----:          .:-----==---.........:-----------------------------++=-------.         :-----:. ";
+	Cursor(5, 11);    cout << " ..-----:           :-----==---.........:-----------------------------++=------:          .-----:. ";
+	Cursor(5, 12);    cout << "  .:-----.          .-----==---.........:-----------------------------++=------.         .:-----:. ";
+	Cursor(5, 13);    cout << "  ..-----:.          :----==---:........:----------------------------=++=---::.         ..-----:.  ";
+	Cursor(5, 14);    cout << "   .:------..          .-=+=---:.........----------------------------+++=--..          .:------:.  ";
+	Cursor(5, 15);    cout << "    .:------:..        .-=++----.........:---------------------------+++=--.         .:-------:.   ";
+	Cursor(5, 16);    cout << "      .:-------:..      :-=+----:........:--------------------------=+++--:.      ..:-------:.     ";
+	Cursor(5, 17);    cout << "        .:--------:.    .-=+=---:........:--------------------------+++=--:.   ..:--------:.       ";
+	Cursor(5, 18);    cout << "         ..:--------:.. .:=++----:.......:-------------------------=+++=--.  .::--------:..        ";
+	Cursor(5, 19);    cout << "            .:---------:..-=++---:........:------------------------+++=--:..:---------..           ";
+	Cursor(5, 20);    cout << "              ..:-----------=++---:.......:-----------------------=+++---:---------:.              ";
+	Cursor(5, 21);    cout << "                 ..:---------+++--:........----------------------=+++-----------:...               ";
+	Cursor(5, 22);    cout << "                    ..--------=++--:.......:--------------------=++=----------...                  ";
+	Cursor(5, 23);    cout << "                      ..:-------++=-:.......-------------------+++=--------:..                      ";
+	Cursor(5, 24);    cout << "                        ..-------=++--......:----------------=+++=-------:..                        ";
+	Cursor(5, 25);    cout << "                         .:--------=+=-:.....---------------=++---------:.                          ";
+	Cursor(5, 26);    cout << "                     .---:-----::--------:....------------=+------:.-----:.:-.                      ";
+	Cursor(5, 27);    cout << "                     .---------  .:--------:...-----------------:.  .--------:                      ";
+	Cursor(5, 28);    cout << "                      .------..    .:-------------------------:.      :------.                      ";
+	Cursor(5, 29);    cout << "                         ..           .--------------------:..          .....                       ";
+	Cursor(5, 30);    cout << "                                         ..:=+++++++++=...                                             ";
+	Cursor(5, 31);    cout << "                                           .=+++++++++=                                              ";
+	Cursor(5, 32);    cout << "                                           :=========++                                              ";
+	Cursor(5, 33);    cout << "                                          .:--..-------.                                             ";
+	Cursor(5, 34);    cout << "                                          .:-:..-------.                                             ";
+	Cursor(5, 35);    cout << "                                         ..:-:..-------:.                                            ";
+	Cursor(5, 36);    cout << "                                         .:--...--------:.                                           ";
+	Cursor(5, 37);    cout << "                                       ..:--:...---------:.                                          ";
+
+
+
 	Console::ForegroundColor = ConsoleColor::White;
-	Cursor(10, 10);
-	cout << cronometro;
+	Cursor(110, 10);
+	cout << "PUNTAJE TOTAL DEL NIVEL 1";
+	Cursor(110, 13);
+	cout << "TIEMPO TRANSCURRIDO:" << cronometro;
+	Cursor(110, 16);
+	cout << "ENEMIGOS ELIMINADOS: " << contador_eliminados;
+	Cursor(110, 25);
+	cout << "PUNTAJE TOTAL DEL NIVEL 2";
+
+	Cursor(100, 30);
+	cout << "NOS VEMOS HASTA LA PROXIMA ESTUDIANTE";
+	Cursor(110, 34);
+	cout << "GRACIAS POR JUGAR";
+	Cursor(100, 38);
+	cout << "PRESIONA CUALQUIER TECLA PARA SALIR DEL JUEGO";
 }
 
 /*==========================*/
