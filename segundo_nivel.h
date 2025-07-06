@@ -64,6 +64,9 @@ int LaberintoMatriz[40][150] = {
 const int perInicial_x = 1;
 const int perInicial_Y = 1;
 
+//Variable global para el numero de respuestas acertadas
+int contador_acertadas = 0;
+
 struct Personajito {	
 	int x = perInicial_x;	//Horizontal inicial
 	int y = perInicial_Y;	//Vertical inicial
@@ -558,6 +561,8 @@ bool checkAlternColi(int x, int y) {	//Check Alternativas Collision
 	for (int i = 0; i < persona.height; i++) {
 		for (int j = 0; j < persona.width; j++) {
 			if (j+x == respuesta.x && i+y == respuesta.y) {
+				//Se significa que las coordenadas del jugador y de la respuesta coinciden
+				contador_acertadas++;
 				return true;
 			}
 		}
@@ -625,7 +630,8 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset
 	DibujaPersona(1);
 	const int tiempoLimite = 60;	//Esta constante define el tiempo maximo
 
-	while (true) {	//Bucle principal segundo nivel -Hw
+	//Bucle principal segundo nivel
+	while (true) {	
 		// Actualizar el contador de tiempo cada segundo
 		//En este caso, guarda el momento final
 		auto tiempo_real = chrono::steady_clock::now();
@@ -745,11 +751,12 @@ void ProgresoFinal() {
 	cout << "ENEMIGOS ELIMINADOS: " << contador_eliminados;
 	Cursor(110, 25);
 	cout << "PUNTAJE TOTAL DEL NIVEL 2";
-
-	Cursor(100, 30);
+	Cursor(105, 28);
+	cout << "TOTAL DE RESPUESTAS ACERTADAS " << contador_acertadas << "/4";
+	Cursor(100, 31);
 	cout << "NOS VEMOS HASTA LA PROXIMA ESTUDIANTE";
 	Cursor(110, 34);
-	cout << "GRACIAS POR JUGAR";
+	cout << "GRACIAS POR JUGAR!!!";
 	Cursor(100, 38);
 	cout << "PRESIONA CUALQUIER TECLA PARA SALIR DEL JUEGO";
 }

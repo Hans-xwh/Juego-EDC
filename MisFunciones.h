@@ -37,6 +37,7 @@ int cronometro = 0;
 
 int contador_eliminados = 0;
 
+
 const auto intervaloMovimientoBalaVertical = chrono::milliseconds(15); // PARA DISPAROS VERTICALES
 
 const auto intervaloMovimientoBala = chrono::milliseconds(10); // PARA DISPAROS HORIZONTALES
