@@ -323,8 +323,8 @@ void GenerarRespuestasAleatorias() {	//Esta funcion solo se encarga de dibujar l
 	int randomY = 0;
 	while(true) {
 		do {
-			randomX = NumeroRandom(1, 148);	//dos menor al limite, sino crashea
-			randomY = NumeroRandom(1, 39);
+			randomX = NumeroRandom(1, 146);	//cuatro menor al limite, sino crashea
+			randomY = NumeroRandom(1, 38);
 		} while (LaberintoMatriz[randomX][randomY] != 0 && LaberintoMatriz[randomX+1][randomY] != 0);
 		int randomrespuesta = NumeroRandom(1, 5);
 
