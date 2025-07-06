@@ -317,78 +317,92 @@ struct PosicionAlternativa {
 	int y;
 }; PosicionAlternativa alternativa1; PosicionAlternativa alternativa2; PosicionAlternativa alternativa3; PosicionAlternativa alternativa4;
 
-void GenerarRespuestasAleatorias() {	//Esta funcion solo se encarga de dibujar las alternativas
-	int cantidad = 0;
-	int randomX = 0;
-	int randomY = 0;
-	while(true) {
-		do {
-			randomX = NumeroRandom(1, 146);	//cuatro menor al limite, sino crashea
-			randomY = NumeroRandom(1, 38);
-		} while (LaberintoMatriz[randomX][randomY] != 0 && LaberintoMatriz[randomX+1][randomY] != 0);
-		int randomrespuesta = NumeroRandom(1, 5);
+void GenerarRespuestasAleatorias() {
+	int alternativasColocadas = 0;
 
-			if (LaberintoMatriz[randomY][randomX] == 0) {
-				if (randomrespuesta == 4 && cantidad == 0) {
-					Console::BackgroundColor = ConsoleColor::Red;
-					Console::ForegroundColor = ConsoleColor::Black;
-					Cursor(randomX, randomY); cout << "A)";
-					alternativa1.x = randomX;
-					alternativa1.y = randomY;
+	// Limpiar posiciones previas (opcional)
+	alternativa1 = { 0, 0 };
+	alternativa2 = { 0, 0 };
+	alternativa3 = { 0, 0 };
+	alternativa4 = { 0, 0 };
 
-					if (respuesta.correcta == 1) {
-						respuesta.x = alternativa1.x;
-						respuesta.y = alternativa1.y;
-					}
-					cantidad++;
-				}
-				if (cantidad == 1 && randomrespuesta == 5) {
-					Console::BackgroundColor = ConsoleColor::Red;
-					Console::ForegroundColor = ConsoleColor::Black;
-					Cursor(randomX, randomY); cout << "B)";
-					alternativa2.x = randomX;
-					alternativa2.y = randomY;
+	while (alternativasColocadas < 4) {
+		int randomX = NumeroRandom(5, 143);  // Margen para no spawnear en bordes
+		int randomY = NumeroRandom(5, 35);   // Margen inferior y superior
 
-					if (respuesta.correcta == 2) {
-						respuesta.x = alternativa2.x;
-						respuesta.y = alternativa2.y;
-					}
-					cantidad++;
-				}
-				if (cantidad == 2 && randomrespuesta == 1) {
-					Console::BackgroundColor = ConsoleColor::Red;
-					Console::ForegroundColor = ConsoleColor::Black;
-					Cursor(randomX, randomY); cout << "C)";
-					alternativa3.x = randomX;
-					alternativa3.y = randomY;
-
-					if (respuesta.correcta == 3) {
-						respuesta.x = alternativa3.x;
-						respuesta.y = alternativa3.y;
-					}
-					cantidad++;
-				}
-				if (cantidad == 3 && randomrespuesta == 2) {
-					Console::BackgroundColor = ConsoleColor::Red;
-					Console::ForegroundColor = ConsoleColor::Black;
-					Cursor(randomX, randomY); cout << "D)";
-					alternativa4.x = randomX;
-					alternativa4.y = randomY;
-
-					if (respuesta.correcta == 4) {
-						respuesta.x = alternativa4.x;
-						respuesta.y = alternativa4.y;
-					}
-					cantidad++;
-				}
-				if (cantidad == 4) {
+		// Verificar si la posición y su alrededor están libres (valor 0 en matriz)
+		bool posicionValida = true;
+		for (int dy = -1; dy <= 1; dy++) {
+			for (int dx = -1; dx <= 2; dx++) {  // +2 por el "A)" que ocupa 2 espacios
+				if (LaberintoMatriz[randomY + dy][randomX + dx] != 0) {
+					posicionValida = false;
 					break;
 				}
-		
+			}
+			if (!posicionValida) break;
 		}
-		
+
+		if (posicionValida) {
+			Console::BackgroundColor = ConsoleColor::Red;
+			Console::ForegroundColor = ConsoleColor::White;
+
+			switch (alternativasColocadas) {
+			case 0:
+				Cursor(randomX, randomY);
+				cout << "A)";
+				alternativa1.x = randomX;
+				alternativa1.y = randomY;
+				if (respuesta.correcta == 1) {
+					respuesta.x = randomX;
+					respuesta.y = randomY;
+				}
+				break;
+
+			case 1:
+				Cursor(randomX, randomY);
+				cout << "B)";
+				alternativa2.x = randomX;
+				alternativa2.y = randomY;
+				if (respuesta.correcta == 2) {
+					respuesta.x = randomX;
+					respuesta.y = randomY;
+				}
+				break;
+
+			case 2:
+				Cursor(randomX, randomY);
+				cout << "C)";
+				alternativa3.x = randomX;
+				alternativa3.y = randomY;
+				if (respuesta.correcta == 3) {
+					respuesta.x = randomX;
+					respuesta.y = randomY;
+				}
+				break;
+
+			case 3:
+				Cursor(randomX, randomY);
+				cout << "D)";
+				alternativa4.x = randomX;
+				alternativa4.y = randomY;
+				if (respuesta.correcta == 4) {
+					respuesta.x = randomX;
+					respuesta.y = randomY;
+				}
+				break;
+			}
+
+			// Marcar la zona ocupada para evitar solapamientos
+			LaberintoMatriz[randomY][randomX] = 5;    // 5 = alternativa (opcional)
+			LaberintoMatriz[randomY][randomX + 1] = 5;
+
+			alternativasColocadas++;
+		}
 	}
-	
+
+	// Restaurar color normal
+	Console::BackgroundColor = ConsoleColor::Gray;
+	Console::ForegroundColor = ConsoleColor::White;
 }
 
 /*==================*/
