@@ -954,12 +954,13 @@ int main() {
 			enemigoX = ListaEnemigos[i].x + 6;	//Offset para las colisiones. 6 funciona bien.
 			enemigoY = ListaEnemigos[i].y;
 
-			Console::SetCursorPosition(0, 0);
+			//// DEBUG ////
+			/*Console::SetCursorPosition(0, 0);
 			cout << "enemigo1 = " << ListaEnemigos[0].x << " " << ListaEnemigos[0].vivo;
 			Console::SetCursorPosition(0, 1);
 			cout << "enemigo2 = " << ListaEnemigos[1].x << " " << ListaEnemigos[1].vivo;
 			Console::SetCursorPosition(0, 2);
-			cout << "bala = " << balaX;
+			cout << "bala = " << balaX;*/
 
 			if (balaX == enemigoX && ListaEnemigos[i].vivo == 0) {
 				ListaEnemigos[i].BorrarEnemigo(ListaEnemigos[i].x, enemigoY);
