@@ -1119,7 +1119,7 @@ int main() {
 			Console::ForegroundColor = ConsoleColor::White;
 			Console::Clear();
 			// Ejecutar la pantalla de inicio SI pierde
-			main();
+			return main();
 			
 		}
 		// Verificar si se respondieron todas las preguntas
