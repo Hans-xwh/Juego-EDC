@@ -1120,6 +1120,7 @@ int main() {
 			Console::ForegroundColor = ConsoleColor::White;
 			Console::Clear();
 			// Ejecutar la pantalla de inicio SI pierde
+			Pantalla_perder();
 			return main();
 			
 		}
@@ -1134,8 +1135,8 @@ int main() {
 			Console::Clear();
 			Console::SetCursorPosition(48, 15);
 			cout << "¡Felicidades! Has respondido todas las preguntas correctamente!";
-			Sleep(1000);
-			Console::SetCursorPosition(50, 20);
+			Sleep(2000);
+			Console::SetCursorPosition(55, 20);
 			cout << "ES LA HORA DEL LABERINTO";
 			Sleep(3000);
 
