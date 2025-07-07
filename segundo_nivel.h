@@ -601,12 +601,16 @@ void ejecutar_segundo_nivel(int po) {		//po = PreguntaOffset
 
 	configurar_ventana_mapa();
 	int NumeroPregunta = 1+po;
-
+	PlaySound(TEXT("musica_preguntas.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	int cambio = Pregunta(NumeroPregunta, 15);
 	cout << cambio << endl << NumeroPregunta;
+
+	//SE GENERA EL LABERINTO CON LAS ALTERNATIVAS ALEATORIAS
 	//system("pause");
 	Laberinto();
 	GenerarRespuestasAleatorias();
+
+	PlaySound(TEXT("musica_respuestas.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	/*La forma de obtener las coordenadas de las alternativas aleatorias es 
 	* alternativa1.x y alternativa1.y
 	* alternativa2.x y alternativa2.y

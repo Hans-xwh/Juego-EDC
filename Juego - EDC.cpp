@@ -547,7 +547,7 @@ int main() {
 
 
 
-	PlaySound(TEXT("horizon.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	PlaySound(TEXT("Horizon.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
 	//SE LLAMA A LA FUNCION SELECCIONAR LA OPCION
 	seleccionar_opcion();
@@ -1149,6 +1149,7 @@ int main() {
 	}
 	Console::Clear();
 	//Ejecutar el Progreso Final
+	PlaySound(TEXT("musica_ending.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	ProgresoFinal();
 	_getch();
 
