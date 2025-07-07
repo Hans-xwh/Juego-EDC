@@ -762,7 +762,12 @@ void ProgresoFinal() {
 	Cursor(110, 34);
 	cout << "GRACIAS POR JUGAR!!!";
 	Cursor(100, 38);
-	cout << "PRESIONA CUALQUIER TECLA PARA SALIR DEL JUEGO";
+	cout << "PRESIONA LA TECLA ESPACIO PARA SALIR DEL JUEGO";
+	char tecla;
+	do
+	{
+		tecla = _getch();
+	} while (tecla != ' ');
 }
 
 /*==========================*/

@@ -1151,8 +1151,6 @@ int main() {
 	//Ejecutar el Progreso Final
 	PlaySound(TEXT("musica_ending.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	ProgresoFinal();
-	_getch();
-
 
 	return 0;
 }
